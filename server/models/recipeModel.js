@@ -1,86 +1,100 @@
-import { Sequelize, DataTypes } from "sequelize";
 import sequelize from "../config/database";
+import { DataTypes } from "sequelize";
 
-const Food = sequelize.define("Food", {
-  foodID: {
+const Recipe = sequelize.define("Recipe", {
+  recipeID: {
     type: DataTypes.INTEGER,
-    autoIncrement: true,
     primaryKey: true,
+    autoIncrement: true,
   },
-  servingSize: {
+  recipeDescription: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  recipeName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  ingredientID: {
+    type: DataTypes.INTEGER,
+    foreignKey: true,
+  },
+  totalCalories: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  carbs: {
+  totalProtein: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  protein: {
+  totalFats: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  fats: {
+  totalCarbs: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  fiber: {
+  totalFiber: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  vitaminA: {
+  totalVitaminA: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  vitaminB: {
+  totalVitaminB: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  vitaminC: {
+  totalVitaminC: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  vitaminD: {
+  totalVitaminD: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  vitaminE: {
+  totalVitaminE: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  vitaminK: {
+  totalVitaminK: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  calcium: {
+  totalCalcium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  phosphorus: {
+  totalPhosporus: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  magnesium: {
+  totalMagnesium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  sodium: {
+  totalSodium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  potassium: {
+  totalPotassium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  iron: {
+  totalIron: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  zinc: {
+  totalZinc: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  copper: {
+  totalCopper: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
+
+export default Meal;

@@ -7,7 +7,14 @@ dotenv.config({
 
 // Creates sequelize instance in order to connect to database
 const sequelize = new Sequelize(
-  `mysql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@localhost:3306/${process.env.DATABASE_NAME}`
+  process.env.DATABASE_NAME,
+  process.env.DATABASE_USER,
+  process.env.DATABASE_PASSWORD,
+  {
+    host: process.env.DATABASE_HOST, // Your AWS RDS or EC2 instance endpoint
+    port: 3306, // Explicitly defining the port
+    dialect: "mysql",
+  }
 );
 
 // Tests the connection to the database
