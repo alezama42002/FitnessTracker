@@ -1,133 +1,118 @@
 import { Sequelize, DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
-// Schema for Food table
-const Food = sequelize.define("Food", {
-  foodID: {
+// Schema for userDailyNutrition table
+const userDailyNutrition = sequelize.define("userDailyNutrition", {
+  dailyNutritionID: {
     type: DataTypes.INTEGER,
-    autoIncrement: true,
+    allowNull: false,
     primaryKey: true,
+    autoIncrement: true,
   },
-  servingSize: {
+  userID: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Calories: {
+  currentCalories: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Protein: {
+  currentProtein: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Carbohydrates: {
+  currentCarbohydrates: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Fats: {
+  currentFats: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Fiber: {
+  currentFiber: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminA: {
+  currentVitaminA: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminB1: {
+  currentVitaminB1: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminB2: {
+  currentVitaminB2: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminB3: {
+  currentVitaminB3: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminB5: {
+  currentVitaminB5: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminB6: {
+  currentVitaminB6: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminB9: {
+  currentVitaminB9: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminB12: {
+  currentVitaminB12: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminC: {
+  currentCalcium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminD: {
+  currentChlorine: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminE: {
+  currentCopper: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminK: {
+  currentIron: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Calcium: {
+  currentIodine: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Chlorine: {
+  currentPotassium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Copper: {
+  currenMagnesium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Iron: {
+  currentManganese: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Iodine: {
+  currentSodium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Potassium: {
+  currentPhosporus: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Magnesium: {
+  currentSelenium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Manganese: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  Sodium: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  Phosphorus: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  Selenium: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  Zinc: {
+  currentZinc: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
 
-export default Food;
+export default userDailyNutrition;

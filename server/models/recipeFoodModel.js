@@ -16,7 +16,7 @@ const recipeFood = sequelize.define("recipeFood", {
     type: DataTypes.INTEGER,
     foreignKey: true,
   },
-  quantity: {
+  Quantity: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },

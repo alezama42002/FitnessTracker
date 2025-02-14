@@ -5,20 +5,25 @@ import { DataTypes } from "sequelize";
 const Recipe = sequelize.define("Recipe", {
   recipeID: {
     type: DataTypes.INTEGER,
+    allowNull: false,
     primaryKey: true,
     autoIncrement: true,
   },
-  recipeDescription: {
-    type: DataTypes.TEXT,
+  Description: {
+    type: DataTypes.STRING(50),
     allowNull: false,
   },
   recipeName: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(15),
+    allowNull: false,
+  },
+  totalServings: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   ingredientID: {
     type: DataTypes.INTEGER,
-    foreignKey: true,
+    allowNull: false,
   },
   totalCalories: {
     type: DataTypes.INTEGER,
@@ -28,11 +33,11 @@ const Recipe = sequelize.define("Recipe", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  totalFats: {
+  totalCarbs: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  totalCarbs: {
+  totalFats: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -40,11 +45,31 @@ const Recipe = sequelize.define("Recipe", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  totalVitaminA: {
+  totalVitaminB1: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  totalVitaminB: {
+  totalVitaminB2: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  totalVitaminB3: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  totalVitaminB5: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  totalVitaminB6: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  totalVitaminB9: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  totalVitaminB12: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -68,19 +93,11 @@ const Recipe = sequelize.define("Recipe", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  totalPhosporus: {
+  totalChlorine: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  totalMagnesium: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  totalSodium: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  totalPotassium: {
+  totalCopper: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -88,11 +105,31 @@ const Recipe = sequelize.define("Recipe", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  totalZinc: {
+  totalIodine: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  totalCopper: {
+  totalPotassium: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  totalMagnesium: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  totalManganese: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  totalSodium: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  totalSelenium: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  totalZinc: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },

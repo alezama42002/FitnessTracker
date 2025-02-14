@@ -8,19 +8,19 @@ const User = sequelize.define("User", {
     autoIncrement: true,
     primaryKey: true,
   },
-  username: {
+  Username: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  height: {
+  Height: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  weight: {
+  Weight: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  age: {
+  Age: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -36,7 +36,7 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  gender: {
+  Gender: {
     type: DataTypes.STRING,
     allowNull: false,
   },
