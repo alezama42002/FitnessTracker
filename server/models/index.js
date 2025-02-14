@@ -3,6 +3,7 @@ import Food from "./foodModel.js";
 import Recipe from "./recipeModel.js";
 import userFood from "./userFoodModel.js";
 import recipeFood from "./recipeFoodModel.js";
+import userDailyNutrition from "./userDailyNutritionModel.js";
 import sequelize from "../config/database.js";
 
 // Each user can have multiple foods through userFoods
@@ -20,5 +21,8 @@ recipeFood.belongsTo(Recipe, { foreignKey: "recipeID" });
 // Each food belongs to multiple recipes through recipeFoods
 Food.hasMany(recipeFood, { foreignKey: "foodID" });
 recipeFood.belongsTo(Food, { foreignKey: "foodID" });
+
+User.hasMany(userDailyNutrition, { foreignKey: "userID" });
+userDailyNutrition.belongsTo(User, { foreignKey: "userID" });
 
 sequelize.sync();
