@@ -1,6 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
-import sequelize from "../config/database";
+import sequelize from "../config/database.js";
 
+// Schema for userFood junction table
 const userFood = sequelize.define("userFood", {
   userFood_ID: {
     type: DataTypes.INTEGER,
@@ -17,5 +18,8 @@ const userFood = sequelize.define("userFood", {
   },
   quantity: {
     type: DataTypes.INTEGER,
+    allowNull: false,
   },
 });
+
+export default userFood;

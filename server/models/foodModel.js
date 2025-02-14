@@ -1,6 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
-import sequelize from "../config/database";
+import sequelize from "../config/database.js";
 
+// Schema for Food table
 const Food = sequelize.define("Food", {
   foodID: {
     type: DataTypes.INTEGER,
