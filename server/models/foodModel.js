@@ -84,3 +84,5 @@ const Food = sequelize.define("Food", {
     allowNull: false,
   },
 });
+
+export default Food;

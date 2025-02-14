@@ -97,4 +97,4 @@ const Recipe = sequelize.define("Recipe", {
   },
 });
 
-export default Meal;
+export default Recipe;
