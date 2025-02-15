@@ -25,4 +25,4 @@ recipeFood.belongsTo(Food, { foreignKey: "foodID" });
 User.hasMany(userDailyNutrition, { foreignKey: "userID" });
 userDailyNutrition.belongsTo(User, { foreignKey: "userID" });
 
-sequelize.sync();
+sequelize.sync({ force: true });
