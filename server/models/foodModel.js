@@ -8,6 +8,10 @@ const Food = sequelize.define("Food", {
     autoIncrement: true,
     primaryKey: true,
   },
+  foodName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   servingSize: {
     type: DataTypes.INTEGER,
     allowNull: false,

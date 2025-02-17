@@ -1,12 +1,18 @@
+// The following file's purpose is to start up the express server which is the server
+// for the API. Requests are sent here and then sent to respective routers for respective
+// handling.
+
 import express from "express";
-const app = express();
 
 import userRouter from "./routes/userRoutes.js";
+import foodRouter from ".//routes/foodRoutes.js";
 
+const app = express();
 app.use(express.json());
 
-app.use("/api/user", userRouter);
+// Allows the server to be listening for requests on port 3000
+app.listen(3000, () => console.log("Server running on port 3000"));
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
+// Seperate routes into multiple routers which handle multiple endpoints
+app.use("/api/user", userRouter);
+app.use("/api/food", foodRouter);

@@ -1,9 +1,10 @@
-import Sequelize from "sequelize";
+// The following file's purpose is to create the connection to the AWS database using
+// Sequilize ORM. All database information is stored in .env file for security.
 
+import Sequelize from "sequelize";
 import dotenv from "dotenv";
-dotenv.config({
-  path: "../.env",
-});
+
+dotenv.config();
 
 // Creates sequelize instance in order to connect to database
 const sequelize = new Sequelize(
@@ -11,20 +12,19 @@ const sequelize = new Sequelize(
   process.env.DATABASE_USER,
   process.env.DATABASE_PASSWORD,
   {
-    host: process.env.DATABASE_HOST, // Your AWS RDS or EC2 instance endpoint
-    port: 3306, // Explicitly defining the port
+    host: process.env.DATABASE_HOST,
+    port: 3306,
     dialect: "mysql",
   }
 );
 
-// Tests the connection to the database
 sequelize
   .authenticate()
   .then(() => {
-    console.log("Connection has been established");
+    console.log("Database connected");
   })
   .catch((error) => {
-    console.error("Unable to connect to database: ", error);
+    console.error("Database connection failed:", error);
   });
 
 export default sequelize;

@@ -89,7 +89,7 @@ const userDailyNutrition = sequelize.define("userDailyNutrition", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  currenMagnesium: {
+  currentMagnesium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
