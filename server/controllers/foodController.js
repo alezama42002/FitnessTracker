@@ -38,11 +38,20 @@ const searchFoodByName = async (req, res) => {
 
 // Adds food to our database that's not in found in FatSecret's based on user input from form
 const addFood = async (req, res) => {
-  const foodData = req.body 
+  const foodData = req.body;
 
-  foodService.addFoodtoDB(foodData)
+  foodService.addFoodtoDB(foodData);
 
-  res.send("Food Added to System!")
-}
+  res.send("Food Added to System!");
+};
 
-export default { searchFoodByName, addFood };
+const removeFood = async (req, res) => {
+  const foodData = req.body;
+  const { foodID, foodName } = foodData;
+
+  foodService.deleteFood(foodID, foodName);
+
+  res.send("Food Was Removed!");
+};
+
+export default { searchFoodByName, addFood, removeFood };

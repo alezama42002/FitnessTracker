@@ -16,5 +16,4 @@ router.post("/AddUser", userController.addUser);
 // Logs food for user
 router.post("/LogFood", userController.logFood);
 
-
 export default router;

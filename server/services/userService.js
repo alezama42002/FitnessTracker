@@ -27,5 +27,4 @@ const addFoodforUser = async (userID, foodData) => {
   //return await User.create(foodData);
 };
 
-
 export default { addUser, removeUser, addFoodforUser };

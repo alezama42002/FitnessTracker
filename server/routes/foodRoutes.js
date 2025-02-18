@@ -9,4 +9,6 @@ router.get("/Search", foodController.searchFoodByName);
 
 router.post("/Add", foodController.addFood);
 
+router.delete("/Remove", foodController.removeFood);
+
 export default router;
