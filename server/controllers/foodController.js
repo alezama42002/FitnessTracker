@@ -1,6 +1,7 @@
 import body from "express-validator";
 import axios from "axios";
 import dotenv from "dotenv";
+import foodService from "../services/foodService.js";
 
 dotenv.config();
 
@@ -35,4 +36,13 @@ const searchFoodByName = async (req, res) => {
   }
 };
 
-export default { searchFoodByName };
+// Adds food to our database that's not in found in FatSecret's based on user input from form
+const addFood = async (req, res) => {
+  const foodData = req.body 
+
+  foodService.addFoodtoDB(foodData)
+
+  res.send("Food Added to System!")
+}
+
+export default { searchFoodByName, addFood };

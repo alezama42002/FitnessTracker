@@ -7,4 +7,6 @@ import foodController from "../controllers/foodController.js";
 // Searches for specific food in database and if not present give ability to enter
 router.get("/Search", foodController.searchFoodByName);
 
+router.post("/Add", foodController.addFood);
+
 export default router;
