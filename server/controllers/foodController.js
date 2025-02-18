@@ -45,6 +45,7 @@ const addFood = async (req, res) => {
   res.send("Food Added to System!");
 };
 
+// Allows admin to remove foods from the database
 const removeFood = async (req, res) => {
   const foodData = req.body;
   const { foodID, foodName } = foodData;
