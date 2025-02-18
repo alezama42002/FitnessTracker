@@ -29,7 +29,7 @@ const searchFoodByName = async (req, res) => {
       ID: food.food_id,
     }));
 
-    res.send(filteredData);
+    res.send(response.data);
   } catch (error) {
     res.error("Error", error);
   }
