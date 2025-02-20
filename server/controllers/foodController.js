@@ -2,6 +2,7 @@ import body from "express-validator";
 import axios from "axios";
 import dotenv from "dotenv";
 import foodService from "../services/foodService.js";
+import userService from "../services/userService.js";
 
 dotenv.config();
 
@@ -55,4 +56,14 @@ const removeFood = async (req, res) => {
   res.send("Food Was Removed!");
 };
 
-export default { searchFoodByName, addFood, removeFood };
+// Allows food to be edited by the user in the database
+const modifyFood = async (req, res) => {
+  const foodData = req.body;
+  const { foodID, foodName } = foodData;
+
+  userService.editFood(foodData);
+
+  res.send("Food Edited Successfully")
+}
+
+export default { searchFoodByName, addFood, removeFood, modifyFood };

@@ -13,4 +13,7 @@ router.post("/Add", foodController.addFood);
 // Deletes food from database
 router.delete("/Remove", foodController.removeFood);
 
+// Edits foods' nutritional values in the database
+router.patch("/Edit", foodController.modifyFood);
+
 export default router;
