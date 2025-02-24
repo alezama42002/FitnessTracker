@@ -2,6 +2,7 @@ import body from "express-validator";
 import axios from "axios";
 import dotenv from "dotenv";
 import userService from "../services/userService.js"; // Imports quieres/mutations related to User
+import foodService from "../services/foodService.js";
 
 dotenv.config();
 
@@ -75,37 +76,59 @@ const getMacros = (req, res) => {
 };
 
 // Adds food to the database by using ID of food
-const addFoodById = async (req, res) => {
-  const { id, userID } = req.body;
-
-  // Makes API call to FatSecret API to get foods nutritional information
-  // so it can then be stored in database
+const logFood = async (req, res) => {
   try {
-    const response = await axios.get(
-      "https://platform.fatsecret.com/rest/server.api",
-      {
-        params: {
-          method: "food.get.v4",
-          food_id: `${id}`,
-          format: "json",
-        },
-        headers: {
-          Authorization: `Bearer ${process.env.FATSECRET_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const {
+      foodID,
+      foodName,
+      servingSize,
+      Calories,
+      Protein,
+      Carbohydrates,
+      Fats,
+      username,
+      quantity,
+    } = req.body;
 
-    // Gets second serving option or first in the case that second is not present
-    const food =
-      response.data.food.servings.serving[1] ||
-      response.data.food.servings.serving[0];
+    let finalFoodID;
 
-    // Filter data to only get the information needed
-    const foodData = {
-      userID: response.data.user_id || "Unknown User",
-      foodData: {
-        foodName: response.data.food.food_name || "Unknown Food",
+    // Gets the necessary foodID for the given food based on the food wishing to be logged.
+    // Foods key nutrtional information is used to find ID.
+    const foodResponse = await foodService.getFoodID({
+      foodName: foodName,
+      servingSize: servingSize,
+      Calories: Calories,
+      Protein: Protein,
+      Carbohydrates: Carbohydrates,
+      Fats: Fats,
+    });
+
+    // If food is not already in our Database, we store food in Database
+    if (foodResponse === false) {
+      // Gets foods information via API call to FatSecret using foodID given through req.body
+      const response = await axios.get(
+        "https://platform.fatsecret.com/rest/server.api",
+        {
+          params: {
+            method: "food.get.v4",
+            finalFoodDataid: `${foodID}`,
+            format: "json",
+          },
+          headers: {
+            Authorization: `Bearer ${process.env.FATSECRET_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Gets second serving option or first in the case that second is not present
+      const food =
+        response.data.food.servings.serving[1] ||
+        response.data.food.servings.serving[0];
+
+      // Filter data to only get the information needed
+      const foodData = {
+        foodName: response.data.food.finalFoodDataname || "Unknown Food",
         servingSize: food.serving_size || 100, // Defaulting to 100 if undefined
         Calories: food.calories ?? 0,
         Protein: food.protein ?? 0,
@@ -136,10 +159,72 @@ const addFoodById = async (req, res) => {
         Phosphorus: food.phosphorus ?? 0,
         Selenium: food.selenium ?? 0,
         Zinc: food.zinc ?? 0,
-      },
+      };
+
+      // Adds food to Database (Foods Table)
+      foodService.addFoodtoDB(foodData);
+
+      // Gets foodID of newly created Food in Food Table
+      finalFoodID = foodService.getFoodID({
+        foodName: foodData.foodName,
+        servingSize: foodData.servingSize,
+        Calories: foodData.Calories,
+        Protein: foodData.Protein,
+        Carbohydrates: foodData.Carbohydrates,
+        Fats: foodData.Fats,
+      });
+    }
+
+    // Gets userID based on username and gets foodID
+    const userID = await userService.getUserID(username);
+    finalFoodID = foodResponse;
+    const finalFoodData = await foodService.getFood(finalFoodID);
+
+    // Creates userFood input in DB using userID and foodID
+    await userService.addFoodforUser({
+      userID: userID,
+      foodID: finalFoodID,
+      Quantity: quantity,
+    });
+
+    // Additional nutritional information coming from newly logged food
+    const userAddedNutritionData = {
+      userID: userID,
+      currentCalories: finalFoodData.Calories ?? 0,
+      currentProtein: finalFoodData.Protein ?? 0,
+      currentCarbohydrates: finalFoodData.Carbohydrates ?? 0,
+      currentFats: finalFoodData.Fats ?? 0,
+      currentFiber: finalFoodData.Fiber ?? 0,
+      currentVitaminA: finalFoodData.VitaminA ?? 0,
+      currentVitaminB1: finalFoodData.VitaminB1 ?? 0,
+      currentVitaminB2: finalFoodData.VitaminB2 ?? 0,
+      currentVitaminB3: finalFoodData.VitaminB3 ?? 0,
+      currentVitaminB5: finalFoodData.VitaminB5 ?? 0,
+      currentVitaminB6: finalFoodData.VitaminB6 ?? 0,
+      currentVitaminB9: finalFoodData.VitaminB9 ?? 0,
+      currentVitaminB12: finalFoodData.VitaminB12 ?? 0,
+      currentVitaminC: finalFoodData.VitaminC ?? 0,
+      currentVitaminD: finalFoodData.VitaminD ?? 0,
+      currentVitaminE: finalFoodData.VitaminE ?? 0,
+      currentVitaminK: finalFoodData.VitaminK ?? 0,
+      currentCalcium: finalFoodData.Calcium ?? 0,
+      currentChlorine: finalFoodData.Chlorine ?? 0,
+      currentCopper: finalFoodData.Copper ?? 0,
+      currentIron: finalFoodData.Iron ?? 0,
+      currentIodine: finalFoodData.Iodine ?? 0,
+      currentPotassium: finalFoodData.Potassium ?? 0,
+      currentMagnesium: finalFoodData.Magnesium ?? 0,
+      currentManganese: finalFoodData.Manganese ?? 0,
+      currentSodium: finalFoodData.Sodium ?? 0,
+      currentPhosporus: finalFoodData.Phosporus ?? 0,
+      currentSelenium: finalFoodData.Selenium ?? 0,
+      currentZinc: finalFoodData.Zinc ?? 0,
     };
 
-    userService.addFoodforUser(userID, foodData);
+    // Update the daily nutritional information of the user based on the nutritional information added
+    // by the new logged food
+    await userService.updateUserNutrition(userAddedNutritionData);
+
     res.send("Food Logged!");
   } catch (error) {}
 };
@@ -153,4 +238,4 @@ const addUser = async (req, res) => {
   res.send("User added!");
 };
 
-export default { getMacros, addFoodById, addUser };
+export default { getMacros, logFood, addUser };

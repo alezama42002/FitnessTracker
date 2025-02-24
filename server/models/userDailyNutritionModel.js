@@ -65,6 +65,22 @@ const userDailyNutrition = sequelize.define("userDailyNutrition", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  currentVitaminC: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  currentVitaminD: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  currentVitaminE: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  currentVitaminK: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   currentCalcium: {
     type: DataTypes.INTEGER,
     allowNull: false,
