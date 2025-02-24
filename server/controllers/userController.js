@@ -111,7 +111,7 @@ const logFood = async (req, res) => {
         {
           params: {
             method: "food.get.v4",
-            finalFoodDataid: `${foodID}`,
+            food_id: `${foodID}`,
             format: "json",
           },
           headers: {
@@ -128,12 +128,12 @@ const logFood = async (req, res) => {
 
       // Filter data to only get the information needed
       const foodData = {
-        foodName: response.data.food.finalFoodDataname || "Unknown Food",
+        foodName: response.data.food.food_name || "Unknown Food",
         servingSize: food.serving_size || 100, // Defaulting to 100 if undefined
         Calories: food.calories ?? 0,
         Protein: food.protein ?? 0,
-        Carbohydrates: food.carbohydrates ?? 0,
-        Fats: food.fats ?? 0,
+        Carbohydrates: food.carbohydrate ?? 0,
+        Fats: food.fat ?? 0,
         Fiber: food.fiber ?? 0,
         VitaminA: food.vitamin_a ?? 0,
         VitaminB1: food.vitamin_b1 ?? 0,
@@ -162,7 +162,7 @@ const logFood = async (req, res) => {
       };
 
       // Adds food to Database (Foods Table)
-      foodService.addFoodtoDB(foodData);
+      await foodService.addFoodtoDB(foodData);
 
       // Gets foodID of newly created Food in Food Table
       finalFoodID = foodService.getFoodID({
@@ -216,7 +216,7 @@ const logFood = async (req, res) => {
       currentMagnesium: finalFoodData.Magnesium ?? 0,
       currentManganese: finalFoodData.Manganese ?? 0,
       currentSodium: finalFoodData.Sodium ?? 0,
-      currentPhosporus: finalFoodData.Phosporus ?? 0,
+      currentPhosphorus: finalFoodData.Phosporus ?? 0,
       currentSelenium: finalFoodData.Selenium ?? 0,
       currentZinc: finalFoodData.Zinc ?? 0,
     };

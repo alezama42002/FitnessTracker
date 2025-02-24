@@ -36,28 +36,39 @@ const addFoodforUser = async (logData) => {
 
 // Adds logged foods nutritional information to users daily totals
 const updateUserNutrition = async (userDailyNutritionData) => {
+  const date = new Date();
+  const month = date.getMonth() + 1; // Months are 0-based
+  const day = date.getDate();
+  const year = date.getFullYear().toString().slice(-2);
+
   // Finds or creates users daily nutrition tracking in Database
   const [userNutritionData, created] = await userNutritionProgress.findOrCreate(
     {
-      where: { userID: userDailyNutritionData.userID },
+      where: {
+        userID: userDailyNutritionData.userID,
+        logDate: `0${month}/${day}/${year}`,
+      },
       defaults: userDailyNutritionData,
     }
   );
 
-  // Gets all of the attributes in userDailyNutrition table that need to be updated
-  // so that only those attributes are updated
-  const updateFields = Object.keys(userNutritionProgress.rawAttributes).filter(
-    (key) => key.startsWith("current")
-  );
+  if (!created) {
+    // Gets all of the attributes in userDailyNutrition table that need to be updated
+    // so that only those attributes are updated
+    const updateFields = Object.keys(
+      userNutritionProgress.rawAttributes
+    ).filter((key) => key.startsWith("current"));
 
-  // Creates new object that contains all updated values of the nutritional information for the users day
-  const updatedValues = {};
-  updateFields.forEach((field) => {
-    updatedValues[field] = userNutritionData[field] + 10; //userDailyNutritionData[field];
-  });
+    // Creates new object that contains all updated values of the nutritional information for the users day
+    const updatedValues = {};
+    updateFields.forEach((field) => {
+      updatedValues[field] =
+        userNutritionData[field] + userDailyNutritionData[field];
+    });
 
-  // Updates the values we want updated
-  await userNutritionData.update(updatedValues);
+    // Updates the values we want updated
+    await userNutritionData.update(updatedValues);
+  }
 };
 
 export default {

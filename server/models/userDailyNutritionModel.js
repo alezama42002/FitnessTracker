@@ -13,6 +13,10 @@ const userDailyNutrition = sequelize.define("userDailyNutrition", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  logDate: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   currentCalories: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -117,7 +121,7 @@ const userDailyNutrition = sequelize.define("userDailyNutrition", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  currentPhosporus: {
+  currentPhosphorus: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
