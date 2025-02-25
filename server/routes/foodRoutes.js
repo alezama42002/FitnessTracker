@@ -16,4 +16,6 @@ router.delete("/Remove", foodController.removeFood);
 // Edits foods' nutritional values in the database
 router.patch("/Edit", foodController.modifyFood);
 
+router.get("/Recommend", foodController.recommendFood);
+
 export default router;

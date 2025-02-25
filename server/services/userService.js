@@ -29,11 +29,11 @@ const addFoodforUser = async (userID, foodData) => {
 
 const editFood = async (foodData) => {
   const { foodID, updatedFields } = foodData;
-  
+
   // Check if the food exists
   const existingFood = await Food.findByPk(foodID);
   if (!existingFood) {
-    throw new Error('Food not found');
+    throw new Error("Food not found");
   }
 
   // Update the food
