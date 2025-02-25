@@ -14,6 +14,11 @@ router.get("/Macros", userController.getMacros);
 router.post("/AddUser", userController.addUser);
 
 // Logs food for user
-router.post("/LogFood", userController.addFoodById);
+router.post("/LogFood", userController.logFood);
 
+// Delete log of food incase of an error
+router.delete("/DeleteLog", userController.deleteLog);
+
+// Edit log of food incase of an error
+router.patch("/EditLog", userController.editLog);
 export default router;
