@@ -36,6 +36,8 @@ const addFoodforUser = async (logData) => {
 
 // Adds logged foods nutritional information to users daily totals
 const updateUserNutrition = async (userDailyNutritionData) => {
+  const { Quantity, adjustmentType } = userDailyNutritionData;
+
   const date = new Date();
   const month = date.getMonth() + 1; // Months are 0-based
   const day = date.getDate();
@@ -62,8 +64,14 @@ const updateUserNutrition = async (userDailyNutritionData) => {
     // Creates new object that contains all updated values of the nutritional information for the users day
     const updatedValues = {};
     updateFields.forEach((field) => {
-      updatedValues[field] =
-        userNutritionData[field] + userDailyNutritionData[field];
+      // Adjusts total nutritional information based on if adding or deleting log
+      if (adjustmentType === "Add") {
+        updatedValues[field] =
+          userNutritionData[field] + userDailyNutritionData[field] * Quantity;
+      } else {
+        updatedValues[field] =
+          userNutritionData[field] - userDailyNutritionData[field] * Quantity;
+      }
     });
 
     // Updates the values we want updated

@@ -16,4 +16,7 @@ router.post("/AddUser", userController.addUser);
 // Logs food for user
 router.post("/LogFood", userController.logFood);
 
+// Delete log of food incase of an error
+router.delete("/DeleteLog", userController.deleteLog);
+
 export default router;

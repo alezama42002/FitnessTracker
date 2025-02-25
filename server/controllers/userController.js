@@ -190,6 +190,8 @@ const logFood = async (req, res) => {
     // Additional nutritional information coming from newly logged food
     const userAddedNutritionData = {
       userID: userID,
+      Quantity: quantity,
+      adjustmentType: "Add",
       currentCalories: finalFoodData.Calories ?? 0,
       currentProtein: finalFoodData.Protein ?? 0,
       currentCarbohydrates: finalFoodData.Carbohydrates ?? 0,
@@ -216,7 +218,7 @@ const logFood = async (req, res) => {
       currentMagnesium: finalFoodData.Magnesium ?? 0,
       currentManganese: finalFoodData.Manganese ?? 0,
       currentSodium: finalFoodData.Sodium ?? 0,
-      currentPhosphorus: finalFoodData.Phosporus ?? 0,
+      currentPhosphorus: finalFoodData.Phosphorus ?? 0,
       currentSelenium: finalFoodData.Selenium ?? 0,
       currentZinc: finalFoodData.Zinc ?? 0,
     };
@@ -238,4 +240,19 @@ const addUser = async (req, res) => {
   res.send("User added!");
 };
 
-export default { getMacros, logFood, addUser };
+// Deletes logged food from userFood and adjusts users day nutritional totals
+// in userDailyNutrition Table
+const deleteLog = async (req, res) => {
+  const { userFood_ID } = req.body;
+
+  const loggedFoodData = await foodService.getUserFoodData(userFood_ID);
+
+  // Deletes food from userFood Table
+  await foodService.deleteUserFood(userFood_ID);
+
+  await userService.updateUserNutrition(loggedFoodData);
+
+  res.send("Food Log Deleted!");
+};
+
+export default { getMacros, logFood, addUser, deleteLog };

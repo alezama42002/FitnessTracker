@@ -56,10 +56,65 @@ const getFoods = async (foodName) => {
   return foods;
 };
 
+const deleteUserFood = async (userFood_ID) => {
+  await userFood.destroy({
+    where: { userFood_ID: userFood_ID },
+  });
+};
+
+const getUserFoodData = async (userFood_ID) => {
+  const food = await userFood.findOne({
+    where: { userFood_ID: userFood_ID },
+  });
+
+  const foodID = food.foodID;
+  const userID = food.userID;
+  const foodData = await getFood(foodID);
+
+  const loggedFoodNutritionData = {
+    userID: userID,
+    Quantity: food.Quantity,
+    adjustmentType: "Subtract",
+    currentCalories: foodData.Calories ?? 0,
+    currentProtein: foodData.Protein ?? 0,
+    currentCarbohydrates: foodData.Carbohydrates ?? 0,
+    currentFats: foodData.Fats ?? 0,
+    currentFiber: foodData.Fiber ?? 0,
+    currentVitaminA: foodData.VitaminA ?? 0,
+    currentVitaminB1: foodData.VitaminB1 ?? 0,
+    currentVitaminB2: foodData.VitaminB2 ?? 0,
+    currentVitaminB3: foodData.VitaminB3 ?? 0,
+    currentVitaminB5: foodData.VitaminB5 ?? 0,
+    currentVitaminB6: foodData.VitaminB6 ?? 0,
+    currentVitaminB9: foodData.VitaminB9 ?? 0,
+    currentVitaminB12: foodData.VitaminB12 ?? 0,
+    currentVitaminC: foodData.VitaminC ?? 0,
+    currentVitaminD: foodData.VitaminD ?? 0,
+    currentVitaminE: foodData.VitaminE ?? 0,
+    currentVitaminK: foodData.VitaminK ?? 0,
+    currentCalcium: foodData.Calcium ?? 0,
+    currentChlorine: foodData.Chlorine ?? 0,
+    currentCopper: foodData.Copper ?? 0,
+    currentIron: foodData.Iron ?? 0,
+    currentIodine: foodData.Iodine ?? 0,
+    currentPotassium: foodData.Potassium ?? 0,
+    currentMagnesium: foodData.Magnesium ?? 0,
+    currentManganese: foodData.Manganese ?? 0,
+    currentSodium: foodData.Sodium ?? 0,
+    currentPhosphorus: foodData.Phosphorus ?? 0,
+    currentSelenium: foodData.Selenium ?? 0,
+    currentZinc: foodData.Zinc ?? 0,
+  };
+
+  return loggedFoodNutritionData;
+};
+
 export default {
   addFoodtoDB,
   deleteFood,
   getFood,
   getFoods,
   getFoodID,
+  deleteUserFood,
+  getUserFoodData,
 };
