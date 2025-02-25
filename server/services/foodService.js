@@ -22,7 +22,7 @@ const deleteFood = async (foodID, foodName) => {
 const getRecommendedFood = async (wants) => {
   try {
     if (wants === "high protein") {
-      return await Food.findByPk();
+      return await Food.findByPk(1);
     }
   } catch (error) {
     console.error("Error getting recommended food: ", error);

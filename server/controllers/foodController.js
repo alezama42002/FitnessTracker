@@ -63,15 +63,21 @@ const modifyFood = async (req, res) => {
 
   userService.editFood(foodData);
 
-  res.send("Food Edited Successfully")
-}
+  res.send("Food Edited Successfully");
+};
 
 // Recommends food to the user based on what they are looking for (ex: high protein, high carbs, etc.)
-const recommendFood = (req, res) => {
+const recommendFood = async (req, res) => {
   const { wants } = req.body;
-  console.log(wants)
-  const foodRecs = foodService.getRecommendedFood(wants);
-  res.send(foodRecs)
-}
+  console.log(wants);
+  const foodRecs = await foodService.getRecommendedFood(wants);
+  res.send(foodRecs);
+};
 
-export default { searchFoodByName, addFood, removeFood, modifyFood, recommendFood };
+export default {
+  searchFoodByName,
+  addFood,
+  removeFood,
+  modifyFood,
+  recommendFood,
+};
