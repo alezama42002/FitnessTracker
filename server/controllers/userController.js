@@ -191,7 +191,6 @@ const logFood = async (req, res) => {
     const userAddedNutritionData = {
       userID: userID,
       Quantity: quantity,
-      adjustmentType: "Add",
       currentCalories: finalFoodData.Calories ?? 0,
       currentProtein: finalFoodData.Protein ?? 0,
       currentCarbohydrates: finalFoodData.Carbohydrates ?? 0,
@@ -245,14 +244,41 @@ const addUser = async (req, res) => {
 const deleteLog = async (req, res) => {
   const { userFood_ID } = req.body;
 
-  const loggedFoodData = await foodService.getUserFoodData(userFood_ID);
+  // Get the logged foods nutritional information and adjust quantity to be negative
+  // since deduction from days nutritional totals is needed
+  let loggedFoodData = await foodService.getUserFoodData(userFood_ID);
+  loggedFoodData.Quantity = -loggedFoodData.Quantity;
 
   // Deletes food from userFood Table
   await foodService.deleteUserFood(userFood_ID);
 
+  // Update the users day nutritional totals
   await userService.updateUserNutrition(loggedFoodData);
 
   res.send("Food Log Deleted!");
 };
 
-export default { getMacros, logFood, addUser, deleteLog };
+const editLog = async (req, res) => {
+  const { userFood_ID, newQuantity } = req.body;
+
+  // Get the original Quantity of the logged food
+  const originalQuantity = await userService.getUserFoodQuantity(userFood_ID);
+
+  // Update the userFood in userFood table
+  await userService.updateUserFood({
+    userFood_ID: userFood_ID,
+    Quantity: newQuantity,
+  });
+
+  // Get logged Foods data and adjust the quantity accordingly based on if
+  // the edit is increasing or decreasing quantity of logged food
+  let loggedFoodData = await foodService.getUserFoodData(userFood_ID);
+  loggedFoodData.Quantity = newQuantity - originalQuantity;
+
+  // Update the users day nutrition totals
+  await userService.updateUserNutrition(loggedFoodData);
+
+  res.send("Logged Food Edited!");
+};
+
+export default { getMacros, logFood, addUser, deleteLog, editLog };

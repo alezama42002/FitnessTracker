@@ -43,6 +43,19 @@ const updateUserNutrition = async (userDailyNutritionData) => {
   const day = date.getDate();
   const year = date.getFullYear().toString().slice(-2);
 
+  // Gets all of the attributes in userDailyNutrition table that need to be updated
+  // so that only those attributes are updated
+  const updateFields = Object.keys(userNutritionProgress.rawAttributes).filter(
+    (key) => key.startsWith("current")
+  );
+
+  // Creates new object that contains all updated values of the nutritional information for the users day
+  const updatedValues = {};
+  updateFields.forEach((field) => {
+    // Adjusts nutritional information based on quantity given
+    updatedValues[field] = userDailyNutritionData[field] * Quantity;
+  });
+
   // Finds or creates users daily nutrition tracking in Database
   const [userNutritionData, created] = await userNutritionProgress.findOrCreate(
     {
@@ -50,33 +63,36 @@ const updateUserNutrition = async (userDailyNutritionData) => {
         userID: userDailyNutritionData.userID,
         logDate: `0${month}/${day}/${year}`,
       },
-      defaults: userDailyNutritionData,
+      defaults: updatedValues,
     }
   );
 
   if (!created) {
-    // Gets all of the attributes in userDailyNutrition table that need to be updated
-    // so that only those attributes are updated
-    const updateFields = Object.keys(
-      userNutritionProgress.rawAttributes
-    ).filter((key) => key.startsWith("current"));
-
-    // Creates new object that contains all updated values of the nutritional information for the users day
-    const updatedValues = {};
     updateFields.forEach((field) => {
-      // Adjusts total nutritional information based on if adding or deleting log
-      if (adjustmentType === "Add") {
-        updatedValues[field] =
-          userNutritionData[field] + userDailyNutritionData[field] * Quantity;
-      } else {
-        updatedValues[field] =
-          userNutritionData[field] - userDailyNutritionData[field] * Quantity;
-      }
+      // Adjusts total nutritional information
+      updatedValues[field] = userNutritionData[field] + updatedValues[field];
     });
 
     // Updates the values we want updated
     await userNutritionData.update(updatedValues);
   }
+};
+
+const updateUserFood = async (userFoodAdjustmentData) => {
+  const { userFood_ID, Quantity } = userFoodAdjustmentData;
+
+  await userFood.update(
+    { Quantity: Quantity },
+    { where: { userFood_ID: userFood_ID } }
+  );
+};
+
+const getUserFoodQuantity = async (userFood_ID) => {
+  const userFoodData = await userFood.findOne({
+    where: { userFood_ID: userFood_ID },
+  });
+
+  return userFoodData.dataValues.Quantity;
 };
 
 export default {
@@ -85,4 +101,6 @@ export default {
   getUserID,
   addFoodforUser,
   updateUserNutrition,
+  updateUserFood,
+  getUserFoodQuantity,
 };

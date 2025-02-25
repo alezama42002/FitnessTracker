@@ -74,7 +74,6 @@ const getUserFoodData = async (userFood_ID) => {
   const loggedFoodNutritionData = {
     userID: userID,
     Quantity: food.Quantity,
-    adjustmentType: "Subtract",
     currentCalories: foodData.Calories ?? 0,
     currentProtein: foodData.Protein ?? 0,
     currentCarbohydrates: foodData.Carbohydrates ?? 0,
