@@ -87,6 +87,28 @@ const updateUserFood = async (userFoodAdjustmentData) => {
   );
 };
 
+
+const editFood = async (foodData) => {
+  const { foodID, updatedFields } = foodData;
+
+  // Check if the food exists
+  const existingFood = await Food.findByPk(foodID);
+  if (!existingFood) {
+    throw new Error("Food not found");
+  }
+
+  // Update the food
+  await Food.update(
+    { ...updatedFields },
+    {
+      where: { foodID },
+    }
+  );
+
+  // Return the updated food data
+  return await Food.findByPk(foodID);
+};
+
 const getUserFoodQuantity = async (userFood_ID) => {
   const userFoodData = await userFood.findOne({
     where: { userFood_ID: userFood_ID },
@@ -102,5 +124,7 @@ export default {
   addFoodforUser,
   updateUserNutrition,
   updateUserFood,
+  editFood,
   getUserFoodQuantity,
 };
+

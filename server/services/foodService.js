@@ -1,9 +1,15 @@
+import { Sequelize } from "sequelize";
 import Food from "../models/foodModel.js";
 import userFood from "../models/userFoodModel.js";
 
 // Adds food to Database (Foods Table)
 const addFoodtoDB = async (foodData) => {
-  return await Food.create(foodData);
+  try {
+    const newFood = Food.create(foodData);
+    return newFood;
+  } catch (error) {
+    console.error("Issue adding food to DB:", error);
+  }
 };
 
 // Deletes food from Database (Foods Table) using the foodID and foodName
@@ -14,6 +20,47 @@ const deleteFood = async (foodID, foodName) => {
       foodName: foodName,
     },
   });
+};
+
+const getRecommendedFood = async (MacroRequest) => {
+  try {
+    switch (MacroRequest) {
+      case "High Protein":
+        return await Food.findAll({
+          where: {
+            Protein: {
+              [Sequelize.Op.gt]: Sequelize.literal("Calories / 10"),
+            },
+          },
+        });
+      case "High Carb":
+        return await Food.findAll({
+          where: {
+            Carbohydrates: {
+              [Sequelize.Op.gte]: 15,
+            },
+          },
+        });
+      case "Low Carb":
+        return await Food.findAll({
+          where: {
+            Carbohydrates: {
+              [Sequelize.Op.lt]: 15,
+            },
+          },
+        });
+      case "Low Fat":
+        return await Food.findAll({
+          where: {
+            Fats: {
+              [Sequelize.Op.lt]: 15,
+            },
+          },
+        });
+    }
+  } catch (error) {
+    console.error("Error getting recommended food: ", error);
+  }
 };
 
 // Gets food from Database (Foods Table) using the foodID
@@ -111,6 +158,7 @@ const getUserFoodData = async (userFood_ID) => {
 export default {
   addFoodtoDB,
   deleteFood,
+  getRecommendedFood,
   getFood,
   getFoods,
   getFoodID,
