@@ -69,7 +69,6 @@ const modifyFood = async (req, res) => {
 // Recommends food to the user based on what they are looking for (ex: high protein, high carbs, etc.)
 const recommendFood = async (req, res) => {
   const { wants } = req.body;
-  console.log(wants);
   const foodRecs = await foodService.getRecommendedFood(wants);
   res.send(foodRecs);
 };
