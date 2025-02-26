@@ -8,6 +8,14 @@ const Food = sequelize.define("Food", {
     autoIncrement: true,
     primaryKey: true,
   },
+  foodBrand: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  Description: {
+    type: DataTypes.JSON,
+    allowNull: false,
+  },
   foodName: {
     type: DataTypes.STRING,
     allowNull: false,
