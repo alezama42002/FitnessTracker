@@ -20,34 +20,41 @@ const deleteFood = async (foodID, foodName) => {
   });
 };
 
-const getRecommendedFood = async (wants) => {
+const getRecommendedFood = async (MacroRequest) => {
   try {
-    switch (wants){      
-      case 'high protein':
+    switch (MacroRequest) {
+      case "High Protein":
         return await Food.findAll({
           where: {
             Protein: {
-              [Sequelize.Op.gt]: Sequelize.literal("Calories / 10") ,
-            }
-          }
+              [Sequelize.Op.gt]: Sequelize.literal("Calories / 10"),
+            },
+          },
         });
-      case 'high carbs':
+      case "High Carb":
         return await Food.findAll({
           where: {
             Carbohydrates: {
               [Sequelize.Op.gte]: 15,
-            }
-          }
-        })
-      case 'low carbs':
+            },
+          },
+        });
+      case "Low Carb":
         return await Food.findAll({
           where: {
             Carbohydrates: {
               [Sequelize.Op.lt]: 15,
-            }
-          }
-        })
-
+            },
+          },
+        });
+      case "Low Fat":
+        return await Food.findAll({
+          where: {
+            Fats: {
+              [Sequelize.Op.lt]: 15,
+            },
+          },
+        });
     }
   } catch (error) {
     console.error("Error getting recommended food: ", error);
