@@ -7,6 +7,12 @@ import express from "express";
 import userRouter from "./routes/userRoutes.js";
 import foodRouter from ".//routes/foodRoutes.js";
 
+/*//ONLY UNCOMMENT IF CHANGES ARE MADE TO MODELS!
+import sequelize from "./config/database.js";
+import Food from "./models/foodModel.js";
+
+sequelize.sync({ force: true });*/
+
 const app = express();
 app.use(express.json());
 

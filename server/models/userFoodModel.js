@@ -17,7 +17,7 @@ const userFood = sequelize.define("userFood", {
     foreignKey: true,
   },
   Quantity: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
 });
