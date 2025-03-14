@@ -2,7 +2,6 @@ import User from "../models/userModel.js";
 import Food from "../models/foodModel.js";
 import userFood from "../models/userFoodModel.js";
 import userNutritionProgress from "../models/userDailyNutritionModel.js";
-import userService from "../services/foodService.js";
 
 // Adds new user to the Users table
 const addUser = async (userData) => {
@@ -10,12 +9,24 @@ const addUser = async (userData) => {
 };
 
 // Removes a user from the Users table
-const removeUser = async (username) => {
+const deleteUser = async (userID) => {
   return await User.destroy({
     where: {
-      Username: username,
+      userID: userID,
     },
   });
+};
+
+const userExists = async (userID) => {
+  const user = await User.findOne({
+    where: {
+      userID: userID,
+    },
+  });
+
+  const presentStatus = user === null ? false : true;
+
+  return presentStatus;
 };
 
 // Gets the userID for a user using the username
@@ -25,6 +36,10 @@ const getUserID = async (username) => {
       Username: username,
     },
   });
+
+  if (user === null) {
+    return null;
+  }
 
   return user.userID;
 };
@@ -87,44 +102,49 @@ const updateUserFood = async (userFoodAdjustmentData) => {
   );
 };
 
-
-const editFood = async (foodData) => {
-  const { foodID, updatedFields } = foodData;
-
-  // Check if the food exists
-  const existingFood = await Food.findByPk(foodID);
-  if (!existingFood) {
-    throw new Error("Food not found");
-  }
-
-  // Update the food
-  await Food.update(
-    { ...updatedFields },
-    {
-      where: { foodID },
-    }
-  );
-
-  // Return the updated food data
-  return await Food.findByPk(foodID);
-};
-
 const getUserFoodQuantity = async (userFood_ID) => {
   const userFoodData = await userFood.findOne({
     where: { userFood_ID: userFood_ID },
   });
 
-  return userFoodData.dataValues.Quantity;
+  if (userFoodData === null) {
+    return null;
+  } else {
+    return userFoodData.dataValues.Quantity;
+  }
+};
+
+const getUserCurrentNutrition = async (Username) => {
+  const userID = await getUserID(Username);
+
+  const date = new Date();
+  const month = date.getMonth() + 1; // Months are 0-based
+  const day = date.getDate();
+  const year = date.getFullYear().toString().slice(-2);
+  const logDate = `0${month}/${day}/${year}`;
+
+  const userCurrentNutritionData = await userNutritionProgress.findOne({
+    where: {
+      userID: userID,
+      logDate: logDate,
+    },
+  });
+
+  if (userCurrentNutritionData === null) {
+    return null;
+  } else {
+    return userCurrentNutritionData;
+  }
 };
 
 export default {
   addUser,
-  removeUser,
+  deleteUser,
+  userExists,
   getUserID,
   addFoodforUser,
   updateUserNutrition,
   updateUserFood,
-  editFood,
   getUserFoodQuantity,
+  getUserCurrentNutrition,
 };
-

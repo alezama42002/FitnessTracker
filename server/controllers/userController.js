@@ -9,70 +9,107 @@ dotenv.config();
 // Calculates the maintainence calories of a user based on information given.
 // Also determines macros based on the users fitness/health goals.
 const getMacros = (req, res) => {
-  const { weight, height, age, gender, activityLevel, goal } = req.body;
-  let maintenanceCalories;
-  let caloriesIntake;
-  let proteinIntake;
-  let carbIntake;
-  let fatIntake;
-  let BMR;
+  try {
+    const { Weight, Height, Age, Gender, activityLevel, Goal } = req.body;
 
-  // Calculates BMR depending on given user information
-  if (gender === "Male") {
-    BMR = 10 * weight + 6.25 * height - 5 * age + 5;
-  } else {
-    BMR = 10 * weight + 6.25 * height - 5 * age - 161;
+    let maintenanceCalories;
+    let caloriesIntake;
+    let proteinIntake;
+    let carbIntake;
+    let fatIntake;
+    let BMR;
+
+    // Calculates BMR depending on given user information
+    if (Gender === "Male") {
+      BMR = 10 * Weight + 6.25 * Height - 5 * Age + 5;
+    } else {
+      BMR = 10 * Weight + 6.25 * Height - 5 * Age - 161;
+    }
+
+    // Calculate maintanence Calories based on BMR and activity level
+    switch (activityLevel) {
+      case "Sedentary":
+        maintenanceCalories = 1.2 * BMR;
+        break;
+      case "Lightly Active":
+        maintenanceCalories = 1.375 * BMR;
+        break;
+      case "Moderately Active":
+        maintenanceCalories = 1.55 * BMR;
+        break;
+      case "Very Active":
+        maintenanceCalories = 1.725 * BMR;
+        break;
+      case "Extra Active":
+        maintenanceCalories = 1.9 * BMR;
+        break;
+      case "Professional Athlete":
+        maintenanceCalories = 2.3 * BMR;
+        break;
+    }
+
+    maintenanceCalories = Math.round(maintenanceCalories);
+
+    switch (Goal) {
+      case "Relaxed Weight Loss":
+        caloriesIntake = maintenanceCalories - 250;
+        break;
+      case "Normal Weight Loss":
+        caloriesIntake = maintenanceCalories - 500;
+        break;
+      case "Relaxed Weight Gain":
+        caloriesIntake = maintenanceCalories + 250;
+        break;
+      case "Normal Weight Gain":
+        caloriesIntake = maintenanceCalories + 500;
+        break;
+    }
+
+    proteinIntake = Math.round((caloriesIntake * 0.25) / 4);
+    carbIntake = Math.round((caloriesIntake * 0.45) / 4);
+    fatIntake = Math.round((caloriesIntake * 0.3) / 9);
+
+    res.status(200).json({
+      Calories: caloriesIntake + " kcal",
+      Protein: proteinIntake + "g",
+      Carbohydrates: carbIntake + "g",
+      Fat: fatIntake + "g",
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
   }
+};
 
-  // Calculate maintanence Calories based on BMR and activity level
-  switch (activityLevel) {
-    case "Sedentary":
-      maintenanceCalories = 1.2 * BMR;
-      break;
-    case "Lightly Active":
-      maintenanceCalories = 1.375 * BMR;
-      break;
-    case "Moderately Active":
-      maintenanceCalories = 1.55 * BMR;
-      break;
-    case "Very Active":
-      maintenanceCalories = 1.725 * BMR;
-      break;
-    case "Extra Active":
-      maintenanceCalories = 1.9 * BMR;
-      break;
-    case "Professional Athlete":
-      maintenanceCalories = 2.3 * BMR;
-      break;
+// Adds user to database based on given user information.
+const addUser = async (req, res) => {
+  try {
+    const userData = req.body;
+
+    if ((await userService.getUserID(userData.Username)) != null) {
+      res.status(409).json("Username is already taken");
+    } else {
+      await userService.addUser(userData);
+      res.status(201).json("User added!");
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
   }
+};
 
-  maintenanceCalories = Math.round(maintenanceCalories);
+// Deletes user from the database based on given information
+const deleteUser = async (req, res) => {
+  try {
+    const { userID } = req.body;
 
-  switch (goal) {
-    case "Relaxed Weight Loss":
-      caloriesIntake = maintenanceCalories - 250;
-      break;
-    case "Normal Weight Loss":
-      caloriesIntake = maintenanceCalories - 500;
-      break;
-    case "Relaxed Weight Gain":
-      caloriesIntake = maintenanceCalories + 250;
-      break;
-    case "Normal Weight Gain":
-      caloriesIntake = maintenanceCalories + 500;
-      break;
+    if ((await userService.userExists(userID)) === false) {
+      res.status(404).json("User does not exist");
+    } else {
+      await userService.deleteUser(userID);
+      res.status(204).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
   }
-
-  proteinIntake = Math.round((maintenanceCalories * 0.25) / 4);
-  carbIntake = Math.round((maintenanceCalories * 0.45) / 4);
-  fatIntake = Math.round((maintenanceCalories * 0.3) / 9);
-
-  res.json({
-    CaloriesIntake: caloriesIntake,
-    ProteinIntake: proteinIntake + "g",
-    CarbohydrateIntake: carbIntake + "g",
-    FatIntake: fatIntake + "g",
-  });
 };
 
 // Adds food to the database by using ID of food
@@ -81,13 +118,12 @@ const logFood = async (req, res) => {
     const {
       foodID,
       foodName,
-      servingSize,
       Calories,
       Protein,
       Carbohydrates,
       Fats,
-      username,
-      quantity,
+      Username,
+      Quantity,
     } = req.body;
 
     let finalFoodID;
@@ -96,7 +132,6 @@ const logFood = async (req, res) => {
     // Foods key nutrtional information is used to find ID.
     const foodResponse = await foodService.getFoodID({
       foodName: foodName,
-      servingSize: servingSize,
       Calories: Calories,
       Protein: Protein,
       Carbohydrates: Carbohydrates,
@@ -128,8 +163,10 @@ const logFood = async (req, res) => {
 
       // Filter data to only get the information needed
       const foodData = {
+        foodBrand: response.data.food.brand_name || "Unknown Brand",
+        Description: response.data.food.food_description || "",
         foodName: response.data.food.food_name || "Unknown Food",
-        servingSize: food.serving_size || 100, // Defaulting to 100 if undefined
+        servingSize: food.metric_serving_amount || 1,
         Calories: food.calories ?? 0,
         Protein: food.protein ?? 0,
         Carbohydrates: food.carbohydrate ?? 0,
@@ -165,7 +202,7 @@ const logFood = async (req, res) => {
       await foodService.addFoodtoDB(foodData);
 
       // Gets foodID of newly created Food in Food Table
-      finalFoodID = foodService.getFoodID({
+      finalFoodID = await foodService.getFoodID({
         foodName: foodData.foodName,
         servingSize: foodData.servingSize,
         Calories: foodData.Calories,
@@ -176,21 +213,23 @@ const logFood = async (req, res) => {
     }
 
     // Gets userID based on username and gets foodID
-    const userID = await userService.getUserID(username);
-    finalFoodID = foodResponse;
+    const userID = await userService.getUserID(Username);
+
+    finalFoodID = foodResponse == false ? finalFoodID : foodResponse;
+
     const finalFoodData = await foodService.getFood(finalFoodID);
 
     // Creates userFood input in DB using userID and foodID
     await userService.addFoodforUser({
       userID: userID,
       foodID: finalFoodID,
-      Quantity: quantity,
+      Quantity: Quantity,
     });
 
     // Additional nutritional information coming from newly logged food
     const userAddedNutritionData = {
       userID: userID,
-      Quantity: quantity,
+      Quantity: Quantity,
       currentCalories: finalFoodData.Calories ?? 0,
       currentProtein: finalFoodData.Protein ?? 0,
       currentCarbohydrates: finalFoodData.Carbohydrates ?? 0,
@@ -226,59 +265,95 @@ const logFood = async (req, res) => {
     // by the new logged food
     await userService.updateUserNutrition(userAddedNutritionData);
 
-    res.send("Food Logged!");
-  } catch (error) {}
+    res.status(201).json("Food Logged");
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
-// Adds user to database based on given user information.
-const addUser = async (req, res) => {
-  const userData = req.body;
+// Edit the log of a food in the case of an erorr when logging originally
+const editLog = async (req, res) => {
+  try {
+    const { userFood_ID, newQuantity } = req.body;
 
-  userService.addUser(userData);
+    // Get the original Quantity of the logged food
+    const originalQuantity = await userService.getUserFoodQuantity(userFood_ID);
 
-  res.send("User added!");
+    if (originalQuantity === null) {
+      res.status(404).send();
+    }
+
+    // Update the userFood in userFood table
+    await userService.updateUserFood({
+      userFood_ID: userFood_ID,
+      Quantity: newQuantity,
+    });
+
+    // Get logged Foods data and adjust the quantity accordingly based on if
+    // the edit is increasing or decreasing quantity of logged food
+    let loggedFoodData = await foodService.getUserFoodData(userFood_ID);
+    loggedFoodData.Quantity = newQuantity - originalQuantity;
+
+    // Update the users day nutrition totals
+    await userService.updateUserNutrition(loggedFoodData);
+
+    res.status(200).json("Food Log Edited!");
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
 // Deletes logged food from userFood and adjusts users day nutritional totals
 // in userDailyNutrition Table
 const deleteLog = async (req, res) => {
+  try {
+    const { userFood_ID } = req.body;
+
+    // Get the logged foods nutritional information and adjust quantity to be negative
+    // since deduction from days nutritional totals is needed
+    let loggedFoodData = await foodService.getUserFoodData(userFood_ID);
+
+    if (loggedFoodData === null) {
+      res.status(404).json("Log Does not Exist");
+    }
+
+    loggedFoodData.Quantity = -loggedFoodData.Quantity;
+
+    // Deletes food from userFood Table
+    await foodService.deleteUserFood(userFood_ID);
+
+    // Update the users day nutritional totals
+    await userService.updateUserNutrition(loggedFoodData);
+
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
   const { userFood_ID } = req.body;
-
-  // Get the logged foods nutritional information and adjust quantity to be negative
-  // since deduction from days nutritional totals is needed
-  let loggedFoodData = await foodService.getUserFoodData(userFood_ID);
-  loggedFoodData.Quantity = -loggedFoodData.Quantity;
-
-  // Deletes food from userFood Table
-  await foodService.deleteUserFood(userFood_ID);
-
-  // Update the users day nutritional totals
-  await userService.updateUserNutrition(loggedFoodData);
-
-  res.send("Food Log Deleted!");
 };
 
-const editLog = async (req, res) => {
-  const { userFood_ID, newQuantity } = req.body;
+const getCurrentNutrition = async (req, res) => {
+  try {
+    const { Username } = req.body;
 
-  // Get the original Quantity of the logged food
-  const originalQuantity = await userService.getUserFoodQuantity(userFood_ID);
+    const userData = await userService.getUserCurrentNutrition(Username);
 
-  // Update the userFood in userFood table
-  await userService.updateUserFood({
-    userFood_ID: userFood_ID,
-    Quantity: newQuantity,
-  });
-
-  // Get logged Foods data and adjust the quantity accordingly based on if
-  // the edit is increasing or decreasing quantity of logged food
-  let loggedFoodData = await foodService.getUserFoodData(userFood_ID);
-  loggedFoodData.Quantity = newQuantity - originalQuantity;
-
-  // Update the users day nutrition totals
-  await userService.updateUserNutrition(loggedFoodData);
-
-  res.send("Logged Food Edited!");
+    if (userData === null) {
+      res.status(404).json("User Currently has No Logs Today");
+    } else {
+      res.status(200).json(userData);
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
-export default { getMacros, logFood, addUser, deleteLog, editLog };
+export default {
+  getMacros,
+  addUser,
+  deleteUser,
+  logFood,
+  editLog,
+  deleteLog,
+  getCurrentNutrition,
+};

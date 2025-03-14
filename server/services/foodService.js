@@ -5,8 +5,7 @@ import userFood from "../models/userFoodModel.js";
 // Adds food to Database (Foods Table)
 const addFoodtoDB = async (foodData) => {
   try {
-    const newFood = Food.create(foodData);
-    return newFood;
+    return await Food.create(foodData);
   } catch (error) {
     console.error("Issue adding food to DB:", error);
   }
@@ -65,8 +64,10 @@ const getRecommendedFood = async (MacroRequest) => {
 
 // Gets food from Database (Foods Table) using the foodID
 const getFood = async (foodID) => {
-  const [food, created] = await Food.findAll({
-    where: { foodID },
+  const food = await Food.findOne({
+    where: {
+      foodID: foodID,
+    },
   });
 
   return food;
@@ -75,12 +76,11 @@ const getFood = async (foodID) => {
 // Gets the foodID for a food based on some of the nutritional information and
 // returns false if not in Database
 const getFoodID = async (foodData) => {
-  const { foodName, servingSize, Calories, Protein, Carbohydrates, Fats } =
-    foodData;
+  const { foodName, Calories, Protein, Carbohydrates, Fats } = foodData;
+
   const food = await Food.findOne({
     where: {
       foodName: foodName,
-      servingSize: servingSize,
       Calories: Calories,
       Protein: Protein,
       Carbohydrates: Carbohydrates,
@@ -113,6 +113,10 @@ const getUserFoodData = async (userFood_ID) => {
   const food = await userFood.findOne({
     where: { userFood_ID: userFood_ID },
   });
+
+  if (food === null) {
+    return null;
+  }
 
   const foodID = food.foodID;
   const userID = food.userID;
@@ -155,6 +159,22 @@ const getUserFoodData = async (userFood_ID) => {
   return loggedFoodNutritionData;
 };
 
+const editFood = async (foodID, updatedFields) => {
+  // Check if the food exists
+  const existingFood = await Food.findByPk(foodID);
+
+  // Update the food
+  await Food.update(
+    { ...updatedFields },
+    {
+      where: { foodID },
+    }
+  );
+
+  // Return the updated food data
+  return await Food.findByPk(foodID);
+};
+
 export default {
   addFoodtoDB,
   deleteFood,
@@ -164,4 +184,5 @@ export default {
   getFoodID,
   deleteUserFood,
   getUserFoodData,
+  editFood,
 };
