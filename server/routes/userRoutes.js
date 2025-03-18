@@ -16,6 +16,12 @@ import {
   validateGetCurrentNutrition,
 } from "../middleware/userEndpointsValidator.js";
 
+router.post("/Login", userController.Login);
+
+router.delete("/Logout", userController.Logout);
+
+router.post("/Token", userController.newToken);
+
 // Return total Calories and Macros user should be consuming for goal
 router.get("/Macros", validateMacroRequest, userController.getMacros);
 
