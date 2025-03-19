@@ -3,8 +3,47 @@ import axios from "axios";
 import dotenv from "dotenv";
 import userService from "../services/userService.js"; // Imports quieres/mutations related to User
 import foodService from "../services/foodService.js";
+import utilService from "../services/utilService.js";
+import bycrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { generateAccessToken } from "../middleware/authentication.js";
 
 dotenv.config();
+
+const Login = async (req, res) => {
+  const user = await userService.getUser(req.body.Username);
+  const user_ = { name: req.body.Username };
+
+  if (user === null) return res.status(400).send("Cannot Find User");
+
+  try {
+    if (await bycrypt.compare(req.body.Password, user.Password)) {
+      const accessToken = generateAccessToken(user_);
+      const refreshToken = jwt.sign(user_, process.env.REFRESH_TOKEN_SECRET);
+      await utilService.addToken(refreshToken);
+      res.json({ accessToken: accessToken, refreshToken: refreshToken });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send();
+  }
+};
+
+const Logout = (req, res) => {
+  utilService.deleteToken(req.body.Token);
+  res.sendStatus(204);
+};
+
+const newToken = (req, res) => {
+  const refreshToken = req.body.Token;
+  if (refreshToken === null) return res.sendStatus(401);
+  if (utilService.findToken(refreshToken) === true) return res.sendStatus(403);
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    const accessToken = generateAccessToken({ name: user.name });
+    res.json({ accessToken: accessToken });
+  });
+};
 
 // Calculates the maintainence calories of a user based on information given.
 // Also determines macros based on the users fitness/health goals.
@@ -88,6 +127,7 @@ const addUser = async (req, res) => {
     if ((await userService.getUserID(userData.Username)) != null) {
       res.status(409).json("Username is already taken");
     } else {
+      userData.Password = await bycrypt.hash(req.body.Password, 10);
       await userService.addUser(userData);
       res.status(201).json("User added!");
     }
@@ -349,6 +389,9 @@ const getCurrentNutrition = async (req, res) => {
 };
 
 export default {
+  Login,
+  Logout,
+  newToken,
   getMacros,
   addUser,
   deleteUser,
