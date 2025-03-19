@@ -21,6 +21,50 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
+const validateLogin = [
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .notEmpty()
+    .withMessage("Username cannot be empty"),
+
+  body("Password")
+    .exists()
+    .withMessage("Password is required")
+    .isString()
+    .withMessage("Password must be a string")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long"),
+
+  handleValidationErrors,
+];
+
+const validateLogout = [
+  body("Token")
+    .exists()
+    .withMessage("Token is required")
+    .isString()
+    .withMessage("Token must be a string")
+    .notEmpty()
+    .withMessage("Token cannot be empty"),
+
+  handleValidationErrors,
+];
+
+const validateToken = [
+  body("Token")
+    .exists()
+    .withMessage("Token is required")
+    .isString()
+    .withMessage("Token must be a string")
+    .notEmpty()
+    .withMessage("Token cannot be empty"),
+
+  handleValidationErrors,
+];
+
 const validateMacroRequest = [
   // Validation rules
   body("Weight")
@@ -250,6 +294,9 @@ const validateGetCurrentNutrition = [
 ];
 
 export {
+  validateLogin,
+  validateLogout,
+  validateToken,
   validateMacroRequest,
   validateAddUser,
   validateDeleteUser,

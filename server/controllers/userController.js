@@ -6,10 +6,7 @@ import foodService from "../services/foodService.js";
 import utilService from "../services/utilService.js";
 import bycrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {
-  authenticateToken,
-  generateAccessToken,
-} from "../middleware/authentication.js";
+import { generateAccessToken } from "../middleware/authentication.js";
 
 dotenv.config();
 

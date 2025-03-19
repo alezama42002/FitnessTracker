@@ -7,6 +7,9 @@ const router = express.Router();
 // Imports the usersController functions in order to use in endpoint declarations
 import userController from "../controllers/userController.js";
 import {
+  validateLogin,
+  validateLogout,
+  validateToken,
   validateMacroRequest,
   validateAddUser,
   validateDeleteUser,
@@ -15,34 +18,61 @@ import {
   validateDeleteLog,
   validateGetCurrentNutrition,
 } from "../middleware/userEndpointsValidator.js";
+import { authenticateUser } from "../middleware/authentication.js";
 
-router.post("/Login", userController.Login);
+router.post("/Login", validateLogin, userController.Login);
 
-router.delete("/Logout", userController.Logout);
+router.delete("/Logout", validateLogout, userController.Logout);
 
-router.post("/Token", userController.newToken);
+router.post("/Token", validateToken, userController.newToken);
 
 // Return total Calories and Macros user should be consuming for goal
 router.get("/Macros", validateMacroRequest, userController.getMacros);
 
 // Adds user to the database
-router.post("/AddUser", validateAddUser, userController.addUser);
+router.post(
+  "/AddUser",
+  authenticateUser,
+  validateAddUser,
+  userController.addUser
+);
 
 // Removes user from the database
-router.delete("/DeleteUser", validateDeleteUser, userController.deleteUser);
+router.delete(
+  "/DeleteUser",
+  authenticateUser,
+  validateDeleteUser,
+  userController.deleteUser
+);
 
 // Logs food for user
-router.post("/LogFood", validateLogFood, userController.logFood);
+router.post(
+  "/LogFood",
+  authenticateUser,
+  validateLogFood,
+  userController.logFood
+);
 
 // Edits logged food incase of an error
-router.patch("/EditLog", validateEditLog, userController.editLog);
+router.patch(
+  "/EditLog",
+  authenticateUser,
+  validateEditLog,
+  userController.editLog
+);
 
 // Delete log of food incase of an error
-router.delete("/DeleteLog", validateDeleteLog, userController.deleteLog);
+router.delete(
+  "/DeleteLog",
+  authenticateUser,
+  validateDeleteLog,
+  userController.deleteLog
+);
 
 // Get the users current nutritional total for the day
 router.get(
   "/GetCurrentNutrition",
+  authenticateUser,
   validateGetCurrentNutrition,
   userController.getCurrentNutrition
 );
