@@ -29,9 +29,11 @@ export default function Login() {
 
       if (response.data != "Not Allowed") {
         localStorage.setItem("accessToken", response.data.accessToken);
-        navigate("/home");
+        navigate("/Dashboard/Progress");
       }
-    } catch (error) {}
+    } catch (error) {
+      return `Error: ${error}`;
+    }
   };
 
   return (

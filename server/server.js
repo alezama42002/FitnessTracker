@@ -6,15 +6,19 @@ import express from "express";
 
 import userRouter from "./routes/userRoutes.js";
 import foodRouter from ".//routes/foodRoutes.js";
+import cors from "cors";
 
 /*//ONLY UNCOMMENT IF CHANGES ARE MADE TO MODELS!
 import sequelize from "./config/database.js";
 import Food from "./models/foodModel.js";
+import User from "./models/userModel.js";
+import refreshToken from "./models/refreshTokensModel.js";
 
 sequelize.sync({ force: true });*/
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // Allows the server to be listening for requests on port 3000
 app.listen(3000, () => console.log("Server running on port 3000"));

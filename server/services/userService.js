@@ -29,6 +29,14 @@ const userExists = async (userID) => {
   return presentStatus;
 };
 
+const getUser = async (username) => {
+  return await User.findOne({
+    where: {
+      Username: username,
+    },
+  });
+};
+
 // Gets the userID for a user using the username
 const getUserID = async (username) => {
   const user = await User.findOne({
@@ -141,6 +149,7 @@ export default {
   addUser,
   deleteUser,
   userExists,
+  getUser,
   getUserID,
   addFoodforUser,
   updateUserNutrition,

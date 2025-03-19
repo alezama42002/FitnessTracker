@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-const authenticateToken = (req, res, next) => {
+const authenticateUser = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -18,4 +18,4 @@ const authenticateToken = (req, res, next) => {
 const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30m" });
 };
-export { authenticateToken, generateAccessToken };
+export { authenticateUser, generateAccessToken };
