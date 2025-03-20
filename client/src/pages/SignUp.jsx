@@ -6,7 +6,7 @@ import Logo from "../assets/logo.png";
 export default function SignUp() {
   return (
     <div className="flex justify-center items-center h-screen bg-[#0E131F]">
-      <div className=" w-full mx-8 lg:mx-140">
+      <div className=" w-full mx-8 lg:mx-180">
         <div className="flex flex-col justify-center items-center">
           <img src={Logo} alt="" className="h-30 lg:h-46" />
           <h1 className="text-white font-normal text-[26px] lg:text-[30px] pb-8 pt-3">
