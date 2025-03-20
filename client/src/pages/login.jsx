@@ -53,12 +53,12 @@ export default function Login() {
           className="bg-[#19212C] space-y-6 rounded-[16px] p-8"
         >
           <Input
-            inputName="Username:"
+            inputName="Username"
             field="Username"
             sendData={handleInputChange}
           />
           <Input
-            inputName="Password:"
+            inputName="Password"
             field="Password"
             sendData={handleInputChange}
           />
