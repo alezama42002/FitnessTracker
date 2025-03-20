@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "../assets/Logo.png";
 import Input from "../components/Input";
 import { useState } from "react";
+import Select from "../components/Select";
 
 export default function AccountInformation() {
   const [formData, setFormData] = useState({
@@ -15,6 +16,15 @@ export default function AccountInformation() {
       [field]: value,
     }));
   };
+
+  const activityLevelOptions = [
+    "Sedentary",
+    "Lightly Active",
+    "Moderately Active",
+    "Very Active",
+    "Extra Active",
+    "Professional Athlete",
+  ];
 
   return (
     <div className="bg-[#0E131F] flex justify-center items-center h-screen">
@@ -30,32 +40,32 @@ export default function AccountInformation() {
             </h1>
           </div>
           <Input
-            inputName="First Name:"
+            inputName="First Name"
             field="First-Name"
             sendData={handleInputChange}
           />
           <Input
-            inputName="Last Name:"
+            inputName="Last Name"
             field="Last-Name"
             sendData={handleInputChange}
           />
           <Input
-            inputName="Gender:"
+            inputName="Gender"
             field="Gender"
             sendData={handleInputChange}
           />
-          <Input inputName="Age:" field="Age" sendData={handleInputChange} />
+          <Input inputName="Age" field="Age" sendData={handleInputChange} />
           <Input
-            inputName="Weight:"
+            inputName="Weight"
             field="Weight"
             sendData={handleInputChange}
           />
           <Input
-            inputName="Height:"
+            inputName="Height"
             field="Height"
             sendData={handleInputChange}
           />
-
+          <Select options={activityLevelOptions}></Select>
           <div className="flex justify-center items-center">
             <button className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[20px]">
               Submit
