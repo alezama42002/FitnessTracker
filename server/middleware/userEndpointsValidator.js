@@ -27,6 +27,8 @@ const validateLogin = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long")
     .notEmpty()
     .withMessage("Username cannot be empty"),
 
