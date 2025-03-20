@@ -3,19 +3,19 @@ import Logo from "../assets/Logo.png";
 import Input from "../components/Input";
 import { useState } from "react";
 import Select from "../components/Select";
+import { useNavigate } from "react-router-dom";
 
 export default function AccountInformation() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    Username: "",
-    Password: "",
+    FirstName: "",
+    LastName: "",
+    Gender: "",
+    Age: "",
+    Weight: "",
+    Height: "",
+    ActivityLevel: "",
   });
-
-  const handleInputChange = (field, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
 
   const activityLevelOptions = [
     "Sedentary",
@@ -25,6 +25,25 @@ export default function AccountInformation() {
     "Extra Active",
     "Professional Athlete",
   ];
+
+  const handleInputChange = (field, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
+
+  const handleSelectChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const submitInformation = () => {
+    navigate("/Dashboard/Progress");
+  };
 
   return (
     <div className="bg-[#0E131F] flex justify-center items-center h-screen">
@@ -41,12 +60,12 @@ export default function AccountInformation() {
           </div>
           <Input
             inputName="First Name"
-            field="First-Name"
+            field="FirstName"
             sendData={handleInputChange}
           />
           <Input
             inputName="Last Name"
-            field="Last-Name"
+            field="LastName"
             sendData={handleInputChange}
           />
           <Input
@@ -65,9 +84,17 @@ export default function AccountInformation() {
             field="Height"
             sendData={handleInputChange}
           />
-          <Select options={activityLevelOptions}></Select>
+          <Select
+            labelName="ActivityLevel"
+            sendData={handleSelectChange}
+            options={activityLevelOptions}
+          ></Select>
           <div className="flex justify-center items-center">
-            <button className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[20px]">
+            <button
+              type="button"
+              onClick={submitInformation}
+              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[20px]"
+            >
               Submit
             </button>
           </div>
