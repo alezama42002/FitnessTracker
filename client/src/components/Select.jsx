@@ -18,7 +18,7 @@ export default function Select({ labelName, options, sendData }) {
         >
           <option value="" disabled selected hidden></option>
           {options.map((option, index) => (
-            <option key={index} value={option} className="text-black">
+            <option key={index} value={option} className="text-white">
               {option}
             </option>
           ))}

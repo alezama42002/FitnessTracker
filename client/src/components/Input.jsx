@@ -5,7 +5,7 @@ export default function Input({ inputName, field, sendData }) {
 
   return (
     <div>
-      <label className="block text-sm/6 text-white font-normal text-[18px]">
+      <label className="block text-sm/6 text-white font-normal text-[16px]">
         {inputName}:
       </label>
       <div className="mt-2">

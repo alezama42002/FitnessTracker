@@ -47,14 +47,14 @@ export default function AccountInformation() {
 
   return (
     <div className="bg-[#0E131F] flex justify-center items-center h-screen">
-      <div className=" w-full mx-115 lg:mx-90">
+      <div className=" w-full mx-8 md:mx-40 lg:mx-60 xl:mx-130 2xl:mx-180">
         <form
           action="#"
           method="POST"
           className="bg-[#19212C] space-y-6 rounded-[16px] p-8"
         >
           <div className="flex justify-center items-center">
-            <h1 className="text-white font-normal text-[30px]">
+            <h1 className="text-white font-normal text-[24px] lg:text-[30px] ">
               Account Information
             </h1>
           </div>
@@ -93,7 +93,7 @@ export default function AccountInformation() {
             <button
               type="button"
               onClick={submitInformation}
-              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[20px]"
+              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[20px] cursor-pointer"
             >
               Submit
             </button>
