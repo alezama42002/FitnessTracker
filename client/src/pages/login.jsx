@@ -1,21 +1,23 @@
 import React from "react";
 import axios from "axios";
-import myLogo from "../assets/logo.png";
-import { useState } from "react";
+import Logo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import Input from "../components/Input";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     Username: "",
     Password: "",
   });
-  const navigate = useNavigate();
 
-  const handleInputChange = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
+  const handleInputChange = (field, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
   };
 
   const login = async (event) => {
@@ -37,93 +39,48 @@ export default function Login() {
   };
 
   return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-16 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            alt="Your Company"
-            src={myLogo}
-            className="mx-auto h-30 w-auto"
-          />
-          <h2 className="mt-2 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            Sign in to your account
-          </h2>
+    <div className="bg-[#0E131F] flex justify-center items-center h-screen">
+      <div className=" w-full mx-115 lg:mx-90">
+        <div className="flex flex-col justify-center items-center">
+          <img src={Logo} alt="" className="h-30" />
+          <h1 className="text-white font-normal text-[30px] pb-8 pt-3">
+            Sign in to your Account
+          </h1>
         </div>
-
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-sm/6 font-medium text-gray-900"
-              >
-                Username
-              </label>
-              <div className="mt-2">
-                <input
-                  id="Username"
-                  name="Username"
-                  type="text"
-                  onChange={handleInputChange}
-                  required
-                  autoComplete="Username"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm/6 font-medium text-gray-900"
-                >
-                  Password
-                </label>
-                <div className="text-sm">
-                  <a
-                    href="#"
-                    className="font-semibold text-[#0925D9] hover:text-[#5EA5FA]"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="Password"
-                  name="Password"
-                  type="Password"
-                  onChange={handleInputChange}
-                  required
-                  autoComplete="current-password"
-                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-[#0966D9] px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-[#5EA5FA] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onClick={login}
-              >
-                Sign in
-              </button>
-            </div>
-          </form>
-
-          <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Not a member?{" "}
-            <a
-              href="#"
-              className="font-semibold text-[#0925D9] hover:text-[#5EA5FA]"
+        <form
+          action="#"
+          method="POST"
+          className="bg-[#19212C] space-y-6 rounded-[16px] p-8"
+        >
+          <Input
+            inputName="Username:"
+            field="Username"
+            sendData={handleInputChange}
+          />
+          <Input
+            inputName="Password:"
+            field="Password"
+            sendData={handleInputChange}
+          />
+          <div className="flex justify-center items-center">
+            <button
+              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[20px]"
+              onClick={login}
+            >
+              Sign In
+            </button>
+          </div>
+          <div className="flex justify-center items-center text-[14px] font-normal mt-6">
+            <p className="text-white pr-4 ">Not a member?</p>
+            <Link
+              to="/Auth/SignUp"
+              className="text-[#1B9E4B] text-[15px] font-normal"
             >
               Create Account
-            </a>
-          </p>
-        </div>
+            </Link>
+          </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
