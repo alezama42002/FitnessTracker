@@ -2,8 +2,6 @@ import React from "react";
 import Logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 import { CiUser } from "react-icons/ci";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
-import {faUser} from "@fortawesome/free-solid-svg-icons"
 
 export default function Navbar() {
   const userInfo = () => {};
@@ -40,7 +38,12 @@ export default function Navbar() {
         </Link>
       </div>
       <div>
-        <CiUser />
+        <CiUser
+          size={40}
+          color="#AFA99E"
+          onClick={userInfo}
+          className="hover:cursor-pointer"
+        />
       </div>
     </div>
   );
