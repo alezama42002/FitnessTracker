@@ -45,7 +45,6 @@ export default function AccountInformation() {
     event.preventDefault();
 
     const signUpFormData = JSON.parse(localStorage.getItem("SignUp-FormData"));
-    const Token = localStorage.getItem("accessToken");
 
     const newUserData = {
       Username: signUpFormData.Username,
@@ -60,10 +59,7 @@ export default function AccountInformation() {
     };
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/user/AddUser",
-        newUserData
-      );
+      await axios.post("http://localhost:3000/api/user/AddUser", newUserData);
 
       localStorage.removeItem("SignUp-FormData");
       navigate("/Auth/Login");
