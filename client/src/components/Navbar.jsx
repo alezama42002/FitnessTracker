@@ -2,6 +2,8 @@ import React from "react";
 import Logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 import { CiUser } from "react-icons/ci";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
+import {faUser} from "@fortawesome/free-solid-svg-icons"
 
 export default function Navbar() {
   return (
@@ -36,7 +38,7 @@ export default function Navbar() {
         </Link>
       </div>
       <div>
-        <CiUser />
+      <FontAwesomeIcon icon={faUser} size="xl" style={{color: "#ff0000",}} />
       </div>
     </div>
   );
