@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../assets/Logo.png";
+import axios from "axios";
 import Input from "../components/Input";
 import { useState } from "react";
 import Select from "../components/Select";
@@ -41,20 +41,47 @@ export default function AccountInformation() {
     }));
   };
 
-  const submitInformation = () => {
-    navigate("/Dashboard/Progress");
+  const submitInformation = async (event) => {
+    event.preventDefault();
+
+    const signUpFormData = JSON.parse(localStorage.getItem("SignUp-FormData"));
+    const Token = localStorage.getItem("accessToken");
+
+    const newUserData = {
+      Username: signUpFormData.Username,
+      Password: signUpFormData.Password,
+      Height: formData.Height,
+      Weight: formData.Weight,
+      Age: formData.Age,
+      firstName: formData.FirstName,
+      lastName: formData.LastName,
+      activityLevel: formData.ActivityLevel,
+      Gender: formData.Gender,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/user/AddUser",
+        newUserData
+      );
+
+      localStorage.removeItem("SignUp-FormData");
+      navigate("/Auth/Login");
+    } catch (error) {
+      return `Error: ${error}`;
+    }
   };
 
   return (
     <div className="bg-[#0E131F] flex justify-center items-center h-screen">
-      <div className=" w-full mx-8 md:mx-40 lg:mx-60 xl:mx-130 2xl:mx-180">
+      <div className=" w-full mx-115 lg:mx-90">
         <form
           action="#"
           method="POST"
           className="bg-[#19212C] space-y-6 rounded-[16px] p-8"
         >
           <div className="flex justify-center items-center">
-            <h1 className="text-white font-normal text-[24px] lg:text-[30px] ">
+            <h1 className="text-white font-normal text-[30px]">
               Account Information
             </h1>
           </div>
@@ -93,7 +120,7 @@ export default function AccountInformation() {
             <button
               type="button"
               onClick={submitInformation}
-              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[20px] cursor-pointer"
+              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[20px]"
             >
               Submit
             </button>
