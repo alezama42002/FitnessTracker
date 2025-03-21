@@ -60,7 +60,7 @@ export default function SignUp() {
             <button
               type="button"
               onClick={signUp}
-              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[18px]"
+              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[18px] cursor-pointer"
             >
               Sign Up
             </button>
