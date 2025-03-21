@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import ProtectedLayout from "./ProtectedRoutes";
 import Dashboard from "../pages/Dashboard";
 import FoodLog from "../pages/FoodLog";
 import Recipes from "../pages/Recipes";
