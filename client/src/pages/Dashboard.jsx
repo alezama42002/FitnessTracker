@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import DailyOverview from "../components/DailyOverview";
+import DailyFoods from "../components/DailyFoods";
 
 export default function Dashboard() {
   return (
@@ -8,6 +9,7 @@ export default function Dashboard() {
       <Navbar />
       <div className="mx-10 w-200">
         <DailyOverview />
+        <DailyFoods />
       </div>
     </div>
   );
