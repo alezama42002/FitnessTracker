@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import DailyOverview from "../components/DailyOverview";
 import DailyFoods from "../components/DailyFoods";
 import MicroNutrients from "../components/MicroNutrients";
 import WeightGraph from "../components/LineChart";
+import axios from 'axios';
 
 export default function Dashboard() {
+  const [dailyOverviewData, setDailyOverviewData] = useState([]);
+  const [dailyFoodsData, setDailyFoodsData] = useState([]);
+  const [micronutrientsData, setMicronutrientsData] = useState([]);
+  const [weightGraphData, setWeightGraphData] = useState([]);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const [dailyOverviewData, dailyFoodsData, micronutrientsData] = await Promise.all([
+          await axios.get('http://localhost:3000/api/user/Macros'),
+          await axios.
+        ])
+      }
+    }
+  })
+
   return (
     <div className="h-screen bg-[#0E131F]">
       <div className="bg-[#0E131F]">
