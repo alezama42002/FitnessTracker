@@ -37,7 +37,7 @@ const Logout = (req, res) => {
 const newToken = (req, res) => {
   const refreshToken = req.body.Token;
   if (refreshToken === null) return res.sendStatus(401);
-  if (utilService.findToken(refreshToken) === true) return res.sendStatus(403);
+  if (utilService.findToken(refreshToken) == false) return res.sendStatus(403);
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403);
     const accessToken = generateAccessToken({ name: user.name });
@@ -158,6 +158,7 @@ const logFood = async (req, res) => {
     const {
       foodID,
       foodName,
+      foodBrand,
       Calories,
       Protein,
       Carbohydrates,
@@ -172,6 +173,7 @@ const logFood = async (req, res) => {
     // Foods key nutrtional information is used to find ID.
     const foodResponse = await foodService.getFoodID({
       foodName: foodName,
+      foodBrand: foodBrand,
       Calories: Calories,
       Protein: Protein,
       Carbohydrates: Carbohydrates,
@@ -213,28 +215,17 @@ const logFood = async (req, res) => {
         Fats: food.fat ?? 0,
         Fiber: food.fiber ?? 0,
         VitaminA: food.vitamin_a ?? 0,
-        VitaminB1: food.vitamin_b1 ?? 0,
-        VitaminB2: food.vitamin_b2 ?? 0,
-        VitaminB3: food.vitamin_b3 ?? 0,
-        VitaminB5: food.vitamin_b5 ?? 0,
         VitaminB6: food.vitamin_b6 ?? 0,
-        VitaminB9: food.vitamin_b9 ?? 0,
         VitaminB12: food.vitamin_b12 ?? 0,
         VitaminC: food.vitamin_c ?? 0,
         VitaminD: food.vitamin_d ?? 0,
         VitaminE: food.vitamin_e ?? 0,
         VitaminK: food.vitamin_k ?? 0,
         Calcium: food.calcium ?? 0,
-        Chlorine: food.chlorine ?? 0,
-        Copper: food.copper ?? 0,
         Iron: food.iron ?? 0,
-        Iodine: food.iodine ?? 0,
         Potassium: food.potassium ?? 0,
         Magnesium: food.magnesium ?? 0,
-        Manganese: food.manganese ?? 0,
         Sodium: food.sodium ?? 0,
-        Phosphorus: food.phosphorus ?? 0,
-        Selenium: food.selenium ?? 0,
         Zinc: food.zinc ?? 0,
       };
 
@@ -244,6 +235,7 @@ const logFood = async (req, res) => {
       // Gets foodID of newly created Food in Food Table
       finalFoodID = await foodService.getFoodID({
         foodName: foodData.foodName,
+        foodBrand: foodData.foodBrand,
         servingSize: foodData.servingSize,
         Calories: foodData.Calories,
         Protein: foodData.Protein,
@@ -276,28 +268,17 @@ const logFood = async (req, res) => {
       currentFats: finalFoodData.Fats ?? 0,
       currentFiber: finalFoodData.Fiber ?? 0,
       currentVitaminA: finalFoodData.VitaminA ?? 0,
-      currentVitaminB1: finalFoodData.VitaminB1 ?? 0,
-      currentVitaminB2: finalFoodData.VitaminB2 ?? 0,
-      currentVitaminB3: finalFoodData.VitaminB3 ?? 0,
-      currentVitaminB5: finalFoodData.VitaminB5 ?? 0,
       currentVitaminB6: finalFoodData.VitaminB6 ?? 0,
-      currentVitaminB9: finalFoodData.VitaminB9 ?? 0,
       currentVitaminB12: finalFoodData.VitaminB12 ?? 0,
       currentVitaminC: finalFoodData.VitaminC ?? 0,
       currentVitaminD: finalFoodData.VitaminD ?? 0,
       currentVitaminE: finalFoodData.VitaminE ?? 0,
       currentVitaminK: finalFoodData.VitaminK ?? 0,
       currentCalcium: finalFoodData.Calcium ?? 0,
-      currentChlorine: finalFoodData.Chlorine ?? 0,
-      currentCopper: finalFoodData.Copper ?? 0,
       currentIron: finalFoodData.Iron ?? 0,
-      currentIodine: finalFoodData.Iodine ?? 0,
       currentPotassium: finalFoodData.Potassium ?? 0,
       currentMagnesium: finalFoodData.Magnesium ?? 0,
-      currentManganese: finalFoodData.Manganese ?? 0,
       currentSodium: finalFoodData.Sodium ?? 0,
-      currentPhosphorus: finalFoodData.Phosphorus ?? 0,
-      currentSelenium: finalFoodData.Selenium ?? 0,
       currentZinc: finalFoodData.Zinc ?? 0,
     };
 

@@ -55,7 +55,7 @@ const addFood = async (req, res) => {
   try {
     const foodData = req.body;
 
-    if ((await foodService.getFoodID(foodData)) === false) {
+    if ((await foodService.getFoodID(foodData)) != false) {
       res.status(409).json("Food Already Exists!");
     } else {
       await foodService.addFoodtoDB(foodData);

@@ -48,27 +48,7 @@ const Food = sequelize.define("Food", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  VitaminB1: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  VitaminB2: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  VitaminB3: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  VitaminB5: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
   VitaminB6: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  VitaminB9: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -96,23 +76,7 @@ const Food = sequelize.define("Food", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Chlorine: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  Copper: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
   Iron: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  Iodine: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  Potassium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -120,19 +84,11 @@ const Food = sequelize.define("Food", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  Manganese: {
+  Potassium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
   Sodium: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  Phosphorus: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  Selenium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
