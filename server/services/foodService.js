@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import Food from "../models/foodModel.js";
 import userFood from "../models/userFoodModel.js";
+import { Op } from "sequelize";
 
 // Adds food to Database (Foods Table)
 const addFoodtoDB = async (foodData) => {
@@ -76,10 +77,12 @@ const getFood = async (foodID) => {
 // Gets the foodID for a food based on some of the nutritional information and
 // returns false if not in Database
 const getFoodID = async (foodData) => {
-  const { foodName, Calories, Protein, Carbohydrates, Fats } = foodData;
+  const { foodName, foodBrand, Calories, Protein, Carbohydrates, Fats } =
+    foodData;
 
   const food = await Food.findOne({
     where: {
+      foodBrand: foodBrand,
       foodName: foodName,
       Calories: Calories,
       Protein: Protein,

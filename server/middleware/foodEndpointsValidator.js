@@ -22,6 +22,14 @@ const validateAddFood = [
     .isLength({ min: 1, max: 100 })
     .withMessage("Food name must be between 1 and 100 characters"),
 
+  body("foodName")
+    .exists()
+    .withMessage("Food brand is required")
+    .isString()
+    .withMessage("Food brand must be a string")
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Food brand must be between 1 and 100 characters"),
+
   body("servingSize")
     .exists()
     .withMessage("Serving size is required")
@@ -60,28 +68,17 @@ const validateAddFood = [
 
   ...[
     "VitaminA",
-    "VitaminB1",
-    "VitaminB2",
-    "VitaminB3",
-    "VitaminB5",
     "VitaminB6",
-    "VitaminB9",
     "VitaminB12",
     "VitaminC",
     "VitaminD",
     "VitaminE",
     "VitaminK",
     "Calcium",
-    "Chlorine",
-    "Copper",
     "Iron",
-    "Iodine",
     "Potassium",
     "Magnesium",
-    "Manganese",
     "Sodium",
-    "Phosphorus",
-    "Selenium",
     "Zinc",
   ].map((nutrient) =>
     body(nutrient)
