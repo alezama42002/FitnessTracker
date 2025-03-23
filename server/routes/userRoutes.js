@@ -10,6 +10,7 @@ import {
   validateLogin,
   validateLogout,
   validateToken,
+  validateValid,
   validateMacroRequest,
   validateAddUser,
   validateDeleteUser,
@@ -28,6 +29,8 @@ router.post("/Login", validateLogin, userController.Login);
 router.delete("/Logout", validateLogout, userController.Logout);
 
 router.post("/Token", validateToken, userController.newToken);
+
+router.post("/Valid", validateValid, userController.checkToken);
 
 // Return total Calories and Macros user should be consuming for goal
 router.post("/Macros", validateMacroRequest, userController.getMacros);

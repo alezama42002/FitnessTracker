@@ -67,6 +67,18 @@ const validateToken = [
   handleValidationErrors,
 ];
 
+const validateValid = [
+  body("Token")
+    .exists()
+    .withMessage("Token is required")
+    .isString()
+    .withMessage("Token must be a string")
+    .notEmpty()
+    .withMessage("Token cannot be empty"),
+
+  handleValidationErrors,
+];
+
 const validateMacroRequest = [
   // Validation rules
   body("Username")
@@ -279,6 +291,7 @@ export {
   validateLogin,
   validateLogout,
   validateToken,
+  validateValid,
   validateMacroRequest,
   validateAddUser,
   validateDeleteUser,

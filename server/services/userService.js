@@ -105,7 +105,8 @@ const getUserFoodQuantity = async (userFood_ID) => {
 
 // Gets the users current nutritional totals for the day
 const getUserCurrentNutrition = async (Username) => {
-  const userID = await getUserID(Username);
+  const user = await getUser(Username);
+  const userID = user.userID;
 
   // Constructs the current days date in month/day/year format
   const date = new Date();

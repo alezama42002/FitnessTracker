@@ -66,7 +66,9 @@ export default function Dashboard() {
           nutritionResponse.data.currentSodium,
           nutritionResponse.data.currentZinc,
         ]);
-      } catch {}
+      } catch {
+        /* empty */
+      }
     };
     fetchAllData();
   }, [Username, token]);

@@ -5,7 +5,10 @@ import foodService from "../services/foodService.js";
 import utilService from "../services/utilService.js";
 import bycrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { generateAccessToken } from "../middleware/authentication.js";
+import {
+  generateAccessToken,
+  verifyToken,
+} from "../middleware/authentication.js";
 
 dotenv.config();
 
@@ -56,6 +59,16 @@ const newToken = (req, res) => {
     const accessToken = generateAccessToken({ name: user.name });
     res.json({ accessToken: accessToken });
   });
+};
+
+const checkToken = (req, res) => {
+  const validValue = verifyToken(req.body.Token);
+
+  if (validValue === true) {
+    res.status(200).json({ Valid: true });
+  } else {
+    res.status(200).json({ Valid: false });
+  }
 };
 
 // Calculates the maintainence calories of a user based on information given.
@@ -170,7 +183,8 @@ const deleteUser = async (req, res) => {
 
 const getFoods = async (req, res) => {
   try {
-    const userID = await userService.getUserID(req.body.Username);
+    const user = await userService.getUser(req.body.Username);
+    const userID = user.userID;
     const Foods = await userService.getUserFoods(userID);
     res.json(Foods);
   } catch {
@@ -402,6 +416,7 @@ export default {
   Login,
   Logout,
   newToken,
+  checkToken,
   getMacros,
   addUser,
   deleteUser,
