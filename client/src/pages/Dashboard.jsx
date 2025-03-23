@@ -7,8 +7,8 @@ import WeightGraph from "../components/LineChart";
 
 export default function Dashboard() {
   return (
-    <div className="h-screen  bg-[#0E131F]">
-      <div>
+    <div className="h-screen bg-[#0E131F]">
+      <div className="bg-[#0E131F]">
         <Navbar />
         <div className="grid grid-cols-3 gap-y-8 gap-x-8 h-full">
           <div className="mx-10 w-200 col-span-2">
@@ -19,7 +19,7 @@ export default function Dashboard() {
           <div className="row-span-2 mt-8">
             <MicroNutrients />
           </div>
-          <div className="bg-[#19212C] h-150 ml-10 rounded-[16px] col-span-2 ">
+          <div className="bg-[#19212C] h-150 ml-10 rounded-[16px] col-span-2">
             <WeightGraph />
           </div>
         </div>

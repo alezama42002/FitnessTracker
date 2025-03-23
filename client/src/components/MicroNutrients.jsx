@@ -7,7 +7,7 @@ export default function MicroNutrients() {
       <div className="px-6 text-white py-6">
         <h1 className=" font-semibold">Micronutrients</h1>
       </div>
-      <div className="px-6 flex flex-col gap-4 ">
+      <div className="px-6 flex flex-col gap-10 ">
         <ProgressBar
           color="#1B9E4B"
           currentValue={420}

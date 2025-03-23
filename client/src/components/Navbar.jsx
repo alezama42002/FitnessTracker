@@ -28,7 +28,7 @@ export default function Navbar() {
           to="/Dashboard/Recipes"
           className="text-[#AFA99E] text-[17px] font-normal hover:text-[#1B9E4B]"
         >
-          Meals
+          Recipes
         </Link>
         <Link
           to="/Dashboard/Suggestions"
