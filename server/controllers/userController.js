@@ -47,9 +47,12 @@ const newToken = (req, res) => {
 
 // Calculates the maintainence calories of a user based on information given.
 // Also determines macros based on the users fitness/health goals.
-const getMacros = (req, res) => {
+const getMacros = async (req, res) => {
   try {
-    const { Weight, Height, Age, Gender, activityLevel, Goal } = req.body;
+    const { Username, Goal } = req.body;
+
+    const User = await userService.getUser(Username);
+    const { Weight, Height, Age, Gender, activityLevel } = User;
 
     let maintenanceCalories;
     let caloriesIntake;
@@ -109,10 +112,10 @@ const getMacros = (req, res) => {
     fatIntake = Math.round((caloriesIntake * 0.3) / 9);
 
     res.status(200).json({
-      Calories: caloriesIntake + " kcal",
-      Protein: proteinIntake + "g",
-      Carbohydrates: carbIntake + "g",
-      Fat: fatIntake + "g",
+      Calories: caloriesIntake,
+      Protein: proteinIntake,
+      Carbohydrates: carbIntake,
+      Fat: fatIntake,
     });
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });

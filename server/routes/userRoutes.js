@@ -27,7 +27,7 @@ router.delete("/Logout", validateLogout, userController.Logout);
 router.post("/Token", validateToken, userController.newToken);
 
 // Return total Calories and Macros user should be consuming for goal
-router.get("/Macros", validateMacroRequest, userController.getMacros);
+router.post("/Macros", validateMacroRequest, userController.getMacros);
 
 // Adds user to the database
 router.post("/AddUser", validateAddUser, userController.addUser);
@@ -65,7 +65,7 @@ router.delete(
 );
 
 // Get the users current nutritional total for the day
-router.get(
+router.post(
   "/GetCurrentNutrition",
   authenticateUser,
   validateGetCurrentNutrition,

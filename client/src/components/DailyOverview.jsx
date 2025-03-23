@@ -1,7 +1,7 @@
 import React from "react";
 import ProgressBar from "./ProgressBar";
 
-export default function DailyOverview({ currentAmounts, totalAmounts }) {
+export default function DailyOverview({ amountsData }) {
   const getCurrentFormattedDate = () => {
     const date = new Date();
     const options = {
@@ -24,8 +24,8 @@ export default function DailyOverview({ currentAmounts, totalAmounts }) {
         <div>
           <ProgressBar
             color="#1B9E4B"
-            currentValue={420}
-            totalValue={2000}
+            currentValue={amountsData[4]}
+            totalValue={amountsData[0]}
             name="Calories"
             unit="kcal"
           />
@@ -34,8 +34,8 @@ export default function DailyOverview({ currentAmounts, totalAmounts }) {
           <div className="w-1/3 pr-1">
             <ProgressBar
               color="#1B9E4B"
-              currentValue={420}
-              totalValue={2000}
+              currentValue={amountsData[5]}
+              totalValue={amountsData[1]}
               name="Protein"
               unit="g"
             />
@@ -43,8 +43,8 @@ export default function DailyOverview({ currentAmounts, totalAmounts }) {
           <div className="w-1/3 pr-1">
             <ProgressBar
               color="#1B9E4B"
-              currentValue={420}
-              totalValue={2000}
+              currentValue={amountsData[6]}
+              totalValue={amountsData[2]}
               name="Carbs"
               unit="g"
             />
@@ -52,8 +52,8 @@ export default function DailyOverview({ currentAmounts, totalAmounts }) {
           <div className="w-1/3">
             <ProgressBar
               color="#1B9E4B"
-              currentValue={420}
-              totalValue={2000}
+              currentValue={amountsData[7]}
+              totalValue={amountsData[3]}
               name="Fat"
               unit="g"
             />
