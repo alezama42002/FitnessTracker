@@ -13,6 +13,7 @@ import {
   validateMacroRequest,
   validateAddUser,
   validateDeleteUser,
+  validateGetUserFoods,
   validateLogFood,
   validateEditLog,
   validateDeleteLog,
@@ -38,6 +39,13 @@ router.delete(
   authenticateUser,
   validateDeleteUser,
   userController.deleteUser
+);
+
+router.post(
+  "/GetUserFoods",
+  authenticateUser,
+  validateGetUserFoods,
+  userController.getFoods
 );
 
 // Logs food for user

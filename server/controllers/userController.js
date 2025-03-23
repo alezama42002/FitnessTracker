@@ -1,4 +1,3 @@
-import body from "express-validator";
 import axios from "axios";
 import dotenv from "dotenv";
 import userService from "../services/userService.js"; // Imports quieres/mutations related to User
@@ -152,6 +151,16 @@ const deleteUser = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
+};
+
+const getFoods = async (req, res) => {
+  try {
+    const userID = await userService.getUserID(req.body.Username);
+    const Foods = await userService.getUserFoods(userID);
+    res.json(Foods);
+  } catch {
+    res.status(500).send();
   }
 };
 
@@ -379,6 +388,7 @@ export default {
   getMacros,
   addUser,
   deleteUser,
+  getFoods,
   logFood,
   editLog,
   deleteLog,

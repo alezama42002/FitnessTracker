@@ -2,6 +2,8 @@ import User from "../models/userModel.js";
 import Food from "../models/foodModel.js";
 import userFood from "../models/userFoodModel.js";
 import userNutritionProgress from "../models/userDailyNutritionModel.js";
+import { Op } from "sequelize";
+import moment from "moment";
 
 // Adds new user to the Users table
 const addUser = async (userData) => {
@@ -145,11 +147,55 @@ const getUserCurrentNutrition = async (Username) => {
   }
 };
 
+const getUserFoods = async (userID) => {
+  let foodIDs = [];
+  const startOfDay = moment().startOf("day").toDate();
+  const endOfDay = moment().endOf("day").toDate();
+
+  const userFoodsData = await userFood.findAll({
+    where: {
+      createdAt: {
+        [Op.gte]: startOfDay,
+        [Op.lte]: endOfDay,
+      },
+      userID: userID,
+    },
+  });
+
+  userFoodsData.forEach((food) => {
+    for (let x = 0; x < food.dataValues.Quantity; x++) {
+      foodIDs.push(food.foodID);
+    }
+  });
+
+  const foodDataPromises = foodIDs.map(async (foodID) => {
+    const foodData = await Food.findOne({
+      where: {
+        foodID: foodID,
+      },
+    });
+
+    const foodItem = {
+      foodName: foodData.foodName,
+      Calories: foodData.Calories,
+      Protein: foodData.Protein,
+      Carbs: foodData.Carbohydrates,
+      Fat: foodData.Fats,
+    };
+
+    return foodItem;
+  });
+
+  const foodItems = await Promise.all(foodDataPromises);
+  return foodItems;
+};
+
 export default {
   addUser,
   deleteUser,
   userExists,
   getUser,
+  getUserFoods,
   getUserID,
   addFoodforUser,
   updateUserNutrition,

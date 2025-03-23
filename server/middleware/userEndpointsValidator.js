@@ -168,6 +168,17 @@ const validateDeleteUser = [
   handleValidationErrors,
 ];
 
+const validateGetUserFoods = [
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 3, max: 30 }),
+
+  handleValidationErrors,
+];
+
 const validateLogFood = [
   // Validation rules
   body("foodID")
@@ -270,6 +281,7 @@ export {
   validateMacroRequest,
   validateAddUser,
   validateDeleteUser,
+  validateGetUserFoods,
   validateLogFood,
   validateEditLog,
   validateDeleteLog,

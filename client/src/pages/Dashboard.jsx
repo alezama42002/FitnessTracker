@@ -8,7 +8,6 @@ import axios from "axios";
 
 export default function Dashboard() {
   const [dailyOverviewData, setDailyOverviewData] = useState([]);
-  const [dailyFoodsData, setDailyFoodsData] = useState([]);
   const [micronutrientsData, setMicronutrientsData] = useState([]);
   const [weightGraphData, setWeightGraphData] = useState([]);
   let Username;
@@ -39,7 +38,6 @@ export default function Dashboard() {
               },
             }
           ),
-          axios.post,
         ]);
 
         setDailyOverviewData([
@@ -80,7 +78,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-3 gap-y-8 gap-x-8 h-full">
           <div className="mx-10 w-200 col-span-2">
             <DailyOverview amountsData={dailyOverviewData} />
-            <DailyFoods />
+            <DailyFoods Username={Username} token={token} />
           </div>
 
           <div className="row-span-2 mt-8">
