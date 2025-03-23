@@ -159,11 +159,12 @@ const validateAddUser = [
 
 const validateDeleteUser = [
   // Validation rules
-  body("userID")
+  body("Username")
     .exists()
-    .withMessage("userID is required")
-    .isInt()
-    .withMessage("userID must be an integer"),
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 3, max: 30 }),
 
   handleValidationErrors,
 ];

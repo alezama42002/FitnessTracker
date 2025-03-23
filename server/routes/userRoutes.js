@@ -21,8 +21,10 @@ import {
 } from "../middleware/userEndpointsValidator.js";
 import { authenticateUser } from "../middleware/authentication.js";
 
+// Logs in user and provides refreshToken and accessToken on succesfull login
 router.post("/Login", validateLogin, userController.Login);
 
+// Logs out user dele
 router.delete("/Logout", validateLogout, userController.Logout);
 
 router.post("/Token", validateToken, userController.newToken);

@@ -1,7 +1,6 @@
 import { Sequelize } from "sequelize";
 import Food from "../models/foodModel.js";
 import userFood from "../models/userFoodModel.js";
-import { Op } from "sequelize";
 
 // Adds food to Database (Foods Table)
 const addFoodtoDB = async (foodData) => {
@@ -22,8 +21,11 @@ const deleteFood = async (foodID, foodName) => {
   });
 };
 
+// Returns all the foods that match a certain macro threshold that is given
+// by the user
 const getRecommendedFood = async (MacroRequest) => {
   try {
+    // Handle all of the different macro threshold options
     switch (MacroRequest) {
       case "High Protein":
         return await Food.findAll({
@@ -162,6 +164,7 @@ const getUserFoodData = async (userFood_ID) => {
   return loggedFoodNutritionData;
 };
 
+// Edits a foods data in the database according to what is given
 const editFood = async (foodID, updatedFields) => {
   // Check if the food exists
   const existingFood = await Food.findByPk(foodID);
