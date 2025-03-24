@@ -185,10 +185,52 @@ const addWeight = async (username, weight) => {
   const user = await getUser(username);
   const userID = user.userID;
 
+  const today = new Date();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const year = String(today.getFullYear()).slice(-2);
+  const formattedDate = `${month}/${day}/${year}`;
+
   return await Weight.create({
     Weight: weight,
     userID: userID,
+    logDate: formattedDate,
   });
+};
+
+const getUserWeights = async (Username, inputDate) => {
+  const user = await getUser(Username);
+  const userID = user.userID;
+
+  const date = new Date(inputDate);
+  const dayOfWeek = date.getDay();
+
+  // Adjust so that Monday is the start of the week
+  const startOfWeek = new Date(date);
+  startOfWeek.setDate(date.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+
+  // Generate array of the full week (Monday - Sunday)
+  const weekArray = Array.from({ length: 7 }, (_, i) => {
+    const weekDate = new Date(startOfWeek);
+    weekDate.setDate(startOfWeek.getDate() + i);
+
+    const month = String(weekDate.getMonth() + 1).padStart(2, "0");
+    const day = String(weekDate.getDate()).padStart(2, "0");
+    return `${month}/${day}/25`;
+  });
+
+  const weeksWeightLogs = await Weight.findAll({
+    where: {
+      userID: userID,
+      logDate: {
+        [Op.in]: weekArray,
+      },
+    },
+  });
+
+  const weeksWeights = weeksWeightLogs.map((weight) => weight.Weight);
+
+  return weeksWeights;
 };
 
 export default {
@@ -202,4 +244,5 @@ export default {
   getUserFoodQuantity,
   getUserCurrentNutrition,
   addWeight,
+  getUserWeights,
 };

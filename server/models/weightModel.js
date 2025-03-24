@@ -10,11 +10,15 @@ const Weight = sequelize.define("Weight", {
   },
   Weight: {
     type: DataTypes.INTEGER,
-    foreignKey: true,
+    allowNull: false,
   },
   userID: {
     type: DataTypes.INTEGER,
     foreignKey: true,
+  },
+  logDate: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
 });
 

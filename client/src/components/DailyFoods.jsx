@@ -5,8 +5,10 @@ import axios from "axios";
 
 export default function DailyFoods({ Username, token }) {
   const [dailyFoodsData, setDailyFoodsData] = useState([]);
+
   useEffect(() => {
     const fetchUserFoods = async () => {
+      if (!Username || !token) return;
       try {
         const response = await axios.post(
           "http://localhost:3000/api/user/GetUserFoods",
@@ -21,7 +23,7 @@ export default function DailyFoods({ Username, token }) {
         );
         setDailyFoodsData(response.data);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
     fetchUserFoods();

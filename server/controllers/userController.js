@@ -417,7 +417,20 @@ const logWeight = async (req, res) => {
   res.sendStatus(201);
 };
 
-const getUserWeights = async () => {};
+const getUserWeights = async (req, res) => {
+  const today = new Date();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const year = String(today.getFullYear()).slice(-2);
+  const formattedDate = `${month}/${day}/${year}`;
+
+  const weekWeightLogs = await userService.getUserWeights(
+    req.body.Username,
+    formattedDate
+  );
+
+  res.status(200).json(weekWeightLogs);
+};
 
 export default {
   Login,

@@ -11,28 +11,20 @@ export default function Dashboard() {
   const [dailyOverviewData, setDailyOverviewData] = useState([]);
   const [micronutrientsData, setMicronutrientsData] = useState([]);
   const [weightGraphData, setWeightGraphData] = useState([]);
-  let Username;
-
-  const token = localStorage.getItem("accessToken");
-  if (token) {
-    const base64Url = token.split(".")[1];
-    const decodedData = JSON.parse(atob(base64Url));
-    Username = decodedData.name;
-  }
-
-  const weightData = [180, 179.5, 179, 179.2, 178.8, 178.5, 178.2];
+  const [token, setToken] = useState(null);
+  const [username, setUsername] = useState(null);
 
   const getCurrentWeekDates = () => {
     const today = new Date();
-    const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+    const dayOfWeek = today.getDay();
     const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - dayOfWeek + 1); // Start from Monday
+    startOfWeek.setDate(today.getDate() - dayOfWeek + 1);
 
     return Array.from({ length: 7 }, (_, i) => {
       const date = new Date(startOfWeek);
       date.setDate(startOfWeek.getDate() + i);
-      const month = String(date.getMonth() + 1).padStart(2, ""); // Ensure two-digit month
-      const day = String(date.getDate()).padStart(2, "0"); // Ensure two-digit day
+      const month = String(date.getMonth() + 1).padStart(2, "");
+      const day = String(date.getDate()).padStart(2, "0");
       return `${month}/${day}`;
     });
   };
@@ -40,25 +32,50 @@ export default function Dashboard() {
   const weekDays = getCurrentWeekDates();
 
   useEffect(() => {
+    const storedToken = localStorage.getItem("accessToken");
+
+    if (storedToken) {
+      const base64Url = storedToken.split(".")[1];
+      const decodedData = JSON.parse(atob(base64Url));
+      setToken(storedToken);
+      setUsername(decodedData.name);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!username || !token) return;
+
     const fetchAllData = async () => {
       try {
-        const [macroResponse, nutritionResponse] = await Promise.all([
-          axios.post("http://localhost:3000/api/user/Macros", {
-            Username: Username,
-            Goal: "Relaxed Weight Loss",
-          }),
-          axios.post(
-            "http://localhost:3000/api/user/GetCurrentNutrition",
-            {
-              Username: Username,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
+        const [macroResponse, nutritionResponse, weightResponse] =
+          await Promise.all([
+            axios.post("http://localhost:3000/api/user/Macros", {
+              Username: username,
+              Goal: "Relaxed Weight Loss",
+            }),
+            axios.post(
+              "http://localhost:3000/api/user/GetCurrentNutrition",
+              {
+                Username: username,
               },
-            }
-          ),
-        ]);
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            ),
+            axios.post(
+              "http://localhost:3000/api/user/GetWeights",
+              {
+                Username: username,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            ),
+          ]);
 
         setDailyOverviewData([
           macroResponse.data.Calories,
@@ -86,12 +103,13 @@ export default function Dashboard() {
           nutritionResponse.data.currentSodium,
           nutritionResponse.data.currentZinc,
         ]);
-      } catch {
-        /* empty */
+        setWeightGraphData(weightResponse.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
     fetchAllData();
-  }, [Username, token]);
+  }, [username, token]);
 
   return (
     <div className="h-screen bg-[#0E131F]">
@@ -100,15 +118,15 @@ export default function Dashboard() {
         <div className="grid grid-cols-3 gap-y-8 gap-x-8 h-full">
           <div className="mx-10 w-200 col-span-2">
             <DailyOverview amountsData={dailyOverviewData} />
-            <DailyFoods Username={Username} token={token} />
+            <DailyFoods Username={username} token={token} />
           </div>
 
           <div className="row-span-2 mt-8">
-            <LogWeight />
+            <LogWeight Username={username} token={token} />
             <MicroNutrients nutritionData={micronutrientsData} />
           </div>
           <div className="bg-[#19212C] h-150 ml-10 rounded-[16px] col-span-2 w-200">
-            <WeightGraph weightData={weightData} weekDays={weekDays} />
+            <WeightGraph weightData={weightGraphData} weekDays={weekDays} />
           </div>
         </div>
       </div>
