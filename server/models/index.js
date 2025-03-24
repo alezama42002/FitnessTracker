@@ -24,3 +24,6 @@ recipeFood.belongsTo(Food, { foreignKey: "foodID" });
 
 User.hasMany(userDailyNutrition, { foreignKey: "userID" });
 userDailyNutrition.belongsTo(User, { foreignKey: "userID" });
+
+User.hasMany(Weight, { foreignKey: "userID" });
+Weight.belongsTo(User, { foreignKey: "userID" });

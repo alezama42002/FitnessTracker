@@ -287,6 +287,28 @@ const validateGetCurrentNutrition = [
   handleValidationErrors,
 ];
 
+const validateLogWeight = [
+  body("Weight")
+    .exists()
+    .withMessage("Weight is required")
+    .isInt({ min: 0, max: 400 })
+    .withMessage("Weight must be between 0 and 400 kg"),
+
+  handleValidationErrors,
+];
+
+const validateGetWeights = [
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 3 })
+    .withMessage("Username must be at least 3 characters long"),
+
+  handleValidationErrors,
+];
+
 export {
   validateLogin,
   validateLogout,
@@ -300,5 +322,7 @@ export {
   validateEditLog,
   validateDeleteLog,
   validateGetCurrentNutrition,
+  validateLogWeight,
+  validateGetWeights,
   handleValidationErrors,
 };

@@ -7,12 +7,10 @@ import express from "express";
 import userRouter from "./routes/userRoutes.js";
 import foodRouter from ".//routes/foodRoutes.js";
 import cors from "cors";
-import sequelize from "./config/database.js";
 
 /*//ONLY UNCOMMENT IF CHANGES ARE MADE TO MODELS!
 import sequelize from "./config/database.js";
-import Food from "./models/foodModel.js";
-import userDailyNutrition from "./models/userDailyNutritionModel.js";
+import Weight from "./models/weightModel.js";
 
 sequelize.sync({ force: true });*/
 

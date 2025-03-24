@@ -19,6 +19,8 @@ import {
   validateEditLog,
   validateDeleteLog,
   validateGetCurrentNutrition,
+  validateLogWeight,
+  validateGetWeights,
 } from "../middleware/userEndpointsValidator.js";
 import { authenticateUser } from "../middleware/authentication.js";
 
@@ -83,6 +85,22 @@ router.post(
   authenticateUser,
   validateGetCurrentNutrition,
   userController.getCurrentNutrition
+);
+
+// Logs the users weight for the day
+router.post(
+  "/LogWeight",
+  authenticateUser,
+  validateLogWeight,
+  userController.logWeight
+);
+
+// Gets the users total weight for the past week
+router.post(
+  "/GetWeights",
+  authenticateUser,
+  validateGetUserFoods,
+  userController.getUserWeights
 );
 
 export default router;

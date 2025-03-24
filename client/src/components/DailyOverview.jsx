@@ -33,7 +33,7 @@ export default function DailyOverview({ amountsData }) {
         <div className="flex w-full gap-2 mt-4">
           <div className="w-1/3 pr-1">
             <ProgressBar
-              color="#1B9E4B"
+              color="#0844A6"
               currentValue={amountsData[5]}
               totalValue={amountsData[1]}
               name="Protein"
@@ -42,7 +42,7 @@ export default function DailyOverview({ amountsData }) {
           </div>
           <div className="w-1/3 pr-1">
             <ProgressBar
-              color="#1B9E4B"
+              color="#BE5105"
               currentValue={amountsData[6]}
               totalValue={amountsData[2]}
               name="Carbs"
@@ -51,7 +51,7 @@ export default function DailyOverview({ amountsData }) {
           </div>
           <div className="w-1/3">
             <ProgressBar
-              color="#1B9E4B"
+              color="#510797"
               currentValue={amountsData[7]}
               totalValue={amountsData[3]}
               name="Fat"

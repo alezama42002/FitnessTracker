@@ -276,7 +276,6 @@ const logFood = async (req, res) => {
       finalFoodID = await foodService.getFoodID({
         foodName: foodData.foodName,
         foodBrand: foodData.foodBrand,
-        servingSize: foodData.servingSize,
         Calories: foodData.Calories,
         Protein: foodData.Protein,
         Carbohydrates: foodData.Carbohydrates,
@@ -285,7 +284,8 @@ const logFood = async (req, res) => {
     }
 
     // Gets userID based on username and gets foodID
-    const userID = await userService.getUserID(Username);
+    const user = await userService.getUser(Username);
+    const userID = user.userID;
 
     finalFoodID = foodResponse == false ? finalFoodID : foodResponse;
 
@@ -412,6 +412,13 @@ const getCurrentNutrition = async (req, res) => {
   }
 };
 
+const logWeight = async (req, res) => {
+  await userService.addWeight(req.body.Username, req.body.Weight);
+  res.sendStatus(201);
+};
+
+const getUserWeights = async () => {};
+
 export default {
   Login,
   Logout,
@@ -425,4 +432,6 @@ export default {
   editLog,
   deleteLog,
   getCurrentNutrition,
+  logWeight,
+  getUserWeights,
 };

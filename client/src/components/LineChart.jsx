@@ -1,12 +1,12 @@
 import React from "react";
 import Chart from "react-apexcharts";
 
-export default function WeightGraph() {
+export default function WeightGraph({ weightData, weekDays }) {
   const chartConfig = {
     series: [
       {
-        name: "Sales",
-        data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+        name: "Weight",
+        data: weightData,
       },
     ],
     chart: {
@@ -23,17 +23,7 @@ export default function WeightGraph() {
     },
     markers: { size: 0 },
     xaxis: {
-      categories: [
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: weekDays,
       axisTicks: { show: false },
       axisBorder: { show: false },
       labels: {
@@ -44,6 +34,7 @@ export default function WeightGraph() {
           fontWeight: 400,
         },
       },
+      tickAmount: 6,
       crosshairs: {
         show: false,
       },
@@ -80,7 +71,7 @@ export default function WeightGraph() {
           </h1>
         </div>
       </div>
-      <div className="w-full p-2 flex-grow">
+      <div className=" w-full p-2 flex-grow">
         <Chart
           options={chartConfig}
           series={chartConfig.series}

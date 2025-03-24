@@ -18,8 +18,11 @@ export default function ProgressBar({
 
       <div className="flex-start flex h-2.5 w-full overflow-hidden rounded-full bg-[#25282A] font-sans text-xs font-medium">
         <div
-          style={{ backgroundColor: color }}
-          className="flex h-full w-1/2 items-center justify-center overflow-hidden break-all rounded-full text-white "
+          style={{
+            backgroundColor: color,
+            width: `${(currentValue / totalValue) * 100}%`,
+          }}
+          className="flex h-full items-center justify-center overflow-hidden break-all rounded-full text-white "
         ></div>
       </div>
     </div>

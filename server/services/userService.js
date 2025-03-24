@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import Food from "../models/foodModel.js";
 import userFood from "../models/userFoodModel.js";
 import userNutritionProgress from "../models/userDailyNutritionModel.js";
+import Weight from "../models/weightModel.js";
 import { Op } from "sequelize";
 import moment from "moment";
 
@@ -180,6 +181,16 @@ const getUserFoods = async (userID) => {
   return foodItems;
 };
 
+const addWeight = async (username, weight) => {
+  const user = await getUser(username);
+  const userID = user.userID;
+
+  return await Weight.create({
+    Weight: weight,
+    userID: userID,
+  });
+};
+
 export default {
   addUser,
   deleteUser,
@@ -190,4 +201,5 @@ export default {
   updateUserFood,
   getUserFoodQuantity,
   getUserCurrentNutrition,
+  addWeight,
 };

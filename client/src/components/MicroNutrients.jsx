@@ -3,11 +3,11 @@ import ProgressBar from "./ProgressBar";
 
 export default function MicroNutrients({ nutritionData }) {
   return (
-    <div className="bg-[#19212C] rounded-[16px] h-full mr-[40px]  ">
-      <div className="px-6 text-white py-6">
+    <div className="bg-[#19212C] rounded-[16px] mr-[40px] pb-6 ">
+      <div className="px-6 text-white pb-6 pt-4">
         <h1 className=" font-semibold">Micronutrients</h1>
       </div>
-      <div className="px-6 flex flex-col gap-10 ">
+      <div className="px-6 flex flex-col gap-4 ">
         <ProgressBar
           color="#1B9E4B"
           currentValue={nutritionData[0]}

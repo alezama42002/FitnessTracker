@@ -5,6 +5,7 @@ import DailyFoods from "../components/DailyFoods";
 import MicroNutrients from "../components/MicroNutrients";
 import WeightGraph from "../components/LineChart";
 import axios from "axios";
+import LogWeight from "../components/LogWeight";
 
 export default function Dashboard() {
   const [dailyOverviewData, setDailyOverviewData] = useState([]);
@@ -18,6 +19,25 @@ export default function Dashboard() {
     const decodedData = JSON.parse(atob(base64Url));
     Username = decodedData.name;
   }
+
+  const weightData = [180, 179.5, 179, 179.2, 178.8, 178.5, 178.2];
+
+  const getCurrentWeekDates = () => {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - dayOfWeek + 1); // Start from Monday
+
+    return Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(startOfWeek);
+      date.setDate(startOfWeek.getDate() + i);
+      const month = String(date.getMonth() + 1).padStart(2, ""); // Ensure two-digit month
+      const day = String(date.getDate()).padStart(2, "0"); // Ensure two-digit day
+      return `${month}/${day}`;
+    });
+  };
+
+  const weekDays = getCurrentWeekDates();
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -84,10 +104,11 @@ export default function Dashboard() {
           </div>
 
           <div className="row-span-2 mt-8">
+            <LogWeight />
             <MicroNutrients nutritionData={micronutrientsData} />
           </div>
-          <div className="bg-[#19212C] h-150 ml-10 rounded-[16px] col-span-2">
-            <WeightGraph />
+          <div className="bg-[#19212C] h-150 ml-10 rounded-[16px] col-span-2 w-200">
+            <WeightGraph weightData={weightData} weekDays={weekDays} />
           </div>
         </div>
       </div>
