@@ -8,10 +8,7 @@ import { useState } from "react";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    Username: "",
-    Password: "",
-  });
+ 
 
   const handleInputChange = (field, value) => {
     setFormData((prevData) => ({

@@ -30,12 +30,7 @@ router.post("/Token", validateToken, userController.newToken);
 router.get("/Macros", validateMacroRequest, userController.getMacros);
 
 // Adds user to the database
-router.post(
-  "/AddUser",
-  authenticateUser,
-  validateAddUser,
-  userController.addUser
-);
+router.post("/AddUser", validateAddUser, userController.addUser);
 
 // Removes user from the database
 router.delete(

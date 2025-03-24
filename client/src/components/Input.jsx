@@ -1,7 +1,8 @@
 import React from "react";
 
 export default function Input({ inputName, field, sendData }) {
-  const inputType = inputName === "Password" ? "password" : "text";
+  const inputType =
+    inputName.includes("Password") == true ? "password" : "text";
 
   return (
     <div>

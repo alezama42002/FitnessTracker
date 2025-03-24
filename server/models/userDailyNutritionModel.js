@@ -41,27 +41,7 @@ const userDailyNutrition = sequelize.define("userDailyNutrition", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  currentVitaminB1: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  currentVitaminB2: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  currentVitaminB3: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  currentVitaminB5: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
   currentVitaminB6: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  currentVitaminB9: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -89,19 +69,7 @@ const userDailyNutrition = sequelize.define("userDailyNutrition", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  currentChlorine: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  currentCopper: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
   currentIron: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  currentIodine: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -113,19 +81,7 @@ const userDailyNutrition = sequelize.define("userDailyNutrition", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  currentManganese: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
   currentSodium: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  currentPhosphorus: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  currentSelenium: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
