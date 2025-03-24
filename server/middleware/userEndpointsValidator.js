@@ -67,46 +67,26 @@ const validateToken = [
   handleValidationErrors,
 ];
 
+const validateValid = [
+  body("Token")
+    .exists()
+    .withMessage("Token is required")
+    .isString()
+    .withMessage("Token must be a string")
+    .notEmpty()
+    .withMessage("Token cannot be empty"),
+
+  handleValidationErrors,
+];
+
 const validateMacroRequest = [
   // Validation rules
-  body("Weight")
+  body("Username")
     .exists()
-    .withMessage("Weight is required")
-    .isInt({ min: 0, max: 400 })
-    .withMessage("Weight must be between 0 and 400 kg"),
-
-  body("Height")
-    .exists()
-    .withMessage("Height is required")
-    .isInt({ min: 0, max: 300 })
-    .withMessage("Height must be between 0 and 300 cm"),
-
-  body("Age")
-    .exists()
-    .withMessage("Age is required")
-    .isInt({ min: 0, max: 150 })
-    .withMessage("Age must be between 0 and 150 years"),
-
-  body("Gender")
-    .exists()
-    .withMessage("Gender is required")
-    .isIn(["Male", "Female"])
-    .withMessage("Gender must be 'Male' or 'Female'"),
-
-  body("activityLevel")
-    .exists()
-    .withMessage("Activity level is required")
-    .isIn([
-      "Sedentary",
-      "Lightly Active",
-      "Moderately Active",
-      "Very Active",
-      "Extra Active",
-      "Professional Athlete",
-    ])
-    .withMessage(
-      "Activity level must be one of: 'Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extra Active', 'Professional Athlete'"
-    ),
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 3, max: 30 }),
 
   body("Goal")
     .exists()
@@ -191,11 +171,23 @@ const validateAddUser = [
 
 const validateDeleteUser = [
   // Validation rules
-  body("userID")
+  body("Username")
     .exists()
-    .withMessage("userID is required")
-    .isInt()
-    .withMessage("userID must be an integer"),
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 3, max: 30 }),
+
+  handleValidationErrors,
+];
+
+const validateGetUserFoods = [
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 3, max: 30 }),
 
   handleValidationErrors,
 ];
@@ -299,9 +291,11 @@ export {
   validateLogin,
   validateLogout,
   validateToken,
+  validateValid,
   validateMacroRequest,
   validateAddUser,
   validateDeleteUser,
+  validateGetUserFoods,
   validateLogFood,
   validateEditLog,
   validateDeleteLog,

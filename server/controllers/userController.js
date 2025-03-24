@@ -1,4 +1,3 @@
-import body from "express-validator";
 import axios from "axios";
 import dotenv from "dotenv";
 import userService from "../services/userService.js"; // Imports quieres/mutations related to User
@@ -6,17 +5,26 @@ import foodService from "../services/foodService.js";
 import utilService from "../services/utilService.js";
 import bycrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { generateAccessToken } from "../middleware/authentication.js";
+import {
+  generateAccessToken,
+  verifyToken,
+} from "../middleware/authentication.js";
 
 dotenv.config();
 
+// Checks the users Username and if in the database and the password given
+// matches the one in the database the user is given an accessToken as well
+// as a refreshToken
 const Login = async (req, res) => {
   const user = await userService.getUser(req.body.Username);
   const user_ = { name: req.body.Username };
 
+  // Returns error is User is not in the database
   if (user === null) return res.status(400).send("Cannot Find User");
 
   try {
+    // Generates and returns accessToken and refreshToken in the occurance
+    // of a successful login
     if (await bycrypt.compare(req.body.Password, user.Password)) {
       const accessToken = generateAccessToken(user_);
       const refreshToken = jwt.sign(user_, process.env.REFRESH_TOKEN_SECRET);
@@ -24,32 +32,53 @@ const Login = async (req, res) => {
       res.json({ accessToken: accessToken, refreshToken: refreshToken });
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).send();
+    res.status(500).json({ error: "Unexpected Internal Error!" });
   }
 };
 
+// Logs out the user by removing the refreshToken from the database so the
+// user can no longer create new accessTokens once their current one expires
 const Logout = (req, res) => {
   utilService.deleteToken(req.body.Token);
   res.sendStatus(204);
 };
 
+// Creates a new accessToken if the refreshToken given is one of the refreshTokens
+// stored in the database
 const newToken = (req, res) => {
   const refreshToken = req.body.Token;
-  if (refreshToken === null) return res.sendStatus(401);
+
+  // Returns 403 Forbidden error in the case that the given refreshToken is not present
+  // in database
   if (utilService.findToken(refreshToken) == false) return res.sendStatus(403);
+
+  // Verifies the refreshToken with our env variable and creates and returns new accessToken
+  // in the case of a successful verification of refreshToken
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.sendStatus(403); // Returns 403 Forbidden if refreshToken is not verified successfully
     const accessToken = generateAccessToken({ name: user.name });
     res.json({ accessToken: accessToken });
   });
 };
 
+const checkToken = (req, res) => {
+  const validValue = verifyToken(req.body.Token);
+
+  if (validValue === true) {
+    res.status(200).json({ Valid: true });
+  } else {
+    res.status(200).json({ Valid: false });
+  }
+};
+
 // Calculates the maintainence calories of a user based on information given.
 // Also determines macros based on the users fitness/health goals.
-const getMacros = (req, res) => {
+const getMacros = async (req, res) => {
   try {
-    const { Weight, Height, Age, Gender, activityLevel, Goal } = req.body;
+    const { Username, Goal } = req.body;
+
+    const User = await userService.getUser(Username);
+    const { Weight, Height, Age, Gender, activityLevel } = User;
 
     let maintenanceCalories;
     let caloriesIntake;
@@ -109,10 +138,10 @@ const getMacros = (req, res) => {
     fatIntake = Math.round((caloriesIntake * 0.3) / 9);
 
     res.status(200).json({
-      Calories: caloriesIntake + " kcal",
-      Protein: proteinIntake + "g",
-      Carbohydrates: carbIntake + "g",
-      Fat: fatIntake + "g",
+      Calories: caloriesIntake,
+      Protein: proteinIntake,
+      Carbohydrates: carbIntake,
+      Fat: fatIntake,
     });
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });
@@ -124,7 +153,7 @@ const addUser = async (req, res) => {
   try {
     const userData = req.body;
 
-    if ((await userService.getUserID(userData.Username)) != null) {
+    if ((await userService.getUser(userData.Username)) != null) {
       res.status(409).json("Username is already taken");
     } else {
       userData.Password = await bycrypt.hash(req.body.Password, 10);
@@ -139,16 +168,27 @@ const addUser = async (req, res) => {
 // Deletes user from the database based on given information
 const deleteUser = async (req, res) => {
   try {
-    const { userID } = req.body;
+    const { Username } = req.body;
 
-    if ((await userService.userExists(userID)) === false) {
+    if ((await userService.getUser(Username)) === null) {
       res.status(404).json("User does not exist");
     } else {
-      await userService.deleteUser(userID);
+      await userService.deleteUser(Username);
       res.status(204).send();
     }
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
+};
+
+const getFoods = async (req, res) => {
+  try {
+    const user = await userService.getUser(req.body.Username);
+    const userID = user.userID;
+    const Foods = await userService.getUserFoods(userID);
+    res.json(Foods);
+  } catch {
+    res.status(500).send();
   }
 };
 
@@ -353,12 +393,15 @@ const deleteLog = async (req, res) => {
   const { userFood_ID } = req.body;
 };
 
+// Returns the users current nutritional totals for the day
 const getCurrentNutrition = async (req, res) => {
   try {
     const { Username } = req.body;
 
     const userData = await userService.getUserCurrentNutrition(Username);
 
+    // Returns 404 if no logs for the day assosciated to the user and returns 200
+    // and all totals otherwise
     if (userData === null) {
       res.status(404).json("User Currently has No Logs Today");
     } else {
@@ -373,9 +416,11 @@ export default {
   Login,
   Logout,
   newToken,
+  checkToken,
   getMacros,
   addUser,
   deleteUser,
+  getFoods,
   logFood,
   editLog,
   deleteLog,

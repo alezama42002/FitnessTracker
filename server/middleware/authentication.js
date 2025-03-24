@@ -15,7 +15,16 @@ const authenticateUser = (req, res, next) => {
   });
 };
 
-const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30m" });
+const verifyToken = (token) => {
+  try {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    return true;
+  } catch (err) {
+    return false;
+  }
 };
-export { authenticateUser, generateAccessToken };
+
+const generateAccessToken = (user) => {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1hr" });
+};
+export { authenticateUser, verifyToken, generateAccessToken };
