@@ -95,4 +95,19 @@ const deleteRecipe = async (recipeName) => {
   });
 };
 
-export default { calculateRecipeMacros, createRecipe, deleteRecipe };
+const editRecipe = async (updatedFields, recipeName) => {
+  await Recipe.update(
+    { ...updatedFields },
+    {
+      where: { recipeName: recipeName },
+    }
+  );
+  return;
+};
+
+export default {
+  calculateRecipeMacros,
+  createRecipe,
+  deleteRecipe,
+  editRecipe,
+};

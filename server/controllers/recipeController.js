@@ -56,6 +56,11 @@ const deleteRecipe = async (req, res) => {
   res.status(204).send();
 };
 
-const editRecipe = async (req, res) => {};
+const editRecipe = async (req, res) => {
+  const { updatedFields, recipeName } = req.body;
+
+  await recipeService.editRecipe(updatedFields, recipeName);
+  res.status(200).send();
+};
 
 export default { createRecipe, deleteRecipe, editRecipe };
