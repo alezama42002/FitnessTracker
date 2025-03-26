@@ -13,7 +13,7 @@ import {
 import { authenticateUser } from "../middleware/authentication.js";
 
 // Searches for specific food in database and if not present give ability to enter
-router.get("/Search", validateSearch, foodController.searchFoodByName);
+router.post("/Search", validateSearch, foodController.searchFoodByName);
 
 // Adds food to database
 router.post(

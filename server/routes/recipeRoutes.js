@@ -1,9 +1,13 @@
 import express from "express";
 const router = express.Router();
 
-import recipecontroller from "../controllers/recipecontroller";
+import recipeController from "../controllers/recipeController.js";
 
 // Create recipe to be used/logged whenever
-router.post("/Create", recipecontroller.createRecipe);
+router.post("/AddRecipe", recipeController.createRecipe);
+
+router.delete("/DeleteRecipe", recipeController.deleteRecipe);
+
+router.patch("/EditRecipe", recipeController.editRecipe);
 
 export default router;

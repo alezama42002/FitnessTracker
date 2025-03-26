@@ -5,14 +5,15 @@
 import express from "express";
 
 import userRouter from "./routes/userRoutes.js";
-import foodRouter from ".//routes/foodRoutes.js";
+import foodRouter from "./routes/foodRoutes.js";
+import recipeRouter from "./routes/recipeRoutes.js";
 import cors from "cors";
 
-/*//ONLY UNCOMMENT IF CHANGES ARE MADE TO MODELS!
-import sequelize from "./config/database.js";
-import Weight from "./models/weightModel.js";
-
-sequelize.sync({ force: true });*/
+//ONLY UNCOMMENT IF CHANGES ARE MADE TO MODELS!
+//import sequelize from "./config/database.js";
+//import Recipe from "./models/recipeModel.js";
+//import RecipeFood from "./models/recipeFoodModel.js";
+//sequelize.sync({ force: true });
 
 const app = express();
 app.use(express.json());
@@ -24,3 +25,4 @@ app.listen(3000, () => console.log("Server running on port 3000"));
 // Seperate routes into multiple routers which handle multiple endpoints
 app.use("/api/user", userRouter);
 app.use("/api/food", foodRouter);
+app.use("/api/recipe", recipeRouter);

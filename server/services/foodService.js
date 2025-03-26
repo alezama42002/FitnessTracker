@@ -86,7 +86,6 @@ const getFoodID = async (foodData) => {
     where: {
       foodBrand: foodBrand,
       foodName: foodName,
-      Calories: Calories,
       Protein: Protein,
       Carbohydrates: Carbohydrates,
       Fats: Fats,
