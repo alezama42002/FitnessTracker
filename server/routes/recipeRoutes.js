@@ -10,4 +10,8 @@ router.delete("/DeleteRecipe", recipeController.deleteRecipe);
 
 router.patch("/EditRecipe", recipeController.editRecipe);
 
+router.post("/GetRecipe", recipeController.getRecipeByName);
+
+router.post("/Reccomend", recipeController.getReccomendedRecipes);
+
 export default router;

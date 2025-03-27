@@ -34,7 +34,8 @@ const checkFood = async (foodData) => {
     const servingOptions = response.data.food.servings.serving;
     const index = servingOptions.findIndex(
       (serving) =>
-        serving.metric_serving_amount === foodData.servingSize ||
+        serving.metric_serving_amount ===
+          foodData.servingSize.toString() + ".000" ||
         serving.serving_description === foodData.servingSize
     );
 

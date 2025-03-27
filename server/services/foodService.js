@@ -27,11 +27,13 @@ const getRecommendedFood = async (MacroRequest) => {
   try {
     // Handle all of the different macro threshold options
     switch (MacroRequest) {
+      case "All":
+        return await Food.findAll();
       case "High Protein":
         return await Food.findAll({
           where: {
             Protein: {
-              [Sequelize.Op.gt]: Sequelize.literal("Calories / 10"),
+              [Sequelize.Op.gte]: Sequelize.literal("Calories / 10"),
             },
           },
         });
@@ -180,6 +182,12 @@ const editFood = async (foodID, updatedFields) => {
   return await Food.findByPk(foodID);
 };
 
+const getFoodByName = async (foodName, foodBrand) => {
+  return await Food.findOne({
+    where: { foodName: foodName, foodBrand: foodBrand },
+  });
+};
+
 export default {
   addFoodtoDB,
   deleteFood,
@@ -190,4 +198,5 @@ export default {
   deleteUserFood,
   getUserFoodData,
   editFood,
+  getFoodByName,
 };

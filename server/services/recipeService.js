@@ -1,5 +1,6 @@
 import foodService from "./foodService.js";
 import Recipe from "../models/recipeModel.js";
+import recipeFood from "../models/recipeFoodModel.js";
 import { Sequelize } from "sequelize";
 
 const calculateRecipeMacros = async (foodIDs) => {
@@ -61,30 +62,35 @@ const createRecipe = async (
   description,
   totalServings
 ) => {
-  return await Recipe.create({
-    userID: userID,
-    Description: description,
-    recipeName: recipeName,
-    totalServings: totalServings,
-    totalCalories: recipeMacros.totalCalories,
-    totalProtein: recipeMacros.totalProtein,
-    totalCarbs: recipeMacros.totalCarbs,
-    totalFats: recipeMacros.totalFats,
-    totalFiber: recipeMacros.totalFiber,
-    totalVitaminA: recipeMacros.totalVitaminA,
-    totalVitaminB6: recipeMacros.totalVitaminB6,
-    totalVitaminB12: recipeMacros.totalVitaminB12,
-    totalVitaminC: recipeMacros.totalVitaminC,
-    totalVitaminD: recipeMacros.totalVitaminD,
-    totalVitaminE: recipeMacros.totalVitaminE,
-    totalVitaminK: recipeMacros.totalVitaminK,
-    totalCalcium: recipeMacros.totalCalcium,
-    totalIron: recipeMacros.totalIron,
-    totalMagnesium: recipeMacros.totalMagnesium,
-    totalPotassium: recipeMacros.totalPotassium,
-    totalSodium: recipeMacros.totalSodium,
-    totalZinc: recipeMacros.totalZinc,
+  const [recipe, created] = await Recipe.findOrCreate({
+    where: { recipeName: recipeName },
+    defaults: {
+      userID: userID,
+      Description: description,
+      recipeName: recipeName,
+      totalServings: totalServings,
+      totalCalories: recipeMacros.totalCalories,
+      totalProtein: recipeMacros.totalProtein,
+      totalCarbs: recipeMacros.totalCarbs,
+      totalFats: recipeMacros.totalFats,
+      totalFiber: recipeMacros.totalFiber,
+      totalVitaminA: recipeMacros.totalVitaminA,
+      totalVitaminB6: recipeMacros.totalVitaminB6,
+      totalVitaminB12: recipeMacros.totalVitaminB12,
+      totalVitaminC: recipeMacros.totalVitaminC,
+      totalVitaminD: recipeMacros.totalVitaminD,
+      totalVitaminE: recipeMacros.totalVitaminE,
+      totalVitaminK: recipeMacros.totalVitaminK,
+      totalCalcium: recipeMacros.totalCalcium,
+      totalIron: recipeMacros.totalIron,
+      totalMagnesium: recipeMacros.totalMagnesium,
+      totalPotassium: recipeMacros.totalPotassium,
+      totalSodium: recipeMacros.totalSodium,
+      totalZinc: recipeMacros.totalZinc,
+    },
   });
+
+  return;
 };
 
 const deleteRecipe = async (recipeName) => {
@@ -105,9 +111,72 @@ const editRecipe = async (updatedFields, recipeName) => {
   return;
 };
 
+const createRecipeFood = async (foodIDs, recipeID) => {
+  for (const foodID of foodIDs) {
+    await recipeFood.create({
+      recipeID: recipeID,
+      foodID: foodID.foodID,
+      Quantity: foodID.Quantity,
+    });
+  }
+};
+
+const getRecipe = async (recipeName) => {
+  return await Recipe.findOne({
+    where: { recipeName: recipeName },
+  });
+};
+
+const getRecipes = async (MacroRequest) => {
+  try {
+    // Handle all of the different macro threshold options
+    switch (MacroRequest) {
+      case "All":
+        return await Recipe.findAll();
+      case "High Protein":
+        return await Recipe.findAll({
+          where: {
+            totalProtein: {
+              [Sequelize.Op.gt]: Sequelize.literal("totalCalories / 10"),
+            },
+          },
+        });
+      case "High Carb":
+        return await Recipe.findAll({
+          where: {
+            totalCarbs: {
+              [Sequelize.Op.gte]: 15,
+            },
+          },
+        });
+      case "Low Carb":
+        return await Recipe.findAll({
+          where: {
+            totalCarbs: {
+              [Sequelize.Op.lt]: 15,
+            },
+          },
+        });
+      case "Low Fat":
+        return await Recipe.findAll({
+          where: {
+            totalFats: {
+              [Sequelize.Op.lt]: 15,
+            },
+          },
+        });
+    }
+  } catch (error) {
+    console.error("Error getting recommended Recipes: ", error);
+  }
+};
+
 export default {
   calculateRecipeMacros,
   createRecipe,
   deleteRecipe,
   editRecipe,
+  createRecipeFood,
+  getRecipe,
+  getRecipes,
 };

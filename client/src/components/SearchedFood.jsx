@@ -79,10 +79,7 @@ export default function SearchedFood({ searchedFoodData }) {
                 </p>{" "}
                 {/* Display macros, fallback to "No Macros Information" */}
               </div>
-              <div
-                className="flex gap-2 items-center justify-center pl-7"
-                onClick={() => logFood(food, quantities[food.ID])}
-              >
+              <div className="flex gap-2 items-center justify-center pl-7">
                 <input
                   type="number"
                   min="1"
@@ -93,7 +90,7 @@ export default function SearchedFood({ searchedFoodData }) {
                   }
                   placeholder="Qty"
                 />{" "}
-                <FaPlus />
+                <FaPlus onClick={() => logFood(food, quantities[food.ID])} />
               </div>
             </div>
           ))

@@ -135,9 +135,9 @@ const validateRecommend = [
     .withMessage("MacroRequest is required")
     .isString()
     .withMessage("MacroRequest must be a string")
-    .isIn(["Low Fat", "High Protein", "Low Carb", "High Carb"])
+    .isIn(["Low Fat", "High Protein", "Low Carb", "High Carb", "All"])
     .withMessage(
-      "MacroRequest must be one of: 'Low Fat', 'High Protein', 'Low Carb', 'High Carb'"
+      "MacroRequest must be one of: 'Low Fat', 'High Protein', 'Low Carb', 'High Carb', 'All'"
     ),
 
   handleValidationErrors,
