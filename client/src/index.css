@@ -5,6 +5,7 @@
   --breakpoint-lg: 63rem;
 }
 
+
 .nav-links.visible{
   background-color: #19212c;
   display: flex;
@@ -13,9 +14,10 @@
   position: absolute;
   top: 90px;
   right: 0;
-  width: 50%;
+  width: 40%;
   padding: 10px;
   border-radius: 8px;
+  transition: 1s linear;
 
 }
 
@@ -23,6 +25,10 @@
   .menu-icon {
     display: block;
     cursor: pointer;
+  }
+
+  .menu-profile {
+    display: block;
   }
 
   .nav-links, .profile-icon {
@@ -36,4 +42,21 @@
     align-items: center;
     position: absolute;
   }
+
+  .dashboardContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .foodLogContainer {
+    margin-inline: 1.4rem;
+  }
+
+  .foodLogFlexContainer {
+    justify-content: space-between;
+  }
+
+  .searchFoodText {
+    font-size: 0.9em;
+  }
+
 }
