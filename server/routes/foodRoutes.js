@@ -13,7 +13,7 @@ import {
 import { authenticateUser } from "../middleware/authentication.js";
 
 // Searches for specific food in database and if not present give ability to enter
-router.get("/Search", validateSearch, foodController.searchFoodByName);
+router.post("/Search", validateSearch, foodController.searchFoodByName);
 
 // Adds food to database
 router.post(
@@ -39,7 +39,9 @@ router.patch(
   foodController.editFood
 );
 
+router.post("/GetFood", foodController.getFoodByName);
+
 // Recommend Foods based on requirements from user such as "High Protein"
-router.get("/Recommend", validateRecommend, foodController.recommendFood);
+router.post("/Recommend", validateRecommend, foodController.recommendFood);
 
 export default router;

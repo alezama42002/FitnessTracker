@@ -111,10 +111,20 @@ const recommendFood = async (req, res) => {
   }
 };
 
+const getFoodByName = async (req, res) => {
+  const food = await foodService.getFoodByName(
+    req.body.foodName,
+    req.body.foodBrand
+  );
+
+  res.status(200).json(food);
+};
+
 export default {
   searchFoodByName,
   addFood,
   deleteFood,
   editFood,
   recommendFood,
+  getFoodByName,
 };

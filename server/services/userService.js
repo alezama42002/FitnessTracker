@@ -76,7 +76,9 @@ const updateUserNutrition = async (userDailyNutritionData) => {
     });
 
     // Updates the values we want updated
-    await userNutritionData.update(updatedValues);
+    await userNutritionData.update(updatedValues, {
+      where: { logDate: `0${month}/${day}/${year}` },
+    });
   }
 };
 

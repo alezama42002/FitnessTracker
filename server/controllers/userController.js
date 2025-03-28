@@ -9,6 +9,7 @@ import {
   generateAccessToken,
   verifyToken,
 } from "../middleware/authentication.js";
+import utilityFunctions from "../services/utilityFunctions.js";
 
 dotenv.config();
 
@@ -197,6 +198,7 @@ const logFood = async (req, res) => {
   try {
     const {
       foodID,
+      servingSize,
       foodName,
       foodBrand,
       Calories,
@@ -207,87 +209,20 @@ const logFood = async (req, res) => {
       Quantity,
     } = req.body;
 
-    let finalFoodID;
-
-    // Gets the necessary foodID for the given food based on the food wishing to be logged.
-    // Foods key nutrtional information is used to find ID.
-    const foodResponse = await foodService.getFoodID({
-      foodName: foodName,
-      foodBrand: foodBrand,
-      Calories: Calories,
-      Protein: Protein,
-      Carbohydrates: Carbohydrates,
-      Fats: Fats,
+    const finalFoodID = await utilityFunctions.checkFood({
+      foodID,
+      servingSize,
+      foodName,
+      foodBrand,
+      Calories,
+      Protein,
+      Carbohydrates,
+      Fats,
     });
-
-    // If food is not already in our Database, we store food in Database
-    if (foodResponse === false) {
-      // Gets foods information via API call to FatSecret using foodID given through req.body
-      const response = await axios.get(
-        "https://platform.fatsecret.com/rest/server.api",
-        {
-          params: {
-            method: "food.get.v4",
-            food_id: `${foodID}`,
-            format: "json",
-          },
-          headers: {
-            Authorization: `Bearer ${process.env.FATSECRET_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // Gets second serving option or first in the case that second is not present
-      const food =
-        response.data.food.servings.serving[1] ||
-        response.data.food.servings.serving[0];
-
-      // Filter data to only get the information needed
-      const foodData = {
-        foodBrand: response.data.food.brand_name || "Unknown Brand",
-        Description: response.data.food.food_description || "",
-        foodName: response.data.food.food_name || "Unknown Food",
-        servingSize: food.metric_serving_amount || 1,
-        Calories: food.calories ?? 0,
-        Protein: food.protein ?? 0,
-        Carbohydrates: food.carbohydrate ?? 0,
-        Fats: food.fat ?? 0,
-        Fiber: food.fiber ?? 0,
-        VitaminA: food.vitamin_a ?? 0,
-        VitaminB6: food.vitamin_b6 ?? 0,
-        VitaminB12: food.vitamin_b12 ?? 0,
-        VitaminC: food.vitamin_c ?? 0,
-        VitaminD: food.vitamin_d ?? 0,
-        VitaminE: food.vitamin_e ?? 0,
-        VitaminK: food.vitamin_k ?? 0,
-        Calcium: food.calcium ?? 0,
-        Iron: food.iron ?? 0,
-        Potassium: food.potassium ?? 0,
-        Magnesium: food.magnesium ?? 0,
-        Sodium: food.sodium ?? 0,
-        Zinc: food.zinc ?? 0,
-      };
-
-      // Adds food to Database (Foods Table)
-      await foodService.addFoodtoDB(foodData);
-
-      // Gets foodID of newly created Food in Food Table
-      finalFoodID = await foodService.getFoodID({
-        foodName: foodData.foodName,
-        foodBrand: foodData.foodBrand,
-        Calories: foodData.Calories,
-        Protein: foodData.Protein,
-        Carbohydrates: foodData.Carbohydrates,
-        Fats: foodData.Fats,
-      });
-    }
 
     // Gets userID based on username and gets foodID
     const user = await userService.getUser(Username);
     const userID = user.userID;
-
-    finalFoodID = foodResponse == false ? finalFoodID : foodResponse;
 
     const finalFoodData = await foodService.getFood(finalFoodID);
 
