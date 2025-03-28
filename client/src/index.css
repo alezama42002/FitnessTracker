@@ -9,8 +9,7 @@ body {
   background-color: #0e131f;
 }
 
-
-.nav-links.visible{
+.nav-links.visible {
   background-color: #19212c;
   display: flex;
   flex-direction: column;
@@ -22,7 +21,6 @@ body {
   padding: 10px;
   border-radius: 8px;
   transition: 1s linear;
-
 }
 
 .micronutientsContainer.hide {
@@ -43,7 +41,8 @@ body {
     display: block;
   }
 
-  .nav-links, .profile-icon {
+  .nav-links,
+  .profile-icon {
     display: none;
   }
 
@@ -70,10 +69,10 @@ body {
   .searchFoodText {
     font-size: 0.9em;
     align-items: flex-start;
+    padding-top: 5px;
   }
 
-  .addFoodContainer > button{
+  .addFoodContainer > button {
     font-size: 14px;
   }
-
 }

@@ -36,7 +36,7 @@ export default function SearchFood() {
         />
       </div>
       <div className="searchFoodText flex flex-col items-center justify-center text-[#AFA99E] pt-8 gap-3 pb-6">
-      <SearchedFood searchedFoodData={searchedFoods} />
+        <SearchedFood searchedFoodData={searchedFoods} />
         <p>Search for foods to add to your profile</p>
         <p>Try searching for items like 'chicken', 'apple', or 'rice'</p>
       </div>
