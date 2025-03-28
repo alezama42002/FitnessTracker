@@ -10,7 +10,7 @@ export default function SearchFood() {
           className="w-full focus:outline-none"
         />
       </div>
-      <div className="searchFoodText flex flex-col justify-center text-[#AFA99E] pt-8 gap-3 pb-6">
+      <div className="searchFoodText flex flex-col items-center justify-center text-[#AFA99E] pt-8 gap-3 pb-6">
         <p>Search for foods to add to your profile</p>
         <p>Try searching for items like 'chicken', 'apple', or 'rice'</p>
       </div>
