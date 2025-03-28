@@ -115,8 +115,8 @@ export default function Dashboard() {
     <div className="h-screen bg-[#0E131F]">
       <div className="bg-[#0E131F]">
         <Navbar />
-        <div className="dashboardContainer grid grid-cols-3 gap-y-8 gap-x-8 h-full">
-          <div className="mx-10 w-auto col-span-2">
+        <div className="grid grid-cols-3 gap-y-8 gap-x-8 h-full">
+          <div className="mx-10 w-200 col-span-2">
             <DailyOverview amountsData={dailyOverviewData} />
             <DailyFoods Username={username} token={token} />
           </div>
