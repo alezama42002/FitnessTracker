@@ -1,7 +1,9 @@
 import React from "react";
 import Input from "../components/Input";
 import { useState } from "react";
+import { IoIosArrowUp } from "react-icons/io";
 import axios from "axios";
+
 
 export default function AddFood() {
   const [formData, setFormData] = useState({
@@ -29,6 +31,13 @@ export default function AddFood() {
     Zinc: "",
   });
 
+  const [dropToggle, setDropToggle] = useState(false);
+
+  const toggleDrop = () => {
+    setDropToggle(!dropToggle);
+    console.log(dropToggle)
+  };
+
   const handleInputChange = (field, value) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -51,14 +60,14 @@ export default function AddFood() {
   };
 
   return (
-    <div className="bg-[#19212C] px-6 py-6 rounded-[16px]">
+    <div className="addFoodContainer bg-[#19212C] p-6 rounded-[16px]">
       <div className=" flex flex-col gap-4 pb-6">
-        <h1 className="text-white">Add Custom Food</h1>
+        <h1 className=" text-white">Add Custom Food</h1>
         <p className="text-[#8FA99E]">
           Create a custom food with detailed nutritional information
         </p>
       </div>
-      <div className="flex justify-center w-full gap-6">
+      <div className="flex justify-center w-full gap-6 sm:max-lg:flex-col">
         <div className="flex-1">
           <Input
             inputName="Food Name"
@@ -90,7 +99,7 @@ export default function AddFood() {
       </div>
       <div className="pt-6">
         <h1 className="pb-4 text-[#55E088] font-semibold">Macronutrients</h1>
-        <div className="flex justify-center w-full gap-6">
+        <div className="flex justify-center w-full gap-6 sm:max-lg:flex-col">
           <div className="flex-1">
             <Input
               inputName="Calories (kcal)"
@@ -101,7 +110,7 @@ export default function AddFood() {
           <div className="flex-1">
             <Input
               inputName="Protein (g)"
-              field="Protein"
+              field="ServingSize"
               sendData={handleInputChange}
             />
           </div>
@@ -121,59 +130,18 @@ export default function AddFood() {
           </div>
         </div>
         <div className="pt-6 pb-6">
-          <h1 className="pb-4 text-[#55E088] font-semibold">Micronutrients</h1>
-          <div className="flex justify-center w-full gap-6">
-            <div className="flex-1">
-              <Input
-                inputName="Fiber (g)"
-                field="Fiber"
-                sendData={handleInputChange}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                inputName="Vitamin A"
-                field="VitaminA"
-                sendData={handleInputChange}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                inputName="Vitamin B6"
-                field="VitaminB6"
-                sendData={handleInputChange}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                inputName="Vitamin B12"
-                field="VitaminB12"
-                sendData={handleInputChange}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                inputName="Vitamin C"
-                field="VitaminC"
-                sendData={handleInputChange}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                inputName="Vitamin D"
-                field="VitaminD"
-                sendData={handleInputChange}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                inputName="Vitamin E"
-                field="VitaminE"
-                sendData={handleInputChange}
-              />
-            </div>
-          </div>
-          <div className="flex justify-center w-full gap-6 pt-4">
+          <div className="flex items-center gap-4 pb-4">
+            <h1 className=" text-[#55E088] font-semibold text-center">
+              Micronutrients
+            </h1>
+            <IoIosArrowUp onClick={toggleDrop} size={22} className={`micronutrientsArrow ${
+              dropToggle ? "rotate" : ""
+            } rotate-180 cursor-pointer`} />
+          <div
+            className={`micronutientsContainer ${
+              dropToggle ? "hide" : ""
+            } flex justify-center w-full gap-6`}
+          >
             <div className="flex-1">
               <Input
                 inputName="Vitamin K"
@@ -227,8 +195,8 @@ export default function AddFood() {
         </div>
         <button
           type="button"
+          className="bg-[#1B9E4B] rounded-[8px] w-full py-2 px-14 mt-2 text-white font-normal text-[18px] cursor-pointer "
           onClick={addFood}
-          className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[18px] cursor-pointer w-full py-2"
         >
           Add Food
         </button>
