@@ -13,7 +13,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="bg-[#19212C] flex justify-between items-center px-4 h-[100px]">
+    <div className="bg-[#19212C] flex justify-between items-center px-4 w-full h-[100px]">
       <div>
         <img src={Logo} alt="" className="h-15" />
       </div>
@@ -61,7 +61,7 @@ export default function Navbar() {
           className="menu-icon hidden"
         />
         <CiUser
-          size={40}
+          size={28}
           color="#AFA99E"
           onClick={userInfo}
           className="profile-icon hover:cursor-pointer"
