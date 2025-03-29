@@ -32,7 +32,7 @@ export default function PopupQuantity({ onClose, onSave, text }) {
             onClick={handleSave}
             className="bg-green-500 text-white py-1 px-4 rounded"
           >
-            Save
+            Log
           </button>
         </div>
       </div>

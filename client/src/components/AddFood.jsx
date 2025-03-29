@@ -14,27 +14,26 @@ export default function AddFood() {
     Protein: "",
     Carbohydrates: "",
     Fats: "",
-    Fiber: "",
-    VitaminA: "",
-    VitaminB6: "",
-    VitaminB12: "",
-    VitaminC: "",
-    VitaminD: "",
-    VitaminE: "",
-    VitaminK: "",
-    Calcium: "",
-    Iron: "",
-    Potassium: "",
-    Magnesium: "",
-    Sodium: "",
-    Zinc: "",
+    Fiber: "0",
+    VitaminA: "0",
+    VitaminB6: "0",
+    VitaminB12: "0",
+    VitaminC: "0",
+    VitaminD: "0",
+    VitaminE: "0",
+    VitaminK: "0",
+    Calcium: "0",
+    Iron: "0",
+    Potassium: "0",
+    Magnesium: "0",
+    Sodium: "0",
+    Zinc: "0",
   });
 
-  const [dropToggle, setDropToggle] = useState(false);
+  const [dropToggle, setDropToggle] = useState(true);
 
   const toggleDrop = () => {
     setDropToggle(!dropToggle);
-    console.log(dropToggle);
   };
 
   const handleInputChange = (field, value) => {
@@ -89,7 +88,7 @@ export default function AddFood() {
           />
         </div>
       </div>
-      <div className="flex-1">
+      <div className="flex-1 mt-6">
         <Input
           inputName="Food Description"
           field="Description"
@@ -129,21 +128,25 @@ export default function AddFood() {
           </div>
         </div>
         <div className="pt-6 pb-6">
-          <div className="flex items-center gap-4 pb-4">
-            <h1 className=" text-[#55E088] font-semibold text-center">
-              Micronutrients
-            </h1>
-            <IoIosArrowUp
-              onClick={toggleDrop}
-              size={22}
-              className={`micronutrientsArrow ${
-                dropToggle ? "rotate" : ""
-              } rotate-180 cursor-pointer`}
-            />
-            <h1 className="pb-4 text-[#55E088] font-semibold">
-              Micronutrients
-            </h1>
-            <div className="flex justify-center w-full gap-6">
+          <div className="flex flex-col gap-4 pb-4">
+            <div className="flex  items-center gap-2">
+              <h1 className=" text-[#55E088] font-semibold text-center">
+                Micronutrients
+              </h1>
+              <p className="text-red-50">(optional)</p>
+              <IoIosArrowUp
+                onClick={toggleDrop}
+                size={22}
+                className={`micronutrientsArrow ${
+                  dropToggle ? "rotate" : ""
+                } rotate-180 mt-1 cursor-pointer`}
+              />
+            </div>
+            <div
+              className={`micronutientsContainer ${
+                dropToggle ? "hide" : ""
+              } flex sm:max-lg:flex-col justify-center w-full gap-6`}
+            >
               <div className="flex-1">
                 <Input
                   inputName="Fiber (g)"
@@ -197,7 +200,7 @@ export default function AddFood() {
             <div
               className={`micronutientsContainer ${
                 dropToggle ? "hide" : ""
-              } flex justify-center w-full gap-6`}
+              } flex sm:max-lg:flex-col justify-center w-full gap-6`}
             >
               <div className="flex-1">
                 <Input

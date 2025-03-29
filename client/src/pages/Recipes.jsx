@@ -85,26 +85,6 @@ export default function Recipes() {
               field="totalServings"
               sendData={handleInputChange}
             />
-            <div class="inline-flex items-center gap-2 pt-4 pb-6">
-              <div class="relative inline-block w-11 h-5 ">
-                <input
-                  id="switch-component-on"
-                  type="checkbox"
-                  class="peer appearance-none w-11 h-5 bg-[#0E131F] rounded-full checked:bg-[#1B9E4B] cursor-pointer transition-colors duration-300"
-                />
-                <label
-                  for="switch-component-on"
-                  class="absolute top-0 left-0 w-5 h-5 bg-white rounded-full border border-slate-300 shadow-sm transition-transform duration-300 peer-checked:translate-x-6 peer-checked:border-slate-800 cursor-pointer"
-                ></label>
-              </div>
-
-              <label
-                for="switch-component-on"
-                class="text-[#AFA99E] text-sm cursor-pointer"
-              >
-                Public Recipe
-              </label>
-            </div>
             <div className="pb-6">
               <h1>Search Ingredient</h1>
               <SearchIngredient addIngredient={addIngredient} />
