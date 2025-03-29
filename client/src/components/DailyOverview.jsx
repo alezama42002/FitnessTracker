@@ -15,7 +15,7 @@ export default function DailyOverview({ amountsData }) {
 
   const currentDate = getCurrentFormattedDate();
   return (
-    <div className="bg-[#19212C] mt-8 w-full py-6 rounded-[16px]">
+    <div className="bg-[#19212C] mt-8 py-6 rounded-[16px]">
       <div className="flex justify-between px-6 text-white">
         <h1 className="inline font-semibold">Daily Overview</h1>
         <p className="inline text-[#BDB7AF]">{currentDate}</p>

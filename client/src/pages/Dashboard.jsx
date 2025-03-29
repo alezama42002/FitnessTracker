@@ -112,20 +112,20 @@ export default function Dashboard() {
   }, [username, token]);
 
   return (
-    <div className="h-screen bg-[#0E131F]">
-      <div className="bg-[#0E131F]">
+    <div className="h-screen bg-[#0E131F] ">
+      <div className="bg-[#0E131F] pb-10">
         <Navbar />
         <div className="dashboardContainer grid grid-cols-3 gap-y-8 gap-x-8 h-full">
-          <div className="mx-10 w-auto col-span-2">
+          <div className="mx-10 col-span-2">
             <DailyOverview amountsData={dailyOverviewData} />
             <DailyFoods Username={username} token={token} />
           </div>
 
-          <div className="row-span-2 mt-8">
+          <div className="row-span-2 mr-10 mt-8 sm:max-lg:mx-10 sm:max-lg:mt-0">
             <LogWeight Username={username} token={token} />
             <MicroNutrients nutritionData={micronutrientsData} />
           </div>
-          <div className="bg-[#19212C] h-150 ml-10 rounded-[16px] col-span-2 w-200">
+          <div className="bg-[#19212C] h-150 mx-10 rounded-[16px] col-span-2 w-auto">
             <WeightGraph weightData={weightGraphData} weekDays={weekDays} />
           </div>
         </div>

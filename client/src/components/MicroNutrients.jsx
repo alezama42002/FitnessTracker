@@ -3,7 +3,7 @@ import ProgressBar from "./ProgressBar";
 
 export default function MicroNutrients({ nutritionData }) {
   return (
-    <div className="bg-[#19212C] rounded-[16px] mr-[40px] pb-6 ">
+    <div className="bg-[#19212C] rounded-[16px] pb-6 ">
       <div className="px-6 text-white pb-6 pt-4">
         <h1 className=" font-semibold">Micronutrients</h1>
       </div>
