@@ -30,19 +30,19 @@ export default function DailyFoods({ Username, token }) {
   }, [Username, token]);
 
   return (
-    <div className="bg-[#19212C] mt-8 w-full py-6 rounded-[16px] ]">
+    <div className="bg-[#19212C] mt-8 py-6 rounded-[16px]">
       <div className="flex justify-between px-6 text-white">
         <h1 className="inline font-semibold">Today's Food</h1>
       </div>
       <div className="px-6 mt-8 text-[14px]">
-        <div className="text-white flex justify-between border-b-2 border-b-[#363B3D] pb-3 font-semibold">
+        <div className="dailyFoodItem-Container text-white flex justify-between sm:max-lg:justify-around border-b-2 border-b-[#363B3D] pb-3 font-semibold w-full">
           <p>Food</p>
-          <div className="flex gap-14 pr-20">
+          <div className="flex gap-14 pr-20 sm:max-lg:gap-28">
             <p>Time</p>
             <p>Calories</p>
-            <p>Protein</p>
-            <p>Carbs</p>
-            <p>Fat</p>
+            <p className="sm:max-lg:hidden ">Protein</p>
+            <p className="sm:max-lg:hidden">Carbs</p>
+            <p className="sm:max-lg:hidden">Fat</p>
           </div>
         </div>
         <div>

@@ -38,7 +38,7 @@ export default function LogWeight({ Username, token }) {
   };
 
   return (
-    <div className="bg-[#19212C] rounded-[16px] mb-8 mr-[40px] px-6 pb-6 ">
+    <div className="bg-[#19212C] rounded-[16px] mb-8 px-6 pb-6 sm:max-lg:hidden">
       <div className=" text-white py-6">
         <h1 className=" font-semibold">Log Weight</h1>
       </div>

@@ -32,6 +32,8 @@ body {
 }
 
 @media screen and (max-width: 768px) {
+  /* navbar  */
+  
   .menu-icon {
     display: block;
     cursor: pointer;
@@ -54,8 +56,11 @@ body {
     position: absolute;
   }
 
+  /* navbar */
+
   .dashboardContainer {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
 
   .foodLogContainer {
