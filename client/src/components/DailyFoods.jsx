@@ -35,12 +35,12 @@ export default function DailyFoods({ Username, token }) {
         <h1 className="inline font-semibold">Today's Food</h1>
       </div>
       <div className="px-6 mt-8 text-[14px]">
-        <div className="dailyFoodItem-Container text-white flex justify-between sm:max-lg:justify-around border-b-2 border-b-[#363B3D] pb-3 font-semibold w-full">
+        <div className="dailyFoodItem-Container text-white flex justify-between sm:max-lg:justify-between border-b-2 border-b-[#363B3D] pb-3 font-semibold w-full">
           <p>Food</p>
-          <div className="flex gap-14 pr-20 sm:max-lg:gap-28">
+          <div className="flex gap-14 pr-20 sm:max-lg:gap-12 sm:max-lg:pr-18">
             <p>Time</p>
             <p>Calories</p>
-            <p className="sm:max-lg:hidden ">Protein</p>
+            <p className="sm:max-lg:hidden">Protein</p>
             <p className="sm:max-lg:hidden">Carbs</p>
             <p className="sm:max-lg:hidden">Fat</p>
           </div>
@@ -57,6 +57,14 @@ export default function DailyFoods({ Username, token }) {
               fat={food.Fat}
             />
           ))}
+          <Food
+            name="Egg"
+            logTime="12:45"
+            calories="100"
+            protein="10"
+            carbs="1"
+            fat="8"
+          />
         </div>
       </div>
     </div>
