@@ -80,4 +80,15 @@ body {
   .addFoodContainer > button {
     font-size: 14px;
   }
+
+  .suggestionBtn-Container button {
+    font-size: 12px;
+    padding: 4px 6px;
+    gap: 4px;
+
+  }
+
+  .suggestion.plus {
+    font-size: 30px;
+  }
 }

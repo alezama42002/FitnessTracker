@@ -118,14 +118,14 @@ export default function Suggestions() {
   return (
     <div className="h-screen bg-[#0E131F]">
       <Navbar />
-      <div className="mx-16 my-8">
+      <div className="mx-16 my-8 sm:max-lg:mx-8">
         <h1 className="text-white text-[22px] pb-4">Suggestions</h1>
         <p className="text-[#AFA99E]">
           Find recipes and meals that match your needs
         </p>
       </div>
-      <div className="bg-[#19212C] rounded-[8px] px-6 py-4 mx-16">
-        <div className="bg-[#2c3441] text-[14px] rounded-md py-2 pl-8">
+      <div className="bg-[#19212C] rounded-[8px] px-6 py-4 mx-16 sm:max-lg:mx-8 sm:max-lg:px-4">
+        <div className="bg-[#2c3441] text-[14px] rounded-md py-2 pl-8 sm:max-lg:pl-4">
           <div className="flex items-center gap-2">
             <FiSearch color="#CCCCCC" />
             <input
@@ -137,7 +137,7 @@ export default function Suggestions() {
             />
           </div>
         </div>
-        <div className="flex gap-2 pt-6">
+        <div className="suggestionBtn-Container flex justify-evenly gap-2 pt-6">
           <button
             onClick={handleClickAll}
             className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
@@ -184,17 +184,7 @@ export default function Suggestions() {
           </button>
         </div>
       </div>
-      <div className="bg-[#19212C] rounded-[8px] mt-6 mx-16 px-4 py-4">
-        <Recipe
-          name="High Protein Chicken Bowl"
-          description="A protein-rich meal perfect for muscle building"
-          calories="450"
-          protein="45"
-          carbs="30"
-          fat="15"
-        />
-      </div>
-      <div className="bg-[#19212C] rounded-[8px] mt-6 mx-16 px-4 py-4">
+      <div className="bg-[#19212C] rounded-[8px] mt-6 mx-16 sm:max-lg:mx-8 px-4 py-4">
         <Recipe
           name="High Protein Chicken Bowl"
           description="A protein-rich meal perfect for muscle building"
