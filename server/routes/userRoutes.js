@@ -103,4 +103,6 @@ router.post(
   userController.getUserWeights
 );
 
+router.post("/LogRecipe", userController.logRecipe);
+
 export default router;

@@ -68,14 +68,18 @@ const editRecipe = async (req, res) => {
 };
 
 const getRecipeByName = async (req, res) => {
-  const recipe = await recipeService.getRecipe(req.body.recipeName);
-  res.status(200).json({
+  const recipes = await recipeService.getRecipe(req.body.recipeName);
+
+  const formattedRecipes = recipes.map((recipe) => ({
     recipeName: recipe.recipeName,
+    totalServings: recipe.totalServings,
     Calories: recipe.totalCalories,
     Protein: recipe.totalProtein,
-    Carbs: recipe.totalCarbohydrates,
+    Carbs: recipe.totalCarbohydrates || 0,
     Fat: recipe.totalFats,
-  });
+  }));
+
+  res.status(200).json(formattedRecipes);
 };
 
 const getReccomendedRecipes = async (req, res) => {

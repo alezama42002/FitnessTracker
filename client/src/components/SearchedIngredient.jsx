@@ -1,55 +1,73 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa6";
+import PopupQuantity from "./PopupQuantity";
 
 export default function SearchedIngredient({
   searchedFoodData,
   addIngredient,
 }) {
+  const [token, setToken] = useState(null);
+  const [username, setUsername] = useState(null);
   const [quantities, setQuantities] = useState({});
+  const [open, setOpen] = React.useState(false);
+  const [selectedFood, setSelectedFood] = useState(null);
 
-  const handleQuantityChange = (foodID, value) => {
-    setQuantities((prev) => ({ ...prev, [foodID]: value }));
+  useEffect(() => {
+    const storedToken = localStorage.getItem("accessToken");
+
+    if (storedToken) {
+      const base64Url = storedToken.split(".")[1];
+      const decodedData = JSON.parse(atob(base64Url));
+      setToken(storedToken);
+      setUsername(decodedData.name);
+    }
+  }, []);
+
+  const handleQuantity = (food) => {
+    setSelectedFood(food);
+    setOpen(true);
+  };
+
+  const logRecipe = () => {
+    alert("Recipe Logged");
   };
 
   return (
-    <div>
+    <div className="lg:w-full">
       {searchedFoodData.length > 0
         ? searchedFoodData.map((food) => (
-            <div
-              key={food.ID}
-              className="text-white flex border-b-2 border-b-[#363B3D] py-3"
-            >
-              <div className="w-52">
-                <p>{food.name}</p> {/* Display food name */}
+            <>
+              <div
+                key={food.ID}
+                className="text-white flex justify-between pb-1 pt-3"
+              >
+                <div className="sm:w-65 md:w-80 lg:w-100">
+                  <p>
+                    {food.name} {food.brand && `(${food.brand})`}
+                  </p>{" "}
+                </div>
+                <div className="flex gap-2 items-center justify-center pr-2">
+                  <FaPlus onClick={() => handleQuantity(food)} />
+                </div>
               </div>
-
-              <div className="flex gap-13">
-                <p>{food.brand || "No Brand"}</p>{" "}
-                {/* Display food brand, fallback to "No Brand" */}
-                <p className="pl-6.5">
-                  {food.macros || "No Macros Information"}
-                </p>{" "}
-                {/* Display macros, fallback to "No Macros Information" */}
+              <div>
+                <p className="border-b-2 border-b-[#363B3D]">{food.macros}</p>{" "}
               </div>
-              <div className="flex gap-2 items-center justify-center pl-7">
-                <input
-                  type="number"
-                  min="1"
-                  className="w-16 px-2 py-1 border rounded bg-gray-800 text-white text-center"
-                  value={quantities[food.ID] || ""}
-                  onChange={(e) =>
-                    handleQuantityChange(food.ID, e.target.value)
-                  }
-                  placeholder="Qty"
-                />{" "}
-                <FaPlus
-                  onClick={() => addIngredient(food, quantities[food.ID])}
-                />
-              </div>
-            </div>
+            </>
           ))
         : null}
+      {open && (
+        <PopupQuantity
+          food={selectedFood}
+          text={"Enter Quantity"}
+          onClose={() => setOpen(false)}
+          onSave={(quantity) => {
+            logRecipe(selectedFood, quantity);
+            setOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 }

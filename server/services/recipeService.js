@@ -122,7 +122,7 @@ const createRecipeFood = async (foodIDs, recipeID) => {
 };
 
 const getRecipe = async (recipeName) => {
-  return await Recipe.findOne({
+  return await Recipe.findAll({
     where: { recipeName: recipeName },
   });
 };

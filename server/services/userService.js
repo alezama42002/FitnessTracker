@@ -1,5 +1,7 @@
 import User from "../models/userModel.js";
 import Food from "../models/foodModel.js";
+import userRecipe from "../models/userRecipeModel.js";
+import Recipe from "../models/recipeModel.js";
 import userFood from "../models/userFoodModel.js";
 import userNutritionProgress from "../models/userDailyNutritionModel.js";
 import Weight from "../models/weightModel.js";
@@ -38,7 +40,7 @@ const addFoodforUser = async (logData) => {
 
 // Adds logged foods nutritional information to users daily totals
 const updateUserNutrition = async (userDailyNutritionData) => {
-  const { Quantity, adjustmentType } = userDailyNutritionData;
+  const { Quantity } = userDailyNutritionData;
 
   const date = new Date();
   const month = date.getMonth() + 1; // Months are 0-based
@@ -235,6 +237,14 @@ const getUserWeights = async (Username, inputDate) => {
   return weeksWeights;
 };
 
+const addRecipeForUser = async (recipeID, userID, servings) => {
+  await userRecipe.create({
+    userID: userID,
+    Servings: servings,
+    recipeID: recipeID,
+  });
+};
+
 export default {
   addUser,
   deleteUser,
@@ -247,4 +257,5 @@ export default {
   getUserCurrentNutrition,
   addWeight,
   getUserWeights,
+  addRecipeForUser,
 };

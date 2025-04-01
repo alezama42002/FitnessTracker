@@ -33,7 +33,7 @@ body {
 
 @media screen and (max-width: 768px) {
   /* navbar  */
-  
+
   .menu-icon {
     display: block;
     cursor: pointer;
@@ -85,7 +85,6 @@ body {
     font-size: 12px;
     padding: 4px 6px;
     gap: 4px;
-
   }
 
   .suggestion.plus {

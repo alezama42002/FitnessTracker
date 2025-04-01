@@ -3,7 +3,6 @@
 // handling.
 
 import express from "express";
-
 import userRouter from "./routes/userRoutes.js";
 import foodRouter from "./routes/foodRoutes.js";
 import recipeRouter from "./routes/recipeRoutes.js";
@@ -13,7 +12,8 @@ import cors from "cors";
 //import sequelize from "./config/database.js";
 //import Recipe from "./models/recipeModel.js";
 //import RecipeFood from "./models/recipeFoodModel.js";
-//sequelize.sync({ force: true });
+//import userRecipe from "./models/userRecipeModel.js";
+//sequelize.sync({ alter: true });
 
 const app = express();
 app.use(express.json());

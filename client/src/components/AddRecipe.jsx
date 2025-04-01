@@ -4,12 +4,8 @@ import Input from "../components/Input";
 import { useState } from "react";
 import SearchIngredient from "../components/SearchIngredient";
 import axios from "axios";
-import { FiSearch } from "react-icons/fi";
-import { FaPlus } from "react-icons/fa6";
-import SearchRecipe from "../components/SearchRecipe";
-import AddRecipe from "../components/AddRecipe";
 
-export default function Recipes() {
+export default function AddRecipe() {
   const [formData, setFormData] = useState({
     recipeName: "",
     recipeDescription: "",
@@ -17,10 +13,12 @@ export default function Recipes() {
   });
   const [username, setUsername] = useState(null);
   const [ingredientData, setIngredientData] = useState([]);
-  const [selected, setSelected] = useState("SearchRecipe");
 
-  const handleClick = (item) => {
-    setSelected(item);
+  const handleInputChange = (field, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
   };
 
   const addIngredient = (food, quantity) => {
@@ -41,13 +39,6 @@ export default function Recipes() {
     };
     setIngredientData((prevIngredients) => [...prevIngredients, foodData]);
     console.log("Ingredient Added");
-  };
-
-  const handleInputChange = (field, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
   };
 
   const addRecipe = async () => {
@@ -73,36 +64,37 @@ export default function Recipes() {
   };
 
   return (
-    <div className="bg-[#0E131F] h-full">
-      <Navbar />
-      <div className="foodLogContainer text-white mx-16 mt-8  pb-16">
-        <h1 className="text-[22px]">Recipes</h1>
-        <div className="foodLogFlexContainer flex mt-8 items-center text-[#AFA99E] text-[16px] border-b-2 border-b-[#363B3D] mb-6">
-          <div
-            className="flex items-center gap-2 border-b-1 border-b-[#363B3D] pr-4 hover:text-[#1B9E4B] hover:border-[#1B9E4B] hover:cursor-pointer"
-            onClick={() => handleClick("SearchRecipe")}
-          >
-            <FiSearch />
-            <p>Search Recipe</p>
-          </div>
-          <div
-            className="flex items-center gap-2 border-b-1 border-b-[#363B3D] pl-4 hover:text-[#1B9E4B] hover:border-[#1B9E4B] hover:cursor-pointer"
-            onClick={() => handleClick("AddRecipe")}
-          >
-            <FaPlus />
-            <p>Add Custom Recipe</p>
+    <div className="mx-2">
+      <h1 className="text-[22px] text-white pt-4">Create Recipe </h1>
+      <div className="bg-[#19212C] text-white mt-6 p-6 rounded-[8px]">
+        <div>
+          <Input
+            inputName="Recipe Name"
+            field="recipeName"
+            sendData={handleInputChange}
+          />
+          <Input
+            inputName="Recipe Description"
+            field="recipeDescription"
+            sendData={handleInputChange}
+          />
+          <Input
+            inputName="Total Servings"
+            field="totalServings"
+            sendData={handleInputChange}
+          />
+          <div className="pb-6">
+            <h1>Search Ingredient</h1>
+            <SearchIngredient addIngredient={addIngredient} />
           </div>
         </div>
-        {selected === "SearchRecipe" && (
-          <div>
-            <SearchRecipe />
-          </div>
-        )}
-        {selected === "AddRecipe" && (
-          <div>
-            <AddRecipe />
-          </div>
-        )}
+        <button
+          type="button"
+          onClick={addRecipe}
+          className="bg-[#1B9E4B] rounded-[8px] px-14 mt-4 mb-2 text-white font-normal text-[18px] cursor-pointer w-full py-2"
+        >
+          Add Recipe
+        </button>
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import axios from "axios";
 import dotenv from "dotenv";
 import userService from "../services/userService.js"; // Imports quieres/mutations related to User
 import foodService from "../services/foodService.js";
@@ -10,6 +9,7 @@ import {
   verifyToken,
 } from "../middleware/authentication.js";
 import utilityFunctions from "../services/utilityFunctions.js";
+import recipeService from "../services/recipeService.js";
 
 dotenv.config();
 
@@ -224,7 +224,7 @@ const logFood = async (req, res) => {
     const user = await userService.getUser(Username);
     const userID = user.userID;
 
-    const finalFoodData = await foodService.getFood(finalFoodID);
+    const recipe = await foodService.getFood(finalFoodID);
 
     // Creates userFood input in DB using userID and foodID
     await userService.addFoodforUser({
@@ -237,24 +237,24 @@ const logFood = async (req, res) => {
     const userAddedNutritionData = {
       userID: userID,
       Quantity: Quantity,
-      currentCalories: finalFoodData.Calories ?? 0,
-      currentProtein: finalFoodData.Protein ?? 0,
-      currentCarbohydrates: finalFoodData.Carbohydrates ?? 0,
-      currentFats: finalFoodData.Fats ?? 0,
-      currentFiber: finalFoodData.Fiber ?? 0,
-      currentVitaminA: finalFoodData.VitaminA ?? 0,
-      currentVitaminB6: finalFoodData.VitaminB6 ?? 0,
-      currentVitaminB12: finalFoodData.VitaminB12 ?? 0,
-      currentVitaminC: finalFoodData.VitaminC ?? 0,
-      currentVitaminD: finalFoodData.VitaminD ?? 0,
-      currentVitaminE: finalFoodData.VitaminE ?? 0,
-      currentVitaminK: finalFoodData.VitaminK ?? 0,
-      currentCalcium: finalFoodData.Calcium ?? 0,
-      currentIron: finalFoodData.Iron ?? 0,
-      currentPotassium: finalFoodData.Potassium ?? 0,
-      currentMagnesium: finalFoodData.Magnesium ?? 0,
-      currentSodium: finalFoodData.Sodium ?? 0,
-      currentZinc: finalFoodData.Zinc ?? 0,
+      currentCalories: recipe.Calories ?? 0,
+      currentProtein: recipe.Protein ?? 0,
+      currentCarbohydrates: recipe.Carbohydrates ?? 0,
+      currentFats: recipe.Fats ?? 0,
+      currentFiber: recipe.Fiber ?? 0,
+      currentVitaminA: recipe.VitaminA ?? 0,
+      currentVitaminB6: recipe.VitaminB6 ?? 0,
+      currentVitaminB12: recipe.VitaminB12 ?? 0,
+      currentVitaminC: recipe.VitaminC ?? 0,
+      currentVitaminD: recipe.VitaminD ?? 0,
+      currentVitaminE: recipe.VitaminE ?? 0,
+      currentVitaminK: recipe.VitaminK ?? 0,
+      currentCalcium: recipe.Calcium ?? 0,
+      currentIron: recipe.Iron ?? 0,
+      currentPotassium: recipe.Potassium ?? 0,
+      currentMagnesium: recipe.Magnesium ?? 0,
+      currentSodium: recipe.Sodium ?? 0,
+      currentZinc: recipe.Zinc ?? 0,
     };
 
     // Update the daily nutritional information of the user based on the nutritional information added
@@ -367,6 +367,45 @@ const getUserWeights = async (req, res) => {
   res.status(200).json(weekWeightLogs);
 };
 
+const logRecipe = async (req, res) => {
+  const recipes = await recipeService.getRecipe(req.body.recipeName);
+  const recipe = recipes.find((r) => r.totalCalories === req.body.Calories);
+
+  const user = await userService.getUser(req.body.Username);
+
+  const quantity = req.body.servings / recipe.dataValues.totalServings;
+
+  const userAddedNutritionData = {
+    userID: user.dataValues.userID,
+    Quantity: quantity,
+    currentCalories: recipe.dataValues.totalCalories ?? 0,
+    currentProtein: recipe.dataValues.totalProtein ?? 0,
+    currentCarbohydrates: recipe.dataValues.totalCarbohydrates ?? 0,
+    currentFats: recipe.dataValues.totalFats ?? 0,
+    currentFiber: recipe.dataValues.totalFiber ?? 0,
+    currentVitaminA: recipe.dataValues.totalVitaminA ?? 0,
+    currentVitaminB6: recipe.dataValues.totalVitaminB6 ?? 0,
+    currentVitaminB12: recipe.dataValues.totalVitaminB12 ?? 0,
+    currentVitaminC: recipe.dataValues.totalVitaminC ?? 0,
+    currentVitaminD: recipe.dataValues.totalVitaminD ?? 0,
+    currentVitaminE: recipe.dataValues.totalVitaminE ?? 0,
+    currentVitaminK: recipe.dataValues.totalVitaminK ?? 0,
+    currentCalcium: recipe.dataValues.totalCalcium ?? 0,
+    currentIron: recipe.dataValues.totalIron ?? 0,
+    currentPotassium: recipe.dataValues.totalPotassium ?? 0,
+    currentMagnesium: recipe.dataValues.totalMagnesium ?? 0,
+    currentSodium: recipe.dataValues.totalSodium ?? 0,
+    currentZinc: recipe.dataValues.totalZinc ?? 0,
+  };
+
+  await userService.updateUserNutrition(userAddedNutritionData);
+  await userService.addRecipeForUser(
+    recipe.dataValues.recipeID,
+    user.userID,
+    quantity
+  );
+};
+
 export default {
   Login,
   Logout,
@@ -382,4 +421,5 @@ export default {
   getCurrentNutrition,
   logWeight,
   getUserWeights,
+  logRecipe,
 };
