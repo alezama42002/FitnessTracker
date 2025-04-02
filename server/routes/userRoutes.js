@@ -40,6 +40,8 @@ router.post("/Macros", validateMacroRequest, userController.getMacros);
 // Adds user to the database
 router.post("/AddUser", validateAddUser, userController.addUser);
 
+router.post("/Username", userController.checkUsername);
+
 // Removes user from the database
 router.delete(
   "/DeleteUser",

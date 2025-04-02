@@ -85,9 +85,7 @@ export default function AccountInformation() {
           if (error.response.status === 422) {
             const errorMessage = error.response.data.errors.msg;
             alert(errorMessage);
-          } else if (error.response.status === 401)
-            alert("Invalid Username or Password");
-          else {
+          } else if (error.response.status === 500) {
             console.log(error);
             alert("An unexpected error occurred. Please try again.");
           }

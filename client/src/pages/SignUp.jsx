@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -23,24 +24,39 @@ export default function SignUp() {
 
   // Stores form data is local storage so it can be referred to in account
   // information page
-  const signUp = () => {
+  const signUp = async () => {
     // Error Handling in case user does not provide needed information
     // or provided incorrect information
     if (
-      formData.Username === "" ||
-      formData.Password === "" ||
-      formData.ReEnteredPassword === ""
-    )
-      alert("All Inputs are Required");
-    else if (formData.Username.length < 4) {
-      alert("Username must be string of atleast 4 characters");
+      !formData.Username ||
+      !formData.Password ||
+      !formData.ReEnteredPassword
+    ) {
+      alert("All inputs are required");
+    } else if (formData.Username.length < 4) {
+      alert("Username must be at least 4 characters long");
+    } else if (!/[a-zA-Z]/.test(formData.Username)) {
+      alert("Username must contain at least one letter");
     } else if (formData.Password.length < 6) {
-      alert("Password must be string of atleast 6 characters");
+      alert("Password must be at least 6 characters long");
+    } else if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(formData.Password)) {
+      alert("Password must contain at least one letter and one number");
+    } else if (formData.Password !== formData.ReEnteredPassword) {
+      alert("Password and Re-entered Password must match");
     } else {
-      if (formData.Password === formData.ReEnteredPassword) {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/user/Username",
+          {
+            Username: formData.Username,
+          }
+        );
+
         localStorage.setItem("SignUp-FormData", JSON.stringify(formData));
         navigate("/Auth/AccountInformation");
-      } else alert("Password and Re-entered Password must match");
+      } catch (error) {
+        alert("Username is already taken");
+      }
     }
   };
 

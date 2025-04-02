@@ -112,7 +112,9 @@ const validateAddUser = [
     .isString()
     .withMessage("Username must be a string")
     .isLength({ min: 4, max: 30 })
-    .withMessage("Username must be at least 4 characters long"),
+    .withMessage("Username must be at least 4 characters long")
+    .matches(/[a-zA-Z]/)
+    .withMessage("Username must contain at least one letter"),
 
   body("Password")
     .exists()
@@ -120,25 +122,30 @@ const validateAddUser = [
     .isString()
     .withMessage("Password must be a string")
     .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters long"),
+    .withMessage("Password must be at least 6 characters long")
+    .matches(/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/)
+    .withMessage("Password must contain at least one letter and one number"),
 
   body("Height")
     .exists()
     .withMessage("Height is required")
     .isInt({ min: 0, max: 300 })
-    .withMessage("Height must be between 0 and 300 cm"),
+    .withMessage("Height must be an integer between 0 and 300 cm")
+    .toInt(),
 
   body("Weight")
     .exists()
     .withMessage("Weight is required")
     .isInt({ min: 0, max: 400 })
-    .withMessage("Weight must be between 0 and 400 kg"),
+    .withMessage("Weight must be an integer between 0 and 400 kg")
+    .toInt(),
 
   body("Age")
     .exists()
     .withMessage("Age is required")
     .isInt({ min: 0, max: 150 })
-    .withMessage("Age must be between 0 and 150 years"),
+    .withMessage("Age must be an integer between 0 and 150 years")
+    .toInt(),
 
   body("firstName")
     .exists()
@@ -146,7 +153,9 @@ const validateAddUser = [
     .isString()
     .withMessage("First Name must be a string")
     .isLength({ min: 3, max: 30 })
-    .withMessage("First Name must be at least 3 characters long"),
+    .withMessage("First Name must be at least 3 characters long")
+    .matches(/^[A-Za-z]+$/)
+    .withMessage("First Name must contain only letters"),
 
   body("lastName")
     .exists()
@@ -154,7 +163,9 @@ const validateAddUser = [
     .isString()
     .withMessage("Last Name must be a string")
     .isLength({ min: 3, max: 30 })
-    .withMessage("Last Name must be at least 3 characters long"),
+    .withMessage("Last Name must be at least 3 characters long")
+    .matches(/^[A-Za-z]+$/)
+    .withMessage("Last Name must contain only letters"),
 
   body("activityLevel")
     .exists()

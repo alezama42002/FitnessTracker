@@ -184,6 +184,14 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// Check Username to see if name has been taken
+const checkUsername = async (req, res) => {
+  if ((await userService.getUser(req.body.Username)) === null) {
+    res.status(200).send();
+  }
+  res.status(409).send();
+};
+
 const getFoods = async (req, res) => {
   try {
     const user = await userService.getUser(req.body.Username);
@@ -424,4 +432,5 @@ export default {
   logWeight,
   getUserWeights,
   logRecipe,
+  checkUsername,
 };
