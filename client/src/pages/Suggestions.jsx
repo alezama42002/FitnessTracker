@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import { FiSearch } from "react-icons/fi";
 import { useState } from "react";
-import Recipe from "../components/Recipe";
+import Recipe from "../components/Suggestions/Recipe";
 import axios from "axios";
 
 export default function Suggestions() {

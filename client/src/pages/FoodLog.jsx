@@ -2,8 +2,8 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import { FiSearch } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa6";
-import SearchFood from "../components/SearchFood";
-import AddFood from "../components/AddFood";
+import SearchFood from "../components/Foods/SearchFood/SearchFood";
+import AddFood from "../components/Foods/AddFood/AddFood";
 import { useState } from "react";
 
 export default function FoodLog() {

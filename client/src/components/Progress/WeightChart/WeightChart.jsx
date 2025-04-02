@@ -60,14 +60,19 @@ export default function WeightGraph({ weightData, weekDays }) {
     tooltip: {
       enabled: true,
       theme: "dark",
+      y: {
+        formatter: function (value) {
+          return `${value} kg`;
+        },
+      },
     },
   };
   return (
     <div className="relative flex flex-col rounded-xl bg-[#19212C] bg-clip-border text-gray-700 shadow-md h-full">
       <div className="relative mx-4 mt-4 flex flex-col gap-4 overflow-hidden rounded-none bg-transparent bg-clip-border text-gray-700 shadow-none md:flex-row md:items-center">
         <div>
-          <h1 className="block font-sans text-base font-extrabold leading-relaxed tracking-normal text-white antialiased">
-            Weight-March
+          <h1 className=" block font-sans text-base font-extrabold leading-relaxed tracking-normal text-white antialiased">
+            Weight
           </h1>
         </div>
       </div>

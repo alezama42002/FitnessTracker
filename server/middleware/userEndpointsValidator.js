@@ -111,7 +111,16 @@ const validateAddUser = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Username must be at least 4 characters long"),
+
+  body("Password")
+    .exists()
+    .withMessage("Password is required")
+    .isString()
+    .withMessage("Password must be a string")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long"),
 
   body("Height")
     .exists()
@@ -136,14 +145,16 @@ const validateAddUser = [
     .withMessage("First Name is required")
     .isString()
     .withMessage("First Name must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 3, max: 30 })
+    .withMessage("First Name must be at least 3 characters long"),
 
   body("lastName")
     .exists()
     .withMessage("Last Name is required")
     .isString()
     .withMessage("Last Name must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 3, max: 30 })
+    .withMessage("Last Name must be at least 3 characters long"),
 
   body("activityLevel")
     .exists()
@@ -165,7 +176,6 @@ const validateAddUser = [
     .withMessage("Gender is required")
     .isIn(["Male", "Female"])
     .withMessage("Gender must be 'Male' or 'Female'"),
-
   handleValidationErrors,
 ];
 

@@ -23,6 +23,23 @@ const ProtectedRoutes = () => {
         setIsValid(response.data.Valid);
       } catch (error) {
         setIsValid(false);
+        console.error("Token validation failed:", error);
+
+        if (error.response) {
+          // Server responded with an error status
+          if (error.response.status === 401) {
+            console.warn("Unauthorized: Token expired or invalid.");
+            localStorage.removeItem("accessToken");
+          } else {
+            console.warn(`Server error: ${error.response.status}`);
+          }
+        } else if (error.request) {
+          // Request was made but no response received
+          console.warn("Network issue: Server did not respond.");
+        } else {
+          // Other unexpected errors
+          console.warn("Unexpected error:", error.message);
+        }
       }
     };
 

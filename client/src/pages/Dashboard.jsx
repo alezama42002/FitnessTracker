@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import DailyOverview from "../components/DailyOverview";
-import DailyFoods from "../components/DailyFoods";
-import MicroNutrients from "../components/MicroNutrients";
-import WeightGraph from "../components/LineChart";
+import DailyOverview from "../components/Progress/DailyOverview/DailyOverview";
+import DailyFoods from "../components/Progress/DailyFoods/DailyFoods";
+import MicroNutrients from "../components/Progress/Micronutrients/MicroNutrients";
+import WeightGraph from "../components/Progress/WeightChart/WeightChart";
 import axios from "axios";
-import LogWeight from "../components/LogWeight";
+import LogWeight from "../components/Progress/LogWeight/LogWeight";
 
 export default function Dashboard() {
   const [dailyOverviewData, setDailyOverviewData] = useState([]);
@@ -14,6 +14,7 @@ export default function Dashboard() {
   const [token, setToken] = useState(null);
   const [username, setUsername] = useState(null);
 
+  // Gets the current weeks dates for displayment in the weight graph
   const getCurrentWeekDates = () => {
     const today = new Date();
     const dayOfWeek = today.getDay();
@@ -45,6 +46,8 @@ export default function Dashboard() {
   useEffect(() => {
     if (!username || !token) return;
 
+    // Combination of api calls to get needed information from backend
+    // for displayment on the dashboard
     const fetchAllData = async () => {
       try {
         const [macroResponse, nutritionResponse, weightResponse] =
@@ -77,6 +80,7 @@ export default function Dashboard() {
             ),
           ]);
 
+        // Sets the data for the Daily Overview section of the dashboard
         setDailyOverviewData([
           macroResponse.data.Calories,
           macroResponse.data.Protein,
@@ -87,6 +91,8 @@ export default function Dashboard() {
           nutritionResponse.data.currentCarbohydrates,
           nutritionResponse.data.currentFats,
         ]);
+
+        // Sets the data for the Micronutrients section of the dashboard
         setMicronutrientsData([
           nutritionResponse.data.currentFiber,
           nutritionResponse.data.currentVitaminA,
@@ -103,9 +109,38 @@ export default function Dashboard() {
           nutritionResponse.data.currentSodium,
           nutritionResponse.data.currentZinc,
         ]);
+
+        // Sets the data for the Weight section of the dashboard
         setWeightGraphData(weightResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+
+        if (error.response) {
+          // Server responded with a status code outside of 2xx
+          console.error("Response Data:", error.response.data);
+          console.error("Response Status:", error.response.status);
+
+          if (error.response.status === 401) {
+            alert("Session expired. Please log in again.");
+          } else if (error.response.status === 500) {
+            alert("Server error. Please try again later.");
+          } else {
+            alert(
+              `Error: ${error.response.data.message || "Something went wrong."}`
+            );
+          }
+        } else if (error.request) {
+          // No response received (e.g., network issue)
+          alert("Network error. Please check your connection and try again.");
+        } else {
+          // Other errors (e.g., code issues)
+          alert("An unexpected error occurred. Please try again.");
+        }
+
+        // Prevents stale data from being displayed if an API call fails
+        setDailyOverviewData([]);
+        setMicronutrientsData([]);
+        setWeightGraphData([]);
       }
     };
     fetchAllData();

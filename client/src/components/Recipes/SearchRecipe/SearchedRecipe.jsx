@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import PopupQuantity from "./PopupQuantity";
+import PopupQuantity from "../../PopupQuantity";
 import { FaPlus } from "react-icons/fa";
 import axios from "axios";
 
@@ -36,7 +36,7 @@ export default function SearchedRecipe({ searchedRecipeData }) {
         Calories: recipeData.Calories,
       });
 
-      setQuantities((prev) => ({ ...prev, [foodData.ID]: "" }));
+      setQuantities((prev) => ({ ...prev, [recipeData.ID]: "" }));
     } catch (error) {
       console.log(error);
     }

@@ -1,5 +1,5 @@
 import React from "react";
-import Input from "../components/Input";
+import Input from "../../Input";
 import { useState } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import axios from "axios";

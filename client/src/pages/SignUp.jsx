@@ -13,6 +13,7 @@ export default function SignUp() {
     ReEnteredPassword: "",
   });
 
+  // Handles the changes to any of the inputs
   const handleInputChange = (field, value) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -20,10 +21,26 @@ export default function SignUp() {
     }));
   };
 
+  // Stores form data is local storage so it can be referred to in account
+  // information page
   const signUp = () => {
-    if (formData.Password === formData.ReEnteredPassword) {
-      localStorage.setItem("SignUp-FormData", JSON.stringify(formData));
-      navigate("/Auth/AccountInformation");
+    // Error Handling in case user does not provide needed information
+    // or provided incorrect information
+    if (
+      formData.Username === "" ||
+      formData.Password === "" ||
+      formData.ReEnteredPassword === ""
+    )
+      alert("All Inputs are Required");
+    else if (formData.Username.length < 4) {
+      alert("Username must be string of atleast 4 characters");
+    } else if (formData.Password.length < 6) {
+      alert("Password must be string of atleast 6 characters");
+    } else {
+      if (formData.Password === formData.ReEnteredPassword) {
+        localStorage.setItem("SignUp-FormData", JSON.stringify(formData));
+        navigate("/Auth/AccountInformation");
+      } else alert("Password and Re-entered Password must match");
     }
   };
 
@@ -60,7 +77,7 @@ export default function SignUp() {
             <button
               type="button"
               onClick={signUp}
-              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[18px] cursor-pointer"
+              className="bg-[#1B9E4B] rounded-[8px] px-14 py-1 mt-2 text-white font-normal text-[16px] cursor-pointer"
             >
               Sign Up
             </button>

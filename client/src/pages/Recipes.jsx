@@ -1,13 +1,10 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import Input from "../components/Input";
 import { useState } from "react";
-import SearchIngredient from "../components/SearchIngredient";
-import axios from "axios";
 import { FiSearch } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa6";
-import SearchRecipe from "../components/SearchRecipe";
-import AddRecipe from "../components/AddRecipe";
+import SearchRecipe from "../components/Recipes/SearchRecipe/SearchRecipe";
+import AddRecipe from "../components/Recipes/AddRecipe/AddRecipe";
 
 export default function Recipes() {
   const [formData, setFormData] = useState({
@@ -15,61 +12,10 @@ export default function Recipes() {
     recipeDescription: "",
     totalServings: "",
   });
-  const [username, setUsername] = useState(null);
-  const [ingredientData, setIngredientData] = useState([]);
   const [selected, setSelected] = useState("SearchRecipe");
 
   const handleClick = (item) => {
     setSelected(item);
-  };
-
-  const addIngredient = (food, quantity) => {
-    const macros = food.macros
-      .match(/\d+(\.\d+)?/g)
-      .map((num) => Math.round(parseFloat(num)));
-
-    const foodData = {
-      foodID: food.ID,
-      servingSize: macros[0],
-      foodName: food.name,
-      foodBrand: food.brand,
-      Calories: macros[1],
-      Protein: macros[4],
-      Carbohydrates: macros[3],
-      Fats: macros[2],
-      Quantity: quantity,
-    };
-    setIngredientData((prevIngredients) => [...prevIngredients, foodData]);
-    console.log("Ingredient Added");
-  };
-
-  const handleInputChange = (field, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
-
-  const addRecipe = async () => {
-    const storedToken = localStorage.getItem("accessToken");
-
-    if (storedToken) {
-      const base64Url = storedToken.split(".")[1];
-      const decodedData = JSON.parse(atob(base64Url));
-      setUsername(decodedData.name);
-    }
-
-    try {
-      await axios.post("http://localhost:3000/api/recipe/AddRecipe", {
-        Username: username,
-        foodsData: ingredientData,
-        recipeName: formData.recipeName,
-        recipeDescription: formData.recipeDescription,
-        totalServings: formData.totalServings,
-      });
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (

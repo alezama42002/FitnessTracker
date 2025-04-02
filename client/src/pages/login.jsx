@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
 import Logo from "../assets/logo.png";
-import { useNavigate } from "react-router-dom";
 import Input from "../components/Input";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -13,6 +13,7 @@ export default function Login() {
     Password: "",
   });
 
+  // Handles the changes to any of the inputs
   const handleInputChange = (field, value) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -20,21 +21,39 @@ export default function Login() {
     }));
   };
 
+  // Calls the api endpoint to validate the login information
+  // and provide frontend with accessToken if successful
   const login = async (event) => {
     event.preventDefault();
+    if (formData.Username === "" || formData.Password === "")
+      alert("Username and Password are Required");
+    else {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/user/Login",
+          formData
+        );
 
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/user/Login",
-        formData
-      );
-
-      if (response.data != "Not Allowed") {
-        localStorage.setItem("accessToken", response.data.accessToken);
-        navigate("/Dashboard/Progress");
+        // Generates accessToken and reroutes user if user is validated by
+        // login endpoint
+        if (response.data != "Not Allowed") {
+          localStorage.setItem("accessToken", response.data.accessToken);
+          navigate("/Dashboard/Progress");
+        }
+      } catch (error) {
+        // Error handling for all possible errors
+        if (error.response) {
+          if (error.response.status === 422) {
+            const errorMessage = error.response.data.errors.msg;
+            alert(errorMessage);
+          } else if (error.response.status === 401)
+            alert("Invalid Username or Password");
+          else {
+            console.log(error);
+            alert("An unexpected error occurred. Please try again.");
+          }
+        }
       }
-    } catch (error) {
-      return `Error: ${error}`;
     }
   };
 
@@ -64,7 +83,7 @@ export default function Login() {
           />
           <div className="flex justify-center items-center">
             <button
-              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[20px]"
+              className="bg-[#1B9E4B] rounded-[8px] px-14 py-2 mt-2 text-white font-normal text-[16px]"
               onClick={login}
             >
               Sign In

@@ -57,14 +57,6 @@ export default function DailyFoods({ Username, token }) {
               fat={food.Fat}
             />
           ))}
-          <Food
-            name="Egg"
-            logTime="12:45"
-            calories="100"
-            protein="10"
-            carbs="1"
-            fat="8"
-          />
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import Input from "../components/Input";
+import Input from "../../Input";
 import { useState } from "react";
 import axios from "axios";
 
@@ -44,7 +44,7 @@ export default function LogWeight({ Username, token }) {
       </div>
       <div>
         <Input
-          inputName="Today's Weight"
+          inputName="Today's Weight (kg)"
           field="Weight"
           sendData={handleInputChange}
         />
@@ -52,7 +52,7 @@ export default function LogWeight({ Username, token }) {
       <div className="flex justify-center pt-2">
         <button
           type="button"
-          className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[18px] cursor-pointer  py-2"
+          className="bg-[#1B9E4B] rounded-[8px] px-14 py-2 mt-2 text-white font-normal text-[16px] cursor-pointer "
           onClick={handleClick}
         >
           Submit

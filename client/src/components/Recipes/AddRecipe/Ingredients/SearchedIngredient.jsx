@@ -1,10 +1,9 @@
 import React from "react";
-import { FaPlus } from "react-icons/fa";
-import axios from "axios";
 import { useState, useEffect } from "react";
-import PopupQuantity from "./PopupQuantity";
+import { FaPlus } from "react-icons/fa6";
+import PopupQuantity from "../../../PopupQuantity";
 
-export default function SearchedFood({ searchedFoodData }) {
+export default function SearchedIngredient({ searchedFoodData }) {
   const [token, setToken] = useState(null);
   const [username, setUsername] = useState(null);
   const [quantities, setQuantities] = useState({});
@@ -22,49 +21,17 @@ export default function SearchedFood({ searchedFoodData }) {
     }
   }, []);
 
-  const logFood = async (foodData, quantity) => {
-    try {
-      if (!quantity || quantity <= 0) {
-        alert("Please enter a valid quantity.");
-        return;
-      }
-
-      const macros = foodData.macros
-        .match(/\d+(\.\d+)?/g)
-        .map((num) => Math.round(parseFloat(num)));
-
-      await axios.post(
-        "http://localhost:3000/api/user/LogFood",
-        {
-          foodID: foodData.ID,
-          foodName: foodData.name,
-          foodBrand: foodData.brand,
-          Calories: macros[1],
-          Protein: macros[4],
-          Carbohydrates: macros[3],
-          Fats: macros[2],
-          Username: username,
-          Quantity: quantity,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setQuantities((prev) => ({ ...prev, [foodData.ID]: "" }));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleQuantity = (food) => {
     setSelectedFood(food);
     setOpen(true);
   };
 
+  const logRecipe = () => {
+    alert("Recipe Logged");
+  };
+
   return (
-    <div className="w-full">
+    <div className="lg:w-full">
       {searchedFoodData.length > 0
         ? searchedFoodData.map((food) => (
             <>
@@ -93,7 +60,7 @@ export default function SearchedFood({ searchedFoodData }) {
           text={"Enter Quantity"}
           onClose={() => setOpen(false)}
           onSave={(quantity) => {
-            logFood(selectedFood, quantity);
+            logRecipe(selectedFood, quantity);
             setOpen(false);
           }}
         />

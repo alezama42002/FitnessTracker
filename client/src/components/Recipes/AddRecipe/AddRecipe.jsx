@@ -1,8 +1,7 @@
 import React from "react";
-import Navbar from "../components/Navbar";
-import Input from "../components/Input";
+import Input from "../../Input";
 import { useState } from "react";
-import SearchIngredient from "../components/SearchIngredient";
+import SearchIngredient from "./Ingredients/SearchIngredient";
 import axios from "axios";
 
 export default function AddRecipe() {

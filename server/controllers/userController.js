@@ -21,7 +21,7 @@ const Login = async (req, res) => {
   const user_ = { name: req.body.Username };
 
   // Returns error is User is not in the database
-  if (user === null) return res.status(400).send("Cannot Find User");
+  if (user === null) return res.status(401).send();
 
   try {
     // Generates and returns accessToken and refreshToken in the occurance
@@ -31,6 +31,8 @@ const Login = async (req, res) => {
       const refreshToken = jwt.sign(user_, process.env.REFRESH_TOKEN_SECRET);
       await utilService.addToken(refreshToken);
       res.json({ accessToken: accessToken, refreshToken: refreshToken });
+    } else {
+      res.status(401).send();
     }
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });
