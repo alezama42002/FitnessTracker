@@ -115,27 +115,6 @@ export default function Dashboard() {
       } catch (error) {
         console.error("Error fetching data:", error);
 
-        if (error.response) {
-          // Server responded with a status code outside of 2xx
-          console.error("Response Data:", error.response.data);
-          console.error("Response Status:", error.response.status);
-
-          if (error.response.status === 401) {
-            alert("Session expired. Please log in again.");
-          } else if (error.response.status === 500) {
-            alert("Server error. Please try again later.");
-          } else {
-            alert(
-              `Error: ${error.response.data.message || "Something went wrong."}`
-            );
-          }
-        } else if (error.request) {
-          // No response received (e.g., network issue)
-          alert("Network error. Please check your connection and try again.");
-        } else {
-          // Other errors (e.g., code issues)
-          alert("An unexpected error occurred. Please try again.");
-        }
 
         // Prevents stale data from being displayed if an API call fails
         setDailyOverviewData([]);

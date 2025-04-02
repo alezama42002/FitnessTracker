@@ -30,8 +30,8 @@ export default function DailyOverview({ amountsData }) {
             unit="kcal"
           />
         </div>
-        <div className="flex w-full gap-2 mt-4">
-          <div className="w-1/3 pr-1">
+        <div className="flex w-full gap-2 mt-4 sm:max-lg:flex-col">
+          <div className="w-1/3 pr-1 sm:max-lg:w-full sm:max-lg:p-0">
             <ProgressBar
               color="#0844A6"
               currentValue={amountsData[5]}
@@ -40,7 +40,7 @@ export default function DailyOverview({ amountsData }) {
               unit="g"
             />
           </div>
-          <div className="w-1/3 pr-1">
+          <div className="w-1/3 pr-1 sm:max-lg:w-full sm:max-lg:p-0">
             <ProgressBar
               color="#BE5105"
               currentValue={amountsData[6]}
@@ -49,7 +49,7 @@ export default function DailyOverview({ amountsData }) {
               unit="g"
             />
           </div>
-          <div className="w-1/3">
+          <div className="w-1/3 sm:max-lg:w-full sm:max-lg:p-0">
             <ProgressBar
               color="#510797"
               currentValue={amountsData[7]}

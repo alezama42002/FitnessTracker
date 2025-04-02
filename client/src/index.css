@@ -2,7 +2,6 @@
 
 @theme {
   --breakpoint-sm: 22rem;
-  --breakpoint-lg: 63rem;
 }
 
 body {
@@ -31,7 +30,7 @@ body {
   transform: rotate(180deg);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
   /* navbar  */
 
   .menu-icon {
