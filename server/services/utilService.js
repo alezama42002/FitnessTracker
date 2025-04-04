@@ -1,11 +1,13 @@
 import RefreshToken from "../models/refreshTokensModel.js";
 
+// Adds a refreshToken to the database
 const addToken = async (refreshToken) => {
   return await RefreshToken.create({
     Token: refreshToken,
   });
 };
 
+// Deletes a refreshToken from the database
 const deleteToken = async (refreshToken) => {
   return await RefreshToken.destroy({
     where: {
@@ -14,6 +16,7 @@ const deleteToken = async (refreshToken) => {
   });
 };
 
+// Finds a specific refreshToken from the database
 const findToken = async (refreshToken) => {
   const Token = await RefreshToken.findOne({
     where: {

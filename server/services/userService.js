@@ -185,10 +185,12 @@ const getUserFoods = async (userID) => {
   return foodItems;
 };
 
+// Logs a weight for the user
 const addWeight = async (username, weight) => {
   const user = await getUser(username);
   const userID = user.userID;
 
+  // Formats the date for storage in the database
   const today = new Date();
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
@@ -202,6 +204,7 @@ const addWeight = async (username, weight) => {
   });
 };
 
+// Gets all of the user weights associated with the week of the inputted date
 const getUserWeights = async (Username, inputDate) => {
   const user = await getUser(Username);
   const userID = user.userID;
@@ -237,6 +240,7 @@ const getUserWeights = async (Username, inputDate) => {
   return weeksWeights;
 };
 
+// Makes the connection to the recipe for a user
 const addRecipeForUser = async (recipeID, userID, servings) => {
   await userRecipe.create({
     userID: userID,

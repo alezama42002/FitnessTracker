@@ -3,6 +3,8 @@ import Recipe from "../models/recipeModel.js";
 import recipeFood from "../models/recipeFoodModel.js";
 import { Sequelize } from "sequelize";
 
+// Calculates the macros for a recipe by finding nutrition data
+// of each food and then summing up the totals
 const calculateRecipeMacros = async (foodIDs) => {
   const recipeMacros = {
     totalCalories: 0,
@@ -25,6 +27,8 @@ const calculateRecipeMacros = async (foodIDs) => {
     totalZinc: 0,
   };
 
+  // Finds the micro and macro nutrients for each food in the recipe
+  // and adds their totals to recipeMacros
   for (const foodID of foodIDs) {
     const food = await foodService.getFood(foodID.foodID);
 
@@ -55,6 +59,7 @@ const calculateRecipeMacros = async (foodIDs) => {
   return recipeMacros;
 };
 
+// Creates a recipe according to the information that the user provides
 const createRecipe = async (
   recipeName,
   userID,
@@ -93,6 +98,7 @@ const createRecipe = async (
   return;
 };
 
+// Deletes a recipe that matches the name that the user provides
 const deleteRecipe = async (recipeName) => {
   return await Recipe.destroy({
     where: {
@@ -101,6 +107,7 @@ const deleteRecipe = async (recipeName) => {
   });
 };
 
+// Edits a recipe according the the information given by the user
 const editRecipe = async (updatedFields, recipeName) => {
   await Recipe.update(
     { ...updatedFields },
@@ -111,6 +118,7 @@ const editRecipe = async (updatedFields, recipeName) => {
   return;
 };
 
+// Creates a connection between a recipe and a food (ingredient)
 const createRecipeFood = async (foodIDs, recipeID) => {
   for (const foodID of foodIDs) {
     await recipeFood.create({
@@ -121,12 +129,14 @@ const createRecipeFood = async (foodIDs, recipeID) => {
   }
 };
 
+// Gets all of the recipes that match the name provided
 const getRecipe = async (recipeName) => {
   return await Recipe.findAll({
     where: { recipeName: recipeName },
   });
 };
 
+// Gets all of the recipes that meet the macro requirements of the user
 const getRecipes = async (MacroRequest) => {
   try {
     // Handle all of the different macro threshold options

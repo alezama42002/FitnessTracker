@@ -4,11 +4,7 @@ import userFood from "../models/userFoodModel.js";
 
 // Adds food to Database (Foods Table)
 const addFoodtoDB = async (foodData) => {
-  try {
-    return await Food.create(foodData);
-  } catch (error) {
-    console.error("Issue adding food to DB:", error);
-  }
+  return await Food.create(foodData);
 };
 
 // Deletes food from Database (Foods Table) using the foodID and foodName
@@ -101,6 +97,7 @@ const getFoodID = async (foodData) => {
   }
 };
 
+// Gets all foods that match the name provided
 const getFoods = async (foodName) => {
   const [foods, created] = await Food.findAll({
     where: { foodName },
@@ -109,12 +106,14 @@ const getFoods = async (foodName) => {
   return foods;
 };
 
+// Deletes a userFood connection in the userFoods table
 const deleteUserFood = async (userFood_ID) => {
   await userFood.destroy({
     where: { userFood_ID: userFood_ID },
   });
 };
 
+// Gets all the data assosciated with a specific userFood_ID
 const getUserFoodData = async (userFood_ID) => {
   const food = await userFood.findOne({
     where: { userFood_ID: userFood_ID },
@@ -182,6 +181,7 @@ const editFood = async (foodID, updatedFields) => {
   return await Food.findByPk(foodID);
 };
 
+// Gets a single food based on the foodName and foodBrand
 const getFoodByName = async (foodName, foodBrand) => {
   return await Food.findOne({
     where: { foodName: foodName, foodBrand: foodBrand },

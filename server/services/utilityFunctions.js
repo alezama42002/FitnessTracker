@@ -1,6 +1,9 @@
 import foodService from "./foodService.js";
 import axios from "axios";
 
+// Checks to see if the food is already in the database and if its not then the
+// needed information is retrieved and then the food is stored in the database for
+// future use
 const checkFood = async (foodData) => {
   // Gets the necessary foodID for the given food based on the food wishing to be logged.
   // Foods key nutrtional information is used to find ID.
