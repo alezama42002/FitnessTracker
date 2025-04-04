@@ -184,7 +184,7 @@ const validateReccomend = [
   handleValidationErrors,
 ];
 
-export default {
+export {
   validateAddRecipe,
   validateDeleteRecipe,
   validateEditRecipe,

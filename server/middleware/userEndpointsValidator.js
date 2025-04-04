@@ -287,87 +287,18 @@ const validateLogFood = [
   handleValidationErrors,
 ];
 
-const validateEditFood = [
-  body("foodID")
+const validateEditLog = [
+  body("userFood_ID")
     .exists()
-    .withMessage("Food ID is required")
+    .withMessage("userFood_ID is required")
     .isInt({ min: 1 })
-    .withMessage("Food ID must be a positive integer"),
+    .withMessage("userFood_ID must be a positive integer"),
 
-  body("updatedFields")
+  body("newQuantity")
     .exists()
-    .withMessage("Updated fields are required")
-    .isObject()
-    .withMessage("Updated fields must be an object"),
-
-  // String fields
-  body("updatedFields.foodBrand")
-    .optional()
-    .isString()
-    .withMessage("foodBrand must be a string"),
-
-  body("updatedFields.foodName")
-    .optional()
-    .isString()
-    .withMessage("foodName must be a string"),
-
-  body("updatedFields.Description")
-    .optional()
-    .isString()
-    .withMessage("Description must be a string"),
-
-  // Integer fields
-  body("updatedFields.servingSize")
-    .optional()
-    .isInt({ min: 1, max: 10000 })
-    .withMessage("servingSize must be an integer between 1 and 10,000"),
-
-  body("updatedFields.Calories")
-    .optional()
-    .isInt({ min: 0, max: 10000 })
-    .withMessage("Calories must be an integer between 0 and 10,000"),
-
-  body("updatedFields.Protein")
-    .optional()
-    .isInt({ min: 0, max: 1000 })
-    .withMessage("Protein must be an integer between 0 and 1,000"),
-
-  body("updatedFields.Carbohydrates")
-    .optional()
-    .isInt({ min: 0, max: 1000 })
-    .withMessage("Carbohydrates must be an integer between 0 and 1,000"),
-
-  body("updatedFields.Fats")
-    .optional()
-    .isInt({ min: 0, max: 1000 })
-    .withMessage("Fats must be an integer between 0 and 1,000"),
-
-  body("updatedFields.Fiber")
-    .optional()
-    .isInt({ min: 0, max: 500 })
-    .withMessage("Fiber must be an integer between 0 and 500"),
-
-  // Vitamins & Minerals (general range 0–1000)
-  ...[
-    "VitaminA",
-    "VitaminB6",
-    "VitaminB12",
-    "VitaminC",
-    "VitaminD",
-    "VitaminE",
-    "VitaminK",
-    "Calcium",
-    "Iron",
-    "Magnesium",
-    "Potassium",
-    "Sodium",
-    "Zinc",
-  ].map((field) =>
-    body(`updatedFields.${field}`)
-      .optional()
-      .isInt({ min: 0, max: 1000 })
-      .withMessage(`${field} must be an integer between 0 and 1,000`)
-  ),
+    .withMessage("newQuantity is required")
+    .isInt({ min: 1 })
+    .withMessage("newQuantity must be a positive integer"),
 
   handleValidationErrors,
 ];
@@ -409,7 +340,6 @@ const validateLogWeight = [
     .isLength({ min: 4 })
     .withMessage("Username must be at least 4 characters long"),
 
-  ,
   handleValidationErrors,
 ];
 
