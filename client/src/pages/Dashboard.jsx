@@ -113,8 +113,8 @@ export default function Dashboard() {
         // Sets the data for the Weight section of the dashboard
         setWeightGraphData(weightResponse.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
-
+        console.log(error);
+        alert("An unexpected error occurred. Please try again.");
 
         // Prevents stale data from being displayed if an API call fails
         setDailyOverviewData([]);

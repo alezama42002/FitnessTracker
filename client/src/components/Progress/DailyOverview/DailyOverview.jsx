@@ -1,7 +1,11 @@
 import React from "react";
 import ProgressBar from "../ProgressBar";
+import PopupGoal from "../../PopUpGoal";
+import { useState } from "react";
 
 export default function DailyOverview({ amountsData }) {
+  const [open, setOpen] = useState(false);
+
   const getCurrentFormattedDate = () => {
     const date = new Date();
     const options = {
@@ -16,11 +20,28 @@ export default function DailyOverview({ amountsData }) {
   const currentDate = getCurrentFormattedDate();
   return (
     <div className="bg-[#19212C] mt-8 py-6 rounded-[16px]">
-      <div className="flex justify-between px-6 text-white">
-        <h1 className="inline font-semibold">Daily Overview</h1>
-        <p className="inline text-[#BDB7AF]">{currentDate}</p>
+      <div className="flex justify-between pr-4 items-center">
+        <div className="flex flex-col gap-2 px-6 text-white">
+          <h1 className="inline font-semibold">Daily Overview</h1>
+          <p className="inline text-[#BDB7AF]">{currentDate}</p>
+        </div>
+        <div className="mr-2">
+          <button
+            className="bg-[#1B9E4B] text-[14px] font-normal text-white px-6 py-2 rounded-[8px] cursor-pointer"
+            onClick={() => setOpen(true)}
+          >
+            Set Goal
+          </button>
+        </div>
+        {open && (
+          <PopupGoal
+            onClose={() => setOpen(false)}
+            onSave={() => setOpen(false)}
+          />
+        )}
       </div>
-      <div className="px-6 mt-8">
+
+      <div className="px-6 mt-6">
         <div>
           <ProgressBar
             color="#1B9E4B"
