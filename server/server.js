@@ -8,13 +8,6 @@ import foodRouter from "./routes/foodRoutes.js";
 import recipeRouter from "./routes/recipeRoutes.js";
 import cors from "cors";
 
-//ONLY UNCOMMENT IF CHANGES ARE MADE TO MODELS!
-//import sequelize from "./config/database.js";
-//import Recipe from "./models/recipeModel.js";
-//import RecipeFood from "./models/recipeFoodModel.js";
-//import userRecipe from "./models/userRecipeModel.js";
-//sequelize.sync({ alter: true });
-
 const app = express();
 app.use(express.json());
 app.use(cors());

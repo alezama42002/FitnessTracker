@@ -14,6 +14,7 @@ import {
   validateMacroRequest,
   validateAddUser,
   validateDeleteUser,
+  validateCheckUsername,
   validateGetUserFoods,
   validateLogFood,
   validateEditLog,
@@ -21,17 +22,20 @@ import {
   validateGetCurrentNutrition,
   validateLogWeight,
   validateGetWeights,
+  validateLogRecipe,
 } from "../middleware/userEndpointsValidator.js";
 import { authenticateUser } from "../middleware/authentication.js";
 
 // Logs in user and provides refreshToken and accessToken on succesfull login
 router.post("/Login", validateLogin, userController.Login);
 
-// Logs out user dele
+// Logs out user and deletes refreshToken from database
 router.delete("/Logout", validateLogout, userController.Logout);
 
+// Generate a new accessToken through the use of valid refreshToken
 router.post("/Token", validateToken, userController.newToken);
 
+// Checks if a accessToken is still valid or has passed its lifespan
 router.post("/Valid", validateValid, userController.checkToken);
 
 // Return total Calories and Macros user should be consuming for goal
@@ -39,8 +43,6 @@ router.post("/Macros", validateMacroRequest, userController.getMacros);
 
 // Adds user to the database
 router.post("/AddUser", validateAddUser, userController.addUser);
-
-router.post("/Username", userController.checkUsername);
 
 // Removes user from the database
 router.delete(
@@ -50,6 +52,10 @@ router.delete(
   userController.deleteUser
 );
 
+// Check if username is taken already
+router.post("/Username", validateCheckUsername, userController.checkUsername);
+
+// Gets all of the users logged foods for the day
 router.post(
   "/GetUserFoods",
   authenticateUser,
@@ -101,10 +107,11 @@ router.post(
 router.post(
   "/GetWeights",
   authenticateUser,
-  validateGetUserFoods,
+  validateGetWeights,
   userController.getUserWeights
 );
 
-router.post("/LogRecipe", userController.logRecipe);
+// Logs a recipe for the user and adjusts their nutrition and macro totals
+router.post("/LogRecipe", validateLogRecipe, userController.logRecipe);
 
 export default router;

@@ -2,14 +2,14 @@ import dotenv from "dotenv";
 import userService from "../services/userService.js"; // Imports quieres/mutations related to User
 import foodService from "../services/foodService.js";
 import utilService from "../services/utilService.js";
+import recipeService from "../services/recipeService.js";
+import utilityFunctions from "../services/utilityFunctions.js";
 import bycrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
   generateAccessToken,
   verifyToken,
 } from "../middleware/authentication.js";
-import utilityFunctions from "../services/utilityFunctions.js";
-import recipeService from "../services/recipeService.js";
 
 dotenv.config();
 
@@ -42,8 +42,12 @@ const Login = async (req, res) => {
 // Logs out the user by removing the refreshToken from the database so the
 // user can no longer create new accessTokens once their current one expires
 const Logout = (req, res) => {
-  utilService.deleteToken(req.body.Token);
-  res.sendStatus(204);
+  try {
+    utilService.deleteToken(req.body.Token);
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
 // Creates a new accessToken if the refreshToken given is one of the refreshTokens
@@ -51,35 +55,45 @@ const Logout = (req, res) => {
 const newToken = (req, res) => {
   const refreshToken = req.body.Token;
 
-  // Returns 403 Forbidden error in the case that the given refreshToken is not present
-  // in database
-  if (utilService.findToken(refreshToken) == false) return res.sendStatus(403);
+  try {
+    // Returns 401 Unauthorized error in the case that the given refreshToken is not present
+    // in database
+    if (utilService.findToken(refreshToken) == false)
+      return res.sendStatus(401);
 
-  // Verifies the refreshToken with our env variable and creates and returns new accessToken
-  // in the case of a successful verification of refreshToken
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403); // Returns 403 Forbidden if refreshToken is not verified successfully
-    const accessToken = generateAccessToken({ name: user.name });
-    res.json({ accessToken: accessToken });
-  });
+    // Verifies the refreshToken with our env variable and creates and returns new accessToken
+    // in the case of a successful verification of refreshToken
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+      if (err) return res.sendStatus(401); // Returns 401 Forbidden if refreshToken is not verified successfully
+      const accessToken = generateAccessToken({ name: user.name });
+      res.json({ accessToken: accessToken });
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
+// Checks to see if the accessToken's lifespan has expired
 const checkToken = (req, res) => {
-  const validValue = verifyToken(req.body.Token);
+  try {
+    const validValue = verifyToken(req.body.Token);
 
-  if (validValue === true) {
-    res.status(200).json({ Valid: true });
-  } else {
-    res.status(200).json({ Valid: false });
+    // If token is still valid send 200 status code and 401 otherwise
+    if (validValue === true) {
+      res.status(200).send();
+    } else {
+      res.status(401).send();
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
   }
 };
 
 // Calculates the maintainence calories of a user based on information given.
 // Also determines macros based on the users fitness/health goals.
 const getMacros = async (req, res) => {
+  const { Username, Goal } = req.body;
   try {
-    const { Username, Goal } = req.body;
-
     const User = await userService.getUser(Username);
     const { Weight, Height, Age, Gender, activityLevel } = User;
 
@@ -153,9 +167,8 @@ const getMacros = async (req, res) => {
 
 // Adds user to database based on given user information.
 const addUser = async (req, res) => {
+  const userData = req.body;
   try {
-    const userData = req.body;
-
     if ((await userService.getUser(userData.Username)) != null) {
       res.status(409).json("Username is already taken");
     } else {
@@ -170,9 +183,8 @@ const addUser = async (req, res) => {
 
 // Deletes user from the database based on given information
 const deleteUser = async (req, res) => {
+  const { Username } = req.body;
   try {
-    const { Username } = req.body;
-
     if ((await userService.getUser(Username)) === null) {
       res.status(404).json("User does not exist");
     } else {
@@ -186,18 +198,25 @@ const deleteUser = async (req, res) => {
 
 // Check Username to see if name has been taken
 const checkUsername = async (req, res) => {
-  if ((await userService.getUser(req.body.Username)) === null) {
-    res.status(200).send();
+  try {
+    if ((await userService.getUser(req.body.Username)) === null) {
+      res.status(200).send(); // Username is not taken
+    }
+    res.status(409).send(); // Username is taken
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
   }
-  res.status(409).send();
 };
 
+// Gets all of the foods logged for the day for a specific username
 const getFoods = async (req, res) => {
   try {
     const user = await userService.getUser(req.body.Username);
     const userID = user.userID;
     const Foods = await userService.getUserFoods(userID);
-    res.json(Foods);
+
+    if (Foods === null) res.status(404).send(); // Return 404 incase no logs for user exist for the day
+    res.status(200).json(Foods);
   } catch {
     res.status(500).send();
   }
@@ -205,20 +224,22 @@ const getFoods = async (req, res) => {
 
 // Adds food to the database by using ID of food
 const logFood = async (req, res) => {
+  const {
+    foodID,
+    servingSize,
+    foodName,
+    foodBrand,
+    Calories,
+    Protein,
+    Carbohydrates,
+    Fats,
+    Username,
+    Quantity,
+  } = req.body;
   try {
-    const {
-      foodID,
-      servingSize,
-      foodName,
-      foodBrand,
-      Calories,
-      Protein,
-      Carbohydrates,
-      Fats,
-      Username,
-      Quantity,
-    } = req.body;
-
+    // Utitlity function to check if food from fatsecret api is already in our database and if
+    // its not then it is stored in our database and the assosciated foodID is returned so that
+    // we can make the connection to the user and that specific food in the database
     const finalFoodID = await utilityFunctions.checkFood({
       foodID,
       servingSize,
@@ -279,9 +300,8 @@ const logFood = async (req, res) => {
 
 // Edit the log of a food in the case of an erorr when logging originally
 const editLog = async (req, res) => {
+  const { userFood_ID, newQuantity } = req.body;
   try {
-    const { userFood_ID, newQuantity } = req.body;
-
     // Get the original Quantity of the logged food
     const originalQuantity = await userService.getUserFoodQuantity(userFood_ID);
 
@@ -312,9 +332,8 @@ const editLog = async (req, res) => {
 // Deletes logged food from userFood and adjusts users day nutritional totals
 // in userDailyNutrition Table
 const deleteLog = async (req, res) => {
+  const { userFood_ID } = req.body;
   try {
-    const { userFood_ID } = req.body;
-
     // Get the logged foods nutritional information and adjust quantity to be negative
     // since deduction from days nutritional totals is needed
     let loggedFoodData = await foodService.getUserFoodData(userFood_ID);
@@ -335,14 +354,13 @@ const deleteLog = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });
   }
-  const { userFood_ID } = req.body;
 };
 
 // Returns the users current nutritional totals for the day
 const getCurrentNutrition = async (req, res) => {
-  try {
-    const { Username } = req.body;
+  const { Username } = req.body;
 
+  try {
     const userData = await userService.getUserCurrentNutrition(Username);
 
     // Returns 404 if no logs for the day assosciated to the user and returns 200
@@ -357,63 +375,86 @@ const getCurrentNutrition = async (req, res) => {
   }
 };
 
+// Logs the users weight for the day
 const logWeight = async (req, res) => {
-  await userService.addWeight(req.body.Username, req.body.Weight);
-  res.sendStatus(201);
+  try {
+    await userService.addWeight(req.body.Username, req.body.Weight);
+    res.sendStatus(201);
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
+// Gets all of the users weights for the week
 const getUserWeights = async (req, res) => {
+  // Creates a formatted string to represent the days date in
+  // month/day/year format
   const today = new Date();
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
   const year = String(today.getFullYear()).slice(-2);
   const formattedDate = `${month}/${day}/${year}`;
 
-  const weekWeightLogs = await userService.getUserWeights(
-    req.body.Username,
-    formattedDate
-  );
+  try {
+    // Finds all of the weights for the week of the date that is provided
+    const weekWeightLogs = await userService.getUserWeights(
+      req.body.Username,
+      formattedDate
+    );
 
-  res.status(200).json(weekWeightLogs);
+    if (weekWeightLogs === null) res.sendStatus(404);
+
+    res.status(200).json(weekWeightLogs);
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
+// Logs a recipe for the user and adjusts the users daily nutrition totals accordinly
 const logRecipe = async (req, res) => {
-  const recipes = await recipeService.getRecipe(req.body.recipeName);
-  const recipe = recipes.find((r) => r.totalCalories === req.body.Calories);
+  try {
+    // Finds the recipe and also finds the exact recipe incase there are multipe recipes of
+    // the name provided
+    const recipes = await recipeService.getRecipe(req.body.recipeName);
+    const recipe = recipes.find((r) => r.totalCalories === req.body.Calories);
 
-  const user = await userService.getUser(req.body.Username);
+    const user = await userService.getUser(req.body.Username);
 
-  const quantity = req.body.servings / recipe.dataValues.totalServings;
+    const quantity = req.body.Servings / recipe.dataValues.totalServings; // Fraction needed for macro/micro calculations
 
-  const userAddedNutritionData = {
-    userID: user.dataValues.userID,
-    Quantity: quantity,
-    currentCalories: recipe.dataValues.totalCalories ?? 0,
-    currentProtein: recipe.dataValues.totalProtein ?? 0,
-    currentCarbohydrates: recipe.dataValues.totalCarbohydrates ?? 0,
-    currentFats: recipe.dataValues.totalFats ?? 0,
-    currentFiber: recipe.dataValues.totalFiber ?? 0,
-    currentVitaminA: recipe.dataValues.totalVitaminA ?? 0,
-    currentVitaminB6: recipe.dataValues.totalVitaminB6 ?? 0,
-    currentVitaminB12: recipe.dataValues.totalVitaminB12 ?? 0,
-    currentVitaminC: recipe.dataValues.totalVitaminC ?? 0,
-    currentVitaminD: recipe.dataValues.totalVitaminD ?? 0,
-    currentVitaminE: recipe.dataValues.totalVitaminE ?? 0,
-    currentVitaminK: recipe.dataValues.totalVitaminK ?? 0,
-    currentCalcium: recipe.dataValues.totalCalcium ?? 0,
-    currentIron: recipe.dataValues.totalIron ?? 0,
-    currentPotassium: recipe.dataValues.totalPotassium ?? 0,
-    currentMagnesium: recipe.dataValues.totalMagnesium ?? 0,
-    currentSodium: recipe.dataValues.totalSodium ?? 0,
-    currentZinc: recipe.dataValues.totalZinc ?? 0,
-  };
+    const userAddedNutritionData = {
+      userID: user.dataValues.userID,
+      Quantity: quantity,
+      currentCalories: recipe.dataValues.totalCalories ?? 0,
+      currentProtein: recipe.dataValues.totalProtein ?? 0,
+      currentCarbohydrates: recipe.dataValues.totalCarbohydrates ?? 0,
+      currentFats: recipe.dataValues.totalFats ?? 0,
+      currentFiber: recipe.dataValues.totalFiber ?? 0,
+      currentVitaminA: recipe.dataValues.totalVitaminA ?? 0,
+      currentVitaminB6: recipe.dataValues.totalVitaminB6 ?? 0,
+      currentVitaminB12: recipe.dataValues.totalVitaminB12 ?? 0,
+      currentVitaminC: recipe.dataValues.totalVitaminC ?? 0,
+      currentVitaminD: recipe.dataValues.totalVitaminD ?? 0,
+      currentVitaminE: recipe.dataValues.totalVitaminE ?? 0,
+      currentVitaminK: recipe.dataValues.totalVitaminK ?? 0,
+      currentCalcium: recipe.dataValues.totalCalcium ?? 0,
+      currentIron: recipe.dataValues.totalIron ?? 0,
+      currentPotassium: recipe.dataValues.totalPotassium ?? 0,
+      currentMagnesium: recipe.dataValues.totalMagnesium ?? 0,
+      currentSodium: recipe.dataValues.totalSodium ?? 0,
+      currentZinc: recipe.dataValues.totalZinc ?? 0,
+    };
 
-  await userService.updateUserNutrition(userAddedNutritionData);
-  await userService.addRecipeForUser(
-    recipe.dataValues.recipeID,
-    user.userID,
-    quantity
-  );
+    await userService.updateUserNutrition(userAddedNutritionData);
+    await userService.addRecipeForUser(
+      recipe.dataValues.recipeID,
+      user.userID,
+      quantity
+    );
+    res.sendStatus(201);
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
 export default {

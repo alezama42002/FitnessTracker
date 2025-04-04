@@ -1,15 +1,14 @@
-import body from "express-validator";
 import axios from "axios";
 import dotenv from "dotenv";
 import foodService from "../services/foodService.js";
-import userService from "../services/userService.js";
 
 dotenv.config();
 
+// Searches for foods based on the food name that is given by the user,
+// foods are then returned along with some respective nutritional information
 const searchFoodByName = async (req, res) => {
+  const { Name } = req.body;
   try {
-    const { Name } = req.body;
-
     const response = await axios.get(
       "https://platform.fatsecret.com/rest/server.api",
       {
@@ -52,9 +51,8 @@ const searchFoodByName = async (req, res) => {
 
 // Adds food to our database that's not in found in FatSecret's based on user input from form
 const addFood = async (req, res) => {
+  const foodData = req.body;
   try {
-    const foodData = req.body;
-
     if ((await foodService.getFoodID(foodData)) != false) {
       res.status(409).json("Food Already Exists!");
     } else {
@@ -68,8 +66,8 @@ const addFood = async (req, res) => {
 
 // Allows admin to remove foods from the database
 const deleteFood = async (req, res) => {
+  const foodData = req.body;
   try {
-    const foodData = req.body;
     const { foodID, foodName } = foodData;
 
     if ((await foodService.getFood(foodID)) === null) {
@@ -85,9 +83,8 @@ const deleteFood = async (req, res) => {
 
 // Allows food to be edited by the user in the database
 const editFood = async (req, res) => {
+  const { foodID, updatedFields } = req.body;
   try {
-    const { foodID, updatedFields } = req.body;
-
     if ((await foodService.getFood(foodID)) === null) {
       res.status(404).json("No Food with provided ID exists");
     } else {
@@ -102,8 +99,8 @@ const editFood = async (req, res) => {
 
 // Recommends food to the user based on what they are looking for (ex: high protein, high carbs, etc.)
 const recommendFood = async (req, res) => {
+  const { MacroRequest } = req.body;
   try {
-    const { MacroRequest } = req.body;
     const foodRecs = await foodService.getRecommendedFood(MacroRequest);
     res.status(200).json(foodRecs);
   } catch (error) {
@@ -111,13 +108,17 @@ const recommendFood = async (req, res) => {
   }
 };
 
+// Gets food from database based on food name and brand
 const getFoodByName = async (req, res) => {
-  const food = await foodService.getFoodByName(
-    req.body.foodName,
-    req.body.foodBrand
-  );
-
-  res.status(200).json(food);
+  try {
+    const food = await foodService.getFoodByName(
+      req.body.foodName,
+      req.body.foodBrand
+    );
+    res.status(200).json(food);
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
 export default {

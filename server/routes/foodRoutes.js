@@ -9,6 +9,7 @@ import {
   validateDeleteFood,
   validateEditFood,
   validateRecommend,
+  validateGetFood,
 } from "../middleware/foodEndpointsValidator.js";
 import { authenticateUser } from "../middleware/authentication.js";
 
@@ -39,9 +40,10 @@ router.patch(
   foodController.editFood
 );
 
-router.post("/GetFood", foodController.getFoodByName);
-
 // Recommend Foods based on requirements from user such as "High Protein"
 router.post("/Recommend", validateRecommend, foodController.recommendFood);
+
+// Gets specific food from database
+router.post("/GetFood", validateGetFood, foodController.getFoodByName);
 
 export default router;

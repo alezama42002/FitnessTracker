@@ -86,7 +86,8 @@ const validateMacroRequest = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Username must be at least 4 characters long"),
 
   body("Goal")
     .exists()
@@ -197,18 +198,34 @@ const validateDeleteUser = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Username must be at least 4 characters long"),
 
   handleValidationErrors,
 ];
 
-const validateGetUserFoods = [
+const validateCheckUsername = [
+  // Validation rules
   body("Username")
     .exists()
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Username must be at least 4 characters long"),
+
+  handleValidationErrors,
+];
+
+const validateGetUserFoods = [
+  // Validation rules
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Username must be at least 4 characters long"),
 
   handleValidationErrors,
 ];
@@ -270,18 +287,87 @@ const validateLogFood = [
   handleValidationErrors,
 ];
 
-const validateEditLog = [
-  body("userFood_ID")
+const validateEditFood = [
+  body("foodID")
     .exists()
-    .withMessage("userFood_ID is required")
+    .withMessage("Food ID is required")
     .isInt({ min: 1 })
-    .withMessage("userFood_ID must be a positive integer"),
+    .withMessage("Food ID must be a positive integer"),
 
-  body("newQuantity")
+  body("updatedFields")
     .exists()
-    .withMessage("newQuantity is required")
-    .isInt({ min: 1 })
-    .withMessage("newQuantity must be a positive integer"),
+    .withMessage("Updated fields are required")
+    .isObject()
+    .withMessage("Updated fields must be an object"),
+
+  // String fields
+  body("updatedFields.foodBrand")
+    .optional()
+    .isString()
+    .withMessage("foodBrand must be a string"),
+
+  body("updatedFields.foodName")
+    .optional()
+    .isString()
+    .withMessage("foodName must be a string"),
+
+  body("updatedFields.Description")
+    .optional()
+    .isString()
+    .withMessage("Description must be a string"),
+
+  // Integer fields
+  body("updatedFields.servingSize")
+    .optional()
+    .isInt({ min: 1, max: 10000 })
+    .withMessage("servingSize must be an integer between 1 and 10,000"),
+
+  body("updatedFields.Calories")
+    .optional()
+    .isInt({ min: 0, max: 10000 })
+    .withMessage("Calories must be an integer between 0 and 10,000"),
+
+  body("updatedFields.Protein")
+    .optional()
+    .isInt({ min: 0, max: 1000 })
+    .withMessage("Protein must be an integer between 0 and 1,000"),
+
+  body("updatedFields.Carbohydrates")
+    .optional()
+    .isInt({ min: 0, max: 1000 })
+    .withMessage("Carbohydrates must be an integer between 0 and 1,000"),
+
+  body("updatedFields.Fats")
+    .optional()
+    .isInt({ min: 0, max: 1000 })
+    .withMessage("Fats must be an integer between 0 and 1,000"),
+
+  body("updatedFields.Fiber")
+    .optional()
+    .isInt({ min: 0, max: 500 })
+    .withMessage("Fiber must be an integer between 0 and 500"),
+
+  // Vitamins & Minerals (general range 0–1000)
+  ...[
+    "VitaminA",
+    "VitaminB6",
+    "VitaminB12",
+    "VitaminC",
+    "VitaminD",
+    "VitaminE",
+    "VitaminK",
+    "Calcium",
+    "Iron",
+    "Magnesium",
+    "Potassium",
+    "Sodium",
+    "Zinc",
+  ].map((field) =>
+    body(`updatedFields.${field}`)
+      .optional()
+      .isInt({ min: 0, max: 1000 })
+      .withMessage(`${field} must be an integer between 0 and 1,000`)
+  ),
 
   handleValidationErrors,
 ];
@@ -302,8 +388,8 @@ const validateGetCurrentNutrition = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3 })
-    .withMessage("Username must be at least 3 characters long"),
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
 
   handleValidationErrors,
 ];
@@ -315,6 +401,15 @@ const validateLogWeight = [
     .isInt({ min: 0, max: 400 })
     .withMessage("Weight must be between 0 and 400 kg"),
 
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
+
+  ,
   handleValidationErrors,
 ];
 
@@ -324,10 +419,40 @@ const validateGetWeights = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3 })
-    .withMessage("Username must be at least 3 characters long"),
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
 
   handleValidationErrors,
+];
+
+const validateLogRecipe = [
+  body("recipeName")
+    .exists()
+    .withMessage("Recipe name is required")
+    .isString()
+    .withMessage("Recipe name must be a string")
+    .isLength({ min: 2, max: 100 })
+    .withMessage("Recipe name must be between 2 and 100 characters"),
+
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
+
+  body("Servings")
+    .exists()
+    .withMessage("Servings is required")
+    .isFloat({ min: 1 })
+    .withMessage("Servings must be a positive value"),
+
+  body("Calories")
+    .exists()
+    .withMessage("Calories is required")
+    .isInt({ min: 0 })
+    .withMessage("Calories must be a positive integer"),
 ];
 
 export {
@@ -338,6 +463,7 @@ export {
   validateMacroRequest,
   validateAddUser,
   validateDeleteUser,
+  validateCheckUsername,
   validateGetUserFoods,
   validateLogFood,
   validateEditLog,
@@ -345,5 +471,6 @@ export {
   validateGetCurrentNutrition,
   validateLogWeight,
   validateGetWeights,
+  validateLogRecipe,
   handleValidationErrors,
 };

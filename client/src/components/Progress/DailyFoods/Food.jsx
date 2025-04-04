@@ -12,8 +12,8 @@ export default function Food({ name, logTime, calories, protein, carbs, fat }) {
       <div>
         <p>{name}</p>
       </div>
-      <div className="flex gap-7 sm:max-lg:gap-4">
-        <div className="flex gap-14 sm:max-lg:gap-6">
+      <div className="flex gap-7 sm:max-lg:gap-3">
+        <div className="flex gap-14 sm:max-lg:gap-7.5">
           <p className="">{logTime}</p>
           <p className=" sm:max-lg:pr-0">{calories} kcal</p>
           <p className="pl-4 sm:max-lg:hidden">{protein}g</p>
