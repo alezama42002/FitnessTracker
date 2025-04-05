@@ -23,6 +23,8 @@ import {
   validateLogWeight,
   validateGetWeights,
   validateLogRecipe,
+  validateSetMacros,
+  validateUserMacros,
 } from "../middleware/userEndpointsValidator.js";
 import { authenticateUser } from "../middleware/authentication.js";
 
@@ -113,5 +115,21 @@ router.post(
 
 // Logs a recipe for the user and adjusts their nutrition and macro totals
 router.post("/LogRecipe", validateLogRecipe, userController.logRecipe);
+
+// Sets the users macros based on a new goal
+router.patch(
+  "/SetMacros",
+  authenticateUser,
+  validateSetMacros,
+  userController.setMacros
+);
+
+// Gets the users goal macros
+router.post(
+  "/UserMacros",
+  authenticateUser,
+  validateUserMacros,
+  userController.getUserMacros
+);
 
 export default router;

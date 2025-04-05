@@ -457,6 +457,34 @@ const logRecipe = async (req, res) => {
   }
 };
 
+// Sets the users macros according the macros given by the user
+const setMacros = async (req, res) => {
+  try {
+    await userService.changeUserMacros(req.body.Username, req.body.Macros);
+    res.status(200).json("Macros Updated");
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
+};
+
+// Returns the users macros from the database
+const getUserMacros = async (req, res) => {
+  try {
+    const user = await userService.getUser(req.body.Username);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json({
+      Calories: user.calorieGoal,
+      Protein: user.proteinGoal,
+      Carbohydrates: user.carbGoal,
+      Fat: user.fatGoal,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
+};
+
 export default {
   Login,
   Logout,
@@ -474,4 +502,6 @@ export default {
   getUserWeights,
   logRecipe,
   checkUsername,
+  setMacros,
+  getUserMacros,
 };

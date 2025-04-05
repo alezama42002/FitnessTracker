@@ -52,10 +52,17 @@ export default function Dashboard() {
       try {
         const [macroResponse, nutritionResponse, weightResponse] =
           await Promise.all([
-            axios.post("http://localhost:3000/api/user/Macros", {
-              Username: username,
-              Goal: "Relaxed Weight Loss",
-            }),
+            axios.post(
+              "http://localhost:3000/api/user/UserMacros",
+              {
+                Username: username,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            ),
             axios.post(
               "http://localhost:3000/api/user/GetCurrentNutrition",
               {
@@ -135,7 +142,7 @@ export default function Dashboard() {
             <DailyFoods Username={username} token={token} />
           </div>
 
-          <div className="row-span-2 mr-10 mt-8 sm:max-lg:mx-10 sm:max-lg:mt-0">
+          <div className="row-span-2 mr-10 mt-8 sm:max-lg:mx-10 sm:max-lg:mt-0 lg:mx-10 lg:mt-0">
             <LogWeight Username={username} token={token} />
             <MicroNutrients nutritionData={micronutrientsData} />
           </div>

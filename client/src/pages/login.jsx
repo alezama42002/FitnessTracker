@@ -38,6 +38,7 @@ export default function Login() {
         // login endpoint
         if (response.data != "Not Allowed") {
           localStorage.setItem("accessToken", response.data.accessToken);
+          localStorage.setItem("Username", formData.Username);
           navigate("/Dashboard/Progress");
         }
       } catch (error) {

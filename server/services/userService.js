@@ -249,6 +249,26 @@ const addRecipeForUser = async (recipeID, userID, servings) => {
   });
 };
 
+// Alters the macros of the user in the Users table
+const changeUserMacros = async (username, macros) => {
+  const user = await getUser(username);
+  const userID = user.userID;
+
+  await user.update(
+    {
+      calorieGoal: macros.Calories,
+      proteinGoal: macros.Protein,
+      carbGoal: macros.Carbohydrates,
+      fatGoal: macros.Fat,
+    },
+    {
+      where: {
+        userID: userID,
+      },
+    }
+  );
+};
+
 export default {
   addUser,
   deleteUser,
@@ -262,4 +282,5 @@ export default {
   addWeight,
   getUserWeights,
   addRecipeForUser,
+  changeUserMacros,
 };

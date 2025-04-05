@@ -25,20 +25,20 @@ export default function DailyOverview({ amountsData }) {
           <h1 className="inline font-semibold">Daily Overview</h1>
           <p className="inline text-[#BDB7AF]">{currentDate}</p>
         </div>
-        <div className="mr-2">
+        <div className="mr-2 relative">
           <button
             className="bg-[#1B9E4B] text-[14px] font-normal text-white px-6 py-2 rounded-[8px] cursor-pointer"
             onClick={() => setOpen(true)}
           >
             Set Goal
           </button>
+          {open && (
+            <PopupGoal
+              onClose={() => setOpen(false)}
+              onSave={() => setOpen(false)}
+            />
+          )}
         </div>
-        {open && (
-          <PopupGoal
-            onClose={() => setOpen(false)}
-            onSave={() => setOpen(false)}
-          />
-        )}
       </div>
 
       <div className="px-6 mt-6">
