@@ -95,8 +95,8 @@ export default function AccountInformation() {
   };
 
   return (
-    <div className="bg-[#0E131F] flex justify-center items-center h-screen lg:my-10">
-      <div className=" w-full mx-115 lg:mx-90">
+    <div className="bg-[#0E131F] flex justify-center items-center my-14">
+      <div className=" w-full mx-90 sm:max-lg:mx-10 lg:mx-30">
         <form
           action="#"
           method="POST"
