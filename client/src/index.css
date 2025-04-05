@@ -30,6 +30,14 @@ body {
 .micronutrientsArrow.rotate {
   transform: rotate(180deg);
 }
+@media screen and (max-width: 548px) {
+  .suggestionBtn-Container button {
+    justify-content: space-evenly;
+    font-size: 12px;
+    padding: 4px 6px;
+    gap: 2px;
+  }
+}
 
 @media screen and (max-width: 1024px) {
   /* navbar  */
@@ -81,11 +89,6 @@ body {
     font-size: 14px;
   }
 
-  .suggestionBtn-Container button {
-    font-size: 12px;
-    padding: 4px 6px;
-    gap: 4px;
-  }
 
   .suggestion.plus {
     font-size: 30px;

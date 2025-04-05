@@ -137,7 +137,7 @@ export default function Suggestions() {
             />
           </div>
         </div>
-        <div className="suggestionBtn-Container flex justify-evenly gap-2 pt-6">
+        <div className="suggestionBtn-Container flex gap-6 pt-6">
           <button
             onClick={handleClickAll}
             className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${

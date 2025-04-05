@@ -66,7 +66,7 @@ export default function AddRecipe() {
     <div className="mx-2">
       <h1 className="text-[22px] text-white pt-4">Create Recipe </h1>
       <div className="bg-[#19212C] text-white mt-6 p-6 rounded-[8px]">
-        <div>
+        <div className="flex flex-col gap-4">
           <Input
             inputName="Recipe Name"
             field="recipeName"
@@ -82,8 +82,8 @@ export default function AddRecipe() {
             field="totalServings"
             sendData={handleInputChange}
           />
-          <div className="pb-6">
-            <h1>Search Ingredient</h1>
+          <div>
+            <h1 className="pb-2">Search Ingredient</h1>
             <SearchIngredient addIngredient={addIngredient} />
           </div>
         </div>
