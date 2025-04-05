@@ -12,6 +12,7 @@ body {
   background-color: #19212c;
   display: flex;
   flex-direction: column;
+  z-index: 1;
   align-items: center;
   position: absolute;
   top: 90px;
