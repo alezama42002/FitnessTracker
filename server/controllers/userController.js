@@ -420,7 +420,7 @@ const logRecipe = async (req, res) => {
 
     const user = await userService.getUser(req.body.Username);
 
-    const quantity = req.body.Servings / recipe.dataValues.totalServings; // Fraction needed for macro/micro calculations
+    const quantity = req.body.servings / recipe.dataValues.totalServings; // Fraction needed for macro/micro calculations
 
     const userAddedNutritionData = {
       userID: user.dataValues.userID,
@@ -485,6 +485,19 @@ const getUserMacros = async (req, res) => {
   }
 };
 
+const getUserRecipes = async (req, res) => {
+  const { Username } = req.body;
+  try {
+    const recipes = await userService.getUserRecipes(Username);
+    if (!recipes) {
+      return res.status(404).json({ error: "No recipes found" });
+    }
+    res.status(200).json(recipes);
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
+};
+
 export default {
   Login,
   Logout,
@@ -504,4 +517,5 @@ export default {
   checkUsername,
   setMacros,
   getUserMacros,
+  getUserRecipes,
 };

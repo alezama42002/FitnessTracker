@@ -439,6 +439,18 @@ const validateUserMacros = [
   handleValidationErrors,
 ];
 
+const validateGetUserRecipes = [
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
+
+  handleValidationErrors,
+];
+
 export {
   validateLogin,
   validateLogout,
@@ -459,4 +471,5 @@ export {
   handleValidationErrors,
   validateSetMacros,
   validateUserMacros,
+  validateGetUserRecipes,
 };

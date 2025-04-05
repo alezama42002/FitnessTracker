@@ -5,12 +5,13 @@ import axios from "axios";
 
 export default function DailyFoods({ Username, token }) {
   const [dailyFoodsData, setDailyFoodsData] = useState([]);
+  const [dailyRecipesData, setDailyRecipesData] = useState([]);
 
   useEffect(() => {
     const fetchUserFoods = async () => {
       if (!Username || !token) return;
       try {
-        const response = await axios.post(
+        const foodresponse = await axios.post(
           "http://localhost:3000/api/user/GetUserFoods",
           {
             Username: Username,
@@ -21,7 +22,20 @@ export default function DailyFoods({ Username, token }) {
             },
           }
         );
-        setDailyFoodsData(response.data);
+
+        const reciperesponse = await axios.post(
+          "http://localhost:3000/api/user/GetUserRecipes",
+          {
+            Username: Username,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setDailyFoodsData(foodresponse.data);
+        setDailyRecipesData(reciperesponse.data);
       } catch (error) {
         console.log(error);
       }
@@ -53,7 +67,30 @@ export default function DailyFoods({ Username, token }) {
               logTime={food.logTime || "Unknown"}
               calories={food.Calories}
               protein={food.Protein}
-              carbs={food.Carbohydrates}
+              carbs={food.Carbs}
+              fat={food.Fat}
+            />
+          ))}
+        </div>
+        <div className="dailyFoodItem-Container text-white flex justify-between sm:max-lg:justify-between border-b-2 border-b-[#363B3D] pb-3 font-semibold w-full mt-6">
+          <p>Recipe</p>
+          <div className="flex gap-14 pr-20 sm:max-lg:gap-8 sm:max-lg:pr-15">
+            <p>Time</p>
+            <p>Calories</p>
+            <p className="sm:max-lg:hidden">Protein</p>
+            <p className="sm:max-lg:hidden">Carbs</p>
+            <p className="sm:max-lg:hidden">Fat</p>
+          </div>
+        </div>
+        <div>
+          {dailyRecipesData.map((food, index) => (
+            <Food
+              key={index}
+              name={food.recipeName}
+              logTime={food.logTime || "Unknown"}
+              calories={food.Calories}
+              protein={food.Protein}
+              carbs={food.Carbs}
               fat={food.Fat}
             />
           ))}

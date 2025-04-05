@@ -25,6 +25,7 @@ import {
   validateLogRecipe,
   validateSetMacros,
   validateUserMacros,
+  validateGetUserRecipes,
 } from "../middleware/userEndpointsValidator.js";
 import { authenticateUser } from "../middleware/authentication.js";
 
@@ -130,6 +131,14 @@ router.post(
   authenticateUser,
   validateUserMacros,
   userController.getUserMacros
+);
+
+// Gets the users logged recipes for the day
+router.post(
+  "/GetUserRecipes",
+  authenticateUser,
+  validateGetUserRecipes,
+  userController.getUserRecipes
 );
 
 export default router;

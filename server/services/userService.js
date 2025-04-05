@@ -269,6 +269,54 @@ const changeUserMacros = async (username, macros) => {
   );
 };
 
+const getUserRecipes = async (username) => {
+  const user = await getUser(username);
+  const userID = user.userID;
+  const userRecipes = await userRecipe.findAll({
+    where: {
+      userID: userID,
+    },
+  });
+
+  if (userRecipes.length != 0) {
+    const recipesData = userRecipes.map((recipe) => ({
+      recipeID: recipe.recipeID,
+      Servings: recipe.Servings,
+    }));
+
+    const recipeIDs = recipesData.map((recipe) => recipe.recipeID);
+
+    const recipes = await Recipe.findAll({
+      where: {
+        recipeID: {
+          [Op.in]: recipeIDs,
+        },
+      },
+    });
+
+    const recipeData = recipesData
+      .map((recipeData) => {
+        const recipe = recipes.find((r) => r.recipeID === recipeData.recipeID);
+
+        if (recipe) {
+          const servings = recipeData.Servings / recipe.totalServings;
+          return {
+            recipeName: recipe.recipeName,
+            Calories: recipe.totalCalories * servings,
+            Protein: recipe.totalProtein * servings,
+            Carbs: recipe.totalCarbs * servings,
+            Fat: recipe.totalFats * servings,
+            totalServings: servings,
+          };
+        }
+        return null;
+      })
+      .filter((item) => item !== null);
+
+    return recipeData;
+  } else return null;
+};
+
 export default {
   addUser,
   deleteUser,
@@ -283,4 +331,5 @@ export default {
   getUserWeights,
   addRecipeForUser,
   changeUserMacros,
+  getUserRecipes,
 };
