@@ -49,7 +49,7 @@ export default function DailyFoods({ Username, token }) {
         <h1 className="inline font-semibold">Today's Food</h1>
       </div>
       <div className="px-6 mt-8 text-[14px]">
-        <div className="dailyFoodItem-Container text-white flex justify-between sm:max-lg:justify-between border-b-2 border-b-[#363B3D] pb-3 font-semibold w-full">
+        {/* <div className="text-white flex justify-between sm:max-lg:justify-between border-b-2 border-b-[#363B3D] pb-3 font-semibold w-full">
           <p>Food</p>
           <div className="flex gap-14 pr-20 sm:max-lg:gap-8 sm:max-lg:pr-15">
             <p>Time</p>
@@ -58,6 +58,14 @@ export default function DailyFoods({ Username, token }) {
             <p className="sm:max-lg:hidden">Carbs</p>
             <p className="sm:max-lg:hidden">Fat</p>
           </div>
+        </div> */}
+        <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_36px] text-white font-semibold border-b-2 border-b-[#363B3D] pb-3 pt-4 w-full sm:max-md:grid-cols-[1fr_1fr_1fr_36px]">
+          <p>Food</p>
+          <p className="justify-self-center">Time</p>
+          <p className="justify-self-center">Calories</p>
+          <p className="justify-self-center sm:max-md:hidden">Protein</p>
+          <p className="justify-self-center sm:max-md:hidden">Carbs</p>
+          <p className="justify-self-center sm:max-md:hidden">Fat</p>
         </div>
         <div>
           {dailyFoodsData.map((food, index) => (
@@ -72,7 +80,7 @@ export default function DailyFoods({ Username, token }) {
             />
           ))}
         </div>
-        <div className="dailyFoodItem-Container text-white flex justify-between sm:max-lg:justify-between border-b-2 border-b-[#363B3D] pb-3 font-semibold w-full mt-6">
+        {/* <div className="dailyFoodItem-Container text-white flex justify-between sm:max-lg:justify-between border-b-2 border-b-[#363B3D] pb-3 font-semibold w-full mt-6">
           <p>Recipe</p>
           <div className="flex gap-14 pr-20 sm:max-lg:gap-8 sm:max-lg:pr-15">
             <p>Time</p>
@@ -81,6 +89,15 @@ export default function DailyFoods({ Username, token }) {
             <p className="sm:max-lg:hidden">Carbs</p>
             <p className="sm:max-lg:hidden">Fat</p>
           </div>
+        </div> 
+        */}
+        <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_36px] sm:max-md:grid-cols-[1fr_1fr_1fr_36px] text-white font-semibold border-b-2 border-b-[#363B3D] pb-3 pt-4 w-full">
+          <p>Recipe</p>
+          <p className="justify-self-center">Time</p>
+          <p className="justify-self-center">Calories</p>
+          <p className="justify-self-center sm:max-md:hidden">Protein</p>
+          <p className="justify-self-center sm:max-md:hidden">Carbs</p>
+          <p className="justify-self-center sm:max-md:hidden">Fat</p>
         </div>
         <div>
           {dailyRecipesData.map((food, index) => (
