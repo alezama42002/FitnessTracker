@@ -332,7 +332,15 @@ const editLog = async (req, res) => {
 // Deletes logged food from userFood and adjusts users day nutritional totals
 // in userDailyNutrition Table
 const deleteLog = async (req, res) => {
-  const { userFood_ID } = req.body;
+  const Username = await userService.getUser(req.body.Username);
+  const userID = Username.userID;
+
+  const userFood_ID = await foodService.getUserFoodID(
+    userID,
+    req.body.foodID,
+    req.body.Quantity
+  );
+
   try {
     // Get the logged foods nutritional information and adjust quantity to be negative
     // since deduction from days nutritional totals is needed

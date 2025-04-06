@@ -2,11 +2,18 @@ import React from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { GoPencil } from "react-icons/go";
 
-export default function Food({ name, logTime, calories, protein, carbs, fat }) {
-  const deleteFood = () => {};
-
-  const editFood = () => {};
-
+export default function Food({
+  name,
+  logTime,
+  calories,
+  protein,
+  carbs,
+  fat,
+  quantity,
+  editLog,
+  deleteLog,
+  foodID,
+}) {
   return (
     <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_36px] sm:max-md:grid-cols-[1fr_1fr_1fr_36px] text-white border-b-2 border-b-[#363B3D] py-3 items-center">
       <p>{name}</p>

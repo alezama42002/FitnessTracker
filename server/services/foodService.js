@@ -188,6 +188,18 @@ const getFoodByName = async (foodName, foodBrand) => {
   });
 };
 
+const getUserFoodID = async (userID, foodID, Quantity) => {
+  const food = await userFood.findOne({
+    where: { userID: userID, foodID: foodID, Quantity: Quantity },
+  });
+
+  if (food === null) {
+    return false;
+  } else {
+    return food.userFood_ID;
+  }
+};
+
 export default {
   addFoodtoDB,
   deleteFood,
@@ -199,4 +211,5 @@ export default {
   getUserFoodData,
   editFood,
   getFoodByName,
+  getUserFoodID,
 };
