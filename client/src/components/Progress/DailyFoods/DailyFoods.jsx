@@ -43,6 +43,35 @@ export default function DailyFoods({ Username, token }) {
     fetchUserFoods();
   }, [Username, token]);
 
+  const deleteFood = async (foodID, Quantity) => {
+    try {
+      await axios.delete("http://localhost:3000/api/user/DeleteLog", {
+        data: {
+          foodID: foodID,
+          Username: Username,
+          Quantity: Quantity,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const editFood = (newQuantity) => {
+    alert("Edit food");
+  };
+
+  const deleteRecipe = () => {
+    alert("Delete recipe");
+  };
+
+  const editRecipe = (newQuantity) => {
+    alert("Edit recipe");
+  };
+
   return (
     <div className="bg-[#19212C] mt-8 py-6 rounded-[16px]">
       <div className="flex justify-between px-6 text-white">
@@ -53,6 +82,7 @@ export default function DailyFoods({ Username, token }) {
           <p>Food</p>
           <div className="flex gap-14 pr-20 sm:max-lg:gap-8 sm:max-lg:pr-15">
             <p>Time</p>
+            <p>Quantity</p>
             <p>Calories</p>
             <p className="sm:max-lg:hidden">Protein</p>
             <p className="sm:max-lg:hidden">Carbs</p>
@@ -69,6 +99,10 @@ export default function DailyFoods({ Username, token }) {
               protein={food.Protein}
               carbs={food.Carbs}
               fat={food.Fat}
+              quantity={food.Quantity}
+              editLog={editFood}
+              deleteLog={deleteFood}
+              foodID={food.foodID}
             />
           ))}
         </div>
@@ -76,13 +110,14 @@ export default function DailyFoods({ Username, token }) {
           <p>Recipe</p>
           <div className="flex gap-14 pr-20 sm:max-lg:gap-8 sm:max-lg:pr-15">
             <p>Time</p>
+            <p>Quantity</p>
             <p>Calories</p>
             <p className="sm:max-lg:hidden">Protein</p>
             <p className="sm:max-lg:hidden">Carbs</p>
             <p className="sm:max-lg:hidden">Fat</p>
           </div>
         </div>
-        <div>
+        {/* <div>
           {dailyRecipesData.map((food, index) => (
             <Food
               key={index}
@@ -92,9 +127,13 @@ export default function DailyFoods({ Username, token }) {
               protein={food.Protein}
               carbs={food.Carbs}
               fat={food.Fat}
+              quantity={food.Servings}
+              editLog={editRecipe}
+              deleteLog={deleteRecipe}
+              foodID={food.recipeID}
             />
           ))}
-        </div>
+        </div> */}
       </div>
     </div>
   );

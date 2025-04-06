@@ -304,11 +304,19 @@ const validateEditLog = [
 ];
 
 const validateDeleteLog = [
-  body("userFood_ID")
-    .exists()
-    .withMessage("userFood_ID is required")
+  body("foodID")
     .isInt({ min: 1 })
-    .withMessage("userFood_ID must be a positive integer"),
+    .withMessage("foodID must be a positive integer"),
+
+  body("Username")
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage("Username is required"),
+
+  body("Quantity")
+    .isInt({ min: 1 })
+    .withMessage("Quantity must be a positive integer"),
 
   handleValidationErrors,
 ];

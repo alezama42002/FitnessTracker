@@ -155,17 +155,19 @@ const getUserFoods = async (userID) => {
   // Adds a foodID "x" times to the foodIDs array according to the quantity of
   // the logged good
   userFoodsData.forEach((food) => {
-    for (let x = 0; x < food.dataValues.Quantity; x++) {
-      foodIDs.push(food.foodID);
-    }
+    foodIDs.push({
+      foodID: food.foodID,
+      Quantity: food.Quantity,
+      creationTime: moment(food.createdAt).format("h:mm A"),
+    });
   });
 
   // For each of the foodIDs we get the food assosciated to that foodID and then
   // retrieve the necessary data
-  const foodDataPromises = foodIDs.map(async (foodID) => {
+  const foodDataPromises = foodIDs.map(async (food) => {
     const foodData = await Food.findOne({
       where: {
-        foodID: foodID,
+        foodID: food.foodID,
       },
     });
 
@@ -175,6 +177,9 @@ const getUserFoods = async (userID) => {
       Protein: foodData.Protein,
       Carbs: foodData.Carbohydrates,
       Fat: foodData.Fats,
+      Quantity: food.Quantity,
+      logTime: food.creationTime,
+      foodID: foodData.foodID,
     };
 
     return foodItem;
@@ -282,6 +287,7 @@ const getUserRecipes = async (username) => {
     const recipesData = userRecipes.map((recipe) => ({
       recipeID: recipe.recipeID,
       Servings: recipe.Servings,
+      creationTime: moment(recipe.createdAt).format("h:mm A"),
     }));
 
     const recipeIDs = recipesData.map((recipe) => recipe.recipeID);
@@ -302,11 +308,12 @@ const getUserRecipes = async (username) => {
           const servings = recipeData.Servings / recipe.totalServings;
           return {
             recipeName: recipe.recipeName,
-            Calories: recipe.totalCalories * servings,
-            Protein: recipe.totalProtein * servings,
-            Carbs: recipe.totalCarbs * servings,
-            Fat: recipe.totalFats * servings,
-            totalServings: servings,
+            Calories: Math.round(recipe.totalCalories * servings),
+            Protein: Math.round(recipe.totalProtein * servings),
+            Carbs: Math.round(recipe.totalCarbs * servings),
+            Fat: Math.round(recipe.totalFats * servings),
+            Servings: servings,
+            logTime: recipeData.creationTime,
           };
         }
         return null;
