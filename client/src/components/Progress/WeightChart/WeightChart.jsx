@@ -79,7 +79,7 @@ export default function WeightGraph({ weightData, weekDays }) {
             Weight
           </h1>
           <button
-            className="bg-[#1B9E4B] text-[12px] font-normal text-white px-4 py-2 rounded-[8px] cursor-pointer"
+            className="bg-[#1B9E4B] text-[12px] font-normal text-white px-4 py-2 rounded-[8px] cursor-pointer md:hidden"
             onClick={() => setOpen(true)}
           >
             Log Weight
