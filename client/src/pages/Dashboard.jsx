@@ -156,7 +156,7 @@ export default function Dashboard() {
             <DailyFoods Username={username} token={token} />
           </div>
 
-          <div className="row-span-2 mr-10 mt-8 sm:max-lg:mx-10 sm:max-lg:mt-0 lg:mx-10 lg:max-xl:mt-0 ">
+          <div className="row-span-2 mr-10 mt-8 sm:max-lg:mx-10 sm:max-lg:mt-0 lg:mx-10">
             <LogWeight Username={username} token={token} />
             <MicroNutrients nutritionData={micronutrientsData} />
           </div>
