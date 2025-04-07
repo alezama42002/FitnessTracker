@@ -12,8 +12,6 @@ export default function Suggestions() {
   const [clickedLowCarbs, setClickedLowCarbs] = useState(false);
   const [clickedHighCarbs, setClickedHighCarbs] = useState(false);
   const [tempState, setTempState] = useState(null);
-  const [recipeName, setRecipeName] = useState("");
-  const [selection, setSelection] = useState("Recipes");
   const [recipes, setRecipes] = useState([]);
 
   const resetOptions = () => {
@@ -24,92 +22,48 @@ export default function Suggestions() {
     setClickedHighCarbs(false);
   };
 
-  const handleInputChange = (event) => {
-    setRecipeName(event.target.value);
-  };
-
-  const handleSearch = (event) => {
-    if (event.key === "Enter") {
-      findSpecificRecipe(recipeName);
-    }
-  };
-
-  const selectType = (macroRequest) => {
-    if (selection === "Food") {
-      findFoods(macroRequest);
-    } else {
-      findRecipes(macroRequest);
-    }
-  };
-
   const handleClickAll = () => {
     setTempState(clickedAll);
     resetOptions();
     setClickedAll(!tempState);
-    selectType("All");
+    findRecipes("All");
   };
 
   const handleClickLowFat = () => {
     setTempState(clickedLowFat);
     resetOptions();
     setClickedLowFat(!tempState);
-    selectType("Low Fat");
+    findRecipes("Low Fat");
   };
 
   const handleClickHighProtein = () => {
     setTempState(clickedHighProtein);
     resetOptions();
     setClickedHighProtein(!tempState);
-    selectType("High Protein");
+    findRecipes("High Protein");
   };
 
   const handleClickLowCarbs = () => {
     setTempState(clickedLowCarbs);
     resetOptions();
     setClickedLowCarbs(!tempState);
-    selectType("Low Carb");
+    findRecipes("Low Carb");
   };
 
   const handleClickHighCarbs = () => {
     setTempState(clickedHighCarbs);
     resetOptions();
     setClickedHighCarbs(!tempState);
-    selectType("High Carb");
+    findRecipes("High Carb");
   };
 
   const findRecipes = async (macroRequest) => {
     try {
-      const recipes = await axios.post(
+      const res = await axios.post(
         "http://localhost:3000/api/recipe/Reccomend",
-        { macroRequest: macroRequest }
+        { MacroRequest: macroRequest }
       );
-      console.log(recipes.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const findSpecificRecipe = async () => {
-    try {
-      const recipe = await axios.post(
-        "http://localhost:3000/api/recipe/GetRecipe",
-        { recipeName: recipeName }
-      );
-      console.log(recipe.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const findFoods = async (macroRequest) => {
-    try {
-      const foods = await axios.post(
-        "http://localhost:3000/api/food/Recommend",
-        {
-          MacroRequest: macroRequest,
-        }
-      );
-      console.log(foods.data);
+      setRecipes(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -125,18 +79,6 @@ export default function Suggestions() {
         </p>
       </div>
       <div className="bg-[#19212C] rounded-[8px] px-6 py-4 mx-16 sm:max-lg:mx-8 sm:max-lg:px-4">
-        <div className="bg-[#2c3441] text-[14px] rounded-md py-2 pl-8 sm:max-lg:pl-4">
-          <div className="flex items-center gap-2">
-            <FiSearch color="#CCCCCC" />
-            <input
-              type="text"
-              onChange={handleInputChange}
-              onKeyDown={handleSearch}
-              placeholder="Search for recipes or enter your requirements..."
-              className="w-full focus:outline-none text-white  placeholder-[#CCCCCC]"
-            />
-          </div>
-        </div>
         <div className="suggestionBtn-Container flex gap-6 pt-6">
           <button
             onClick={handleClickAll}
@@ -185,14 +127,15 @@ export default function Suggestions() {
         </div>
       </div>
       <div className="bg-[#19212C] rounded-[8px] mt-6 mx-16 sm:max-lg:mx-8 px-4 py-4">
-        <Recipe
-          name="High Protein Chicken Bowl"
-          description="A protein-rich meal perfect for muscle building"
-          calories="450"
-          protein="45"
-          carbs="30"
-          fat="15"
-        />
+        {recipes.length > 0 ? (
+          recipes.map((recipe, index) => (
+            <Recipe key={index} recipeData={recipe} />
+          ))
+        ) : (
+          <p className="text-white">
+            No recipes to show. Try a search or pick a category.
+          </p>
+        )}
       </div>
     </div>
   );
