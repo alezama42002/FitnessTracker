@@ -288,16 +288,22 @@ const validateLogFood = [
 ];
 
 const validateEditLog = [
-  body("userFood_ID")
-    .exists()
-    .withMessage("userFood_ID is required")
-    .isInt({ min: 1 })
-    .withMessage("userFood_ID must be a positive integer"),
+  body("foodID")
+    .isInt({ gt: 0 })
+    .withMessage("foodID must be a positive integer"),
+
+  body("Username")
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage("Username is required"),
+
+  body("Quantity")
+    .isInt({ gt: 0 })
+    .withMessage("Quantity must be a positive integer"),
 
   body("newQuantity")
-    .exists()
-    .withMessage("newQuantity is required")
-    .isInt({ min: 1 })
+    .isInt({ gt: 0 })
     .withMessage("newQuantity must be a positive integer"),
 
   handleValidationErrors,

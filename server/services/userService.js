@@ -172,7 +172,7 @@ const getUserFoods = async (userID) => {
     });
 
     const foodItem = {
-      foodName: foodData.foodName,
+      Name: foodData.foodName,
       Calories: foodData.Calories,
       Protein: foodData.Protein,
       Carbs: foodData.Carbohydrates,
@@ -277,8 +277,17 @@ const changeUserMacros = async (username, macros) => {
 const getUserRecipes = async (username) => {
   const user = await getUser(username);
   const userID = user.userID;
+
+  // Variables for selecting only foods logged in the current day
+  const startOfDay = moment().startOf("day").toDate();
+  const endOfDay = moment().endOf("day").toDate();
+
   const userRecipes = await userRecipe.findAll({
     where: {
+      createdAt: {
+        [Op.gte]: startOfDay,
+        [Op.lte]: endOfDay,
+      },
       userID: userID,
     },
   });
@@ -307,11 +316,11 @@ const getUserRecipes = async (username) => {
         if (recipe) {
           const servings = recipeData.Servings / recipe.totalServings;
           return {
-            recipeName: recipe.recipeName,
-            Calories: Math.round(recipe.totalCalories * servings),
-            Protein: Math.round(recipe.totalProtein * servings),
-            Carbs: Math.round(recipe.totalCarbs * servings),
-            Fat: Math.round(recipe.totalFats * servings),
+            Name: recipe.recipeName,
+            Protein: Math.round(recipe.totalProtein),
+            Carbs: Math.round(recipe.totalCarbs),
+            Calories: Math.round(recipe.totalCalories),
+            Fat: Math.round(recipe.totalFats),
             Servings: servings,
             logTime: recipeData.creationTime,
           };
@@ -322,6 +331,34 @@ const getUserRecipes = async (username) => {
 
     return recipeData;
   } else return null;
+};
+
+const deleteRecipeLog = async (recipeID, userID, Servings) => {
+  const recipe = await userRecipe.findOne({
+    where: {
+      userID: userID,
+      recipeID: recipeID,
+      Servings: Servings,
+    },
+  });
+
+  if (recipe) {
+    await recipe.destroy();
+  }
+};
+
+const editRecipeLog = async (userID, recipeID, Servings, newServings) => {
+  const recipe = await userRecipe.findOne({
+    where: {
+      userID: userID,
+      recipeID: recipeID,
+      Servings: Servings,
+    },
+  });
+
+  if (recipe) {
+    await recipe.update({ Servings: newServings });
+  }
 };
 
 export default {
@@ -339,4 +376,6 @@ export default {
   addRecipeForUser,
   changeUserMacros,
   getUserRecipes,
+  deleteRecipeLog,
+  editRecipeLog,
 };

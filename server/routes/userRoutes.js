@@ -141,4 +141,16 @@ router.post(
   userController.getUserRecipes
 );
 
+// Deletes the users logged recipe for the day
+// Also adjusts their nutritional totals
+router.post(
+  "/DeleteRecipeLog",
+  authenticateUser,
+  userController.deleteRecipeLog
+);
+
+// Edits the users logged recipe for the day
+// Also adjusts their nutritional totals
+router.post("/EditRecipeLog", authenticateUser, userController.editRecipeLog);
+
 export default router;

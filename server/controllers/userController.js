@@ -300,7 +300,13 @@ const logFood = async (req, res) => {
 
 // Edit the log of a food in the case of an erorr when logging originally
 const editLog = async (req, res) => {
-  const { userFood_ID, newQuantity } = req.body;
+  const userID = await userService.getUser(req.body.Username);
+  const userFood_ID = await foodService.getUserFoodID(
+    userID.userID,
+    req.body.foodID,
+    req.body.Quantity
+  );
+  const newQuantity = req.body.newQuantity;
   try {
     // Get the original Quantity of the logged food
     const originalQuantity = await userService.getUserFoodQuantity(userFood_ID);
@@ -506,6 +512,30 @@ const getUserRecipes = async (req, res) => {
   }
 };
 
+const deleteRecipeLog = async (req, res) => {
+  const { Username, recipeID, Servings } = req.body;
+  const user = await userService.getUser(Username);
+  const userID = user.userID;
+  try {
+    await userService.deleteRecipeLog(userID, recipeID, Servings);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
+};
+
+const editRecipeLog = async (req, res) => {
+  const { Username, recipeID, Servings } = req.body;
+  const user = await userService.getUser(Username);
+  const userID = user.userID;
+  try {
+    await userService.editRecipeLog(userID, recipeID, Servings);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
+};
+
 export default {
   Login,
   Logout,
@@ -526,4 +556,6 @@ export default {
   setMacros,
   getUserMacros,
   getUserRecipes,
+  deleteRecipeLog,
+  editRecipeLog,
 };

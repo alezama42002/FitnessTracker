@@ -89,7 +89,6 @@ export default function Food({ searchedFoodData }) {
         : null}
       {open && (
         <PopupQuantity
-          food={selectedFood}
           text={"Enter Quantity"}
           onClose={() => setOpen(false)}
           onSave={(quantity) => {
