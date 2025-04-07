@@ -88,10 +88,10 @@ const getRecipeByName = async (req, res) => {
     const formattedRecipes = recipes.map((recipe) => ({
       recipeName: recipe.recipeName,
       totalServings: recipe.totalServings,
-      Calories: recipe.totalCalories,
-      Protein: recipe.totalProtein,
-      Carbs: recipe.totalCarbohydrates || 0,
-      Fat: recipe.totalFats,
+      totalCalories: recipe.totalCalories,
+      totalProtein: recipe.totalProtein,
+      totalCarbs: recipe.totalCarbs || 0,
+      totalFats: recipe.totalFats,
     }));
 
     res.status(200).json(formattedRecipes);
@@ -104,7 +104,7 @@ const getRecipeByName = async (req, res) => {
 // requirements of the user
 const getReccomendedRecipes = async (req, res) => {
   try {
-    const recipes = await recipeService.getRecipes(req.body.macroRequest);
+    const recipes = await recipeService.getRecipes(req.body.MacroRequest);
     res.status(200).json(recipes);
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });
