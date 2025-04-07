@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { CiUser } from "react-icons/ci";
+import Logout from "./Logout";
 
 export default function Navbar() {
   const userInfo = () => {};
@@ -52,6 +53,7 @@ export default function Navbar() {
         >
           Suggestions
         </Link>
+        <Logout />
       </div>
       <div>
         <RxHamburgerMenu

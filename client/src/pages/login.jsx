@@ -39,6 +39,7 @@ export default function Login() {
         if (response.data != "Not Allowed") {
           localStorage.setItem("accessToken", response.data.accessToken);
           localStorage.setItem("Username", formData.Username);
+          localStorage.setItem("refreshToken", response.data.refreshToken);
           navigate("/Dashboard/Progress");
         }
       } catch (error) {
