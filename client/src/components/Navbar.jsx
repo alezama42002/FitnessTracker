@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import { RxHamburgerMenu } from "react-icons/rx";
@@ -6,29 +6,58 @@ import { CiUser } from "react-icons/ci";
 import Logout from "./Logout";
 
 export default function Navbar() {
-  const userInfo = () => {};
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileMenuRef = useRef(null); // Create a ref for the profile menu
+  const profileIconRef = useRef(null); // Create a ref for the profile icon
+
+  const toggleProfile = () => {
+    setProfileOpen(!profileOpen);
+  };
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
+  // Close the menu when clicking outside of it
+  const handleClickOutside = (event) => {
+    if (
+      !event.target.closest(".menu-icon") &&
+      !event.target.closest(".nav-links")
+    ) {
+      setMenuOpen(false);
+    }
+
+    if (
+      profileMenuRef.current &&
+      !profileMenuRef.current.contains(event.target) &&
+      profileIconRef.current &&
+      !profileIconRef.current.contains(event.target) // Exclude clicks on the profile icon
+    ) {
+      setProfileOpen(false);
+    }
+  };
+
+  window.addEventListener("click", handleClickOutside);
+
+  // Attach the event listener on mount and cleanup on unmount
+  React.useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="bg-[#19212C] flex justify-between items-center px-4 w-full h-[100px]">
+    <div className="bg-[#19212C]  flex justify-between items-center px-4 w-full h-[100px]">
       <div>
         <img src={Logo} alt="" className="h-15" />
       </div>
       <div
         className={`nav-links ${
           menuOpen ? "visible" : ""
-        } flex justify-between items-center gap-10`}
+        } flex justify-between items-center gap-10 rounded-lg bg-[#19212C] lg:flex hidden`}
       >
-        <Link
-          to="/Dashboard/Profile"
-          className="menu-profile hidden text-[#AFA99E] text-[17px] font-normal hover:text-[#1B9E4B]"
-        >
-          Profile
-        </Link>
         <Link
           to="/Dashboard/Progress"
           className="text-[#AFA99E] text-[17px] font-normal hover:text-[#1B9E4B]"
@@ -53,7 +82,9 @@ export default function Navbar() {
         >
           Suggestions
         </Link>
-        <Logout />
+        <div className="lg:hidden">
+          <Logout />
+        </div>
       </div>
       <div>
         <RxHamburgerMenu
@@ -62,12 +93,23 @@ export default function Navbar() {
           color="#AFA99E"
           className="menu-icon hidden"
         />
-        <CiUser
-          size={28}
-          color="#AFA99E"
-          onClick={userInfo}
-          className="profile-icon hover:cursor-pointer"
-        />
+        <button
+          ref={profileIconRef}
+          onClick={toggleProfile}
+          className="profile-icon cursor-pointer"
+        >
+          <CiUser
+            size={28}
+            color="#AFA99E"
+          />
+        </button>
+        <div ref={profileMenuRef}>
+          {profileOpen && (
+            <div className="absolute right-0 top-18  bg-[#19212c] px-4 py- rounded">
+              <Logout />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
