@@ -513,9 +513,13 @@ const getUserRecipes = async (req, res) => {
 };
 
 const deleteRecipeLog = async (req, res) => {
-  const { Username, recipeID, Servings } = req.body;
+  const { recipeName, Calories, Username, Servings } = req.body;
   const user = await userService.getUser(Username);
   const userID = user.userID;
+
+  const recipe = await recipeService.getSingleRecipe(recipeName, Calories);
+  const recipeID = recipe.recipeID;
+
   try {
     await userService.deleteRecipeLog(userID, recipeID, Servings);
     res.status(204).send();
@@ -525,11 +529,14 @@ const deleteRecipeLog = async (req, res) => {
 };
 
 const editRecipeLog = async (req, res) => {
-  const { Username, recipeID, Servings } = req.body;
+  const { recipeName, Calories, Username, Servings, newServings } = req.body;
   const user = await userService.getUser(Username);
   const userID = user.userID;
+
+  const recipe = await recipeService.getSingleRecipe(recipeName, Calories);
+  const recipeID = recipe.recipeID;
   try {
-    await userService.editRecipeLog(userID, recipeID, Servings);
+    await userService.editRecipeLog(userID, recipeID, Servings, newServings);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });

@@ -181,6 +181,15 @@ const getRecipes = async (MacroRequest) => {
   }
 };
 
+const getSingleRecipe = async (recipeName, Calories) => {
+  return await Recipe.findOne({
+    where: {
+      recipeName: recipeName,
+      totalCalories: Calories,
+    },
+  });
+};
+
 export default {
   calculateRecipeMacros,
   createRecipe,
@@ -189,4 +198,5 @@ export default {
   createRecipeFood,
   getRecipe,
   getRecipes,
+  getSingleRecipe,
 };

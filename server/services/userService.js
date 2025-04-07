@@ -314,7 +314,7 @@ const getUserRecipes = async (username) => {
         const recipe = recipes.find((r) => r.recipeID === recipeData.recipeID);
 
         if (recipe) {
-          const servings = recipeData.Servings / recipe.totalServings;
+          const servings = recipeData.Servings;
           return {
             Name: recipe.recipeName,
             Protein: Math.round(recipe.totalProtein),
@@ -333,7 +333,7 @@ const getUserRecipes = async (username) => {
   } else return null;
 };
 
-const deleteRecipeLog = async (recipeID, userID, Servings) => {
+const deleteRecipeLog = async (userID, recipeID, Servings) => {
   const recipe = await userRecipe.findOne({
     where: {
       userID: userID,
