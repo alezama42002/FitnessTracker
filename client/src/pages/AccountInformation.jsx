@@ -61,6 +61,10 @@ export default function AccountInformation() {
       lastName: formData.LastName,
       activityLevel: formData.ActivityLevel,
       Gender: formData.Gender,
+      calorieGoal: 0,
+      proteinGoal: 0,
+      carbGoal: 0,
+      fatGoal: 0,
     };
 
     if (

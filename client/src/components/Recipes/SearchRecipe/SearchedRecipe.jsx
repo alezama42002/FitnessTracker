@@ -58,17 +58,25 @@ export default function SearchedRecipe({ searchedRecipeData }) {
                 <div className="sm:w-65 md:w-80 lg:w-100">
                   <p>{recipe.recipeName}</p>{" "}
                 </div>
-                <div className="flex gap-2 items-center justify-center pr-2">
-                  <FaPlus onClick={() => handleQuantity(recipe)} />
+                <div className="flex gap-2 items-center justify-center">
+                  <FaPlus 
+                    size={20}
+                  onClick={() => handleQuantity(recipe)} className="bg-[#1b9e4b] w-fit py-0.75 px-4 rounded" />
                 </div>
               </div>
               <div className="border-b-2 border-b-[#363B3D]">
                 <p>Servings: {recipe.totalServings}</p>
                 <p>
-                  Calories: {recipe.Calories} kcal Protein: {recipe.Protein}g
-                </p>{" "}
+                  Calories: {recipe.Calories} kcal
+                </p>
                 <p>
-                  Carbs: {recipe.Carbs}g Fats: {recipe.Fat}g
+                  Protein: {recipe.Protein}g
+                </p>
+                <p>
+                  Carbs: {recipe.Carbs}g
+                </p>
+                <p>
+                  Fat: {recipe.Fats}g
                 </p>
               </div>
             </>

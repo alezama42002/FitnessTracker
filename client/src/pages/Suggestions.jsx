@@ -79,7 +79,7 @@ export default function Suggestions() {
         </p>
       </div>
       <div className="bg-[#19212C] rounded-[8px] px-6 py-4 mx-16 sm:max-lg:mx-8 sm:max-lg:px-4">
-        <div className="suggestionBtn-Container flex gap-6 pt-6">
+        <div className="suggestionBtn-Container flex gap-6">
           <button
             onClick={handleClickAll}
             className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${

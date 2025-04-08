@@ -79,7 +79,7 @@ export default function DailyFoods({ Username, token }) {
             <Food key={index} foodData={food} />
           ))}
         </div>
-        <div className="bg-[#ffffffab] mb-4 mt-7 h-1"></div>
+        <div className="bg-[#ffffffab] mb-4 mt-7 h-1 rounded-[16px]"></div>
         <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_36px] sm:max-md:grid-cols-[1fr_1fr_1fr_36px] text-white font-semibold border-b-2 border-b-[#363B3D] pb-3 pt-4 w-full">
           <p>Recipe</p>
           <p className="justify-self-center sm:max-md:hidden">Time</p>

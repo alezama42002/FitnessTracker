@@ -30,7 +30,7 @@ export default function PopUpWeight({ onClose, onSave }) {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center">
+    <div className="absolute flex items-center top-16 right-4">
       <div className=" p-4 rounded-lg w-80 bg-[#2C3441] ">
         <div className="flex justify-center">
           <h2 className="text-xl mb-4 text-white">Log Weight</h2>
@@ -40,7 +40,7 @@ export default function PopUpWeight({ onClose, onSave }) {
           type="number"
           value={weight}
           onChange={(e) => setWeight(e.target.value)}
-          className="border border-[#1b9e4b] p-2 rounded w-full focus:outline-none "
+          className="border border-[#5e6a7a] p-2 rounded w-full focus:outline-none "
           min="1"
         />
         <div className="mt-4 flex justify-between">
