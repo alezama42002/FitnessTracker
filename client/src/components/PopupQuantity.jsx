@@ -9,7 +9,7 @@ export default function PopupQuantity({ onClose, onSave, text }) {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center">
-      <div className=" p-4 rounded-lg w-80 bg-[#2C3441] ">
+      <div className=" p-4 rounded-lg w-80 bg-[#2C3441]">
         <div className="flex justify-center">
           <h2 className="text-xl mb-4 text-white">{text}</h2>
         </div>

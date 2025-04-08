@@ -84,14 +84,16 @@ export default function WeightGraph({ weightData, weekDays }) {
           >
             Log Weight
           </button>
-          {open && (
-            <PopUpWeight
-              onClose={() => setOpen(false)}
-              onSave={() => setOpen(false)}
-            />
-          )}
         </div>
       </div>
+      {open && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center text-white">
+          <PopUpWeight
+            onClose={() => setOpen(false)}
+            onSave={() => setOpen(false)}
+          />
+        </div>
+      )}
       <div className=" w-full p-2 flex-grow">
         <Chart
           options={chartConfig}
