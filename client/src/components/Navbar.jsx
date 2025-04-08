@@ -56,7 +56,7 @@ export default function Navbar() {
       <div
         className={`nav-links ${
           menuOpen ? "visible" : ""
-        } flex justify-between items-center gap-10 rounded-lg bg-[#19212C] lg:flex hidden`}
+        } flex justify-between items-center gap-10 rounded-lg bg-[#19212C]`}
       >
         <Link
           to="/Dashboard/Progress"
@@ -105,7 +105,7 @@ export default function Navbar() {
         </button>
         <div ref={profileMenuRef}>
           {profileOpen && (
-            <div className="absolute right-0 top-18  bg-[#19212c] px-4 py- rounded">
+            <div className="absolute right-0 top-23  bg-[#19212c] px-12 py-2 rounded">
               <Logout />
             </div>
           )}

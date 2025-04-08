@@ -2,6 +2,7 @@
 
 @theme {
   --breakpoint-sm: 22rem;
+  --breakpoint--slg: 64.063rem;
 }
 
 body {
@@ -93,4 +94,15 @@ body {
   .suggestion.plus {
     font-size: 30px;
   }
+}
+
+@media screen and (max-width: 1024px) {
+  .db-second-col {
+    margin-top: 0;
+  }
+
+  .PopupWeight-btn {
+    display: block;
+  }
+  
 }

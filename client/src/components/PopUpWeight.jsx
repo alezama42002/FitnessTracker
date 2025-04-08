@@ -40,7 +40,7 @@ export default function PopUpWeight({ onClose, onSave }) {
           type="number"
           value={weight}
           onChange={(e) => setWeight(e.target.value)}
-          className="border p-2 rounded w-full focus:outline-none "
+          className="border border-[#1b9e4b] p-2 rounded w-full focus:outline-none "
           min="1"
         />
         <div className="mt-4 flex justify-between">

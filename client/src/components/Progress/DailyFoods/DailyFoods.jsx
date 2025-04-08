@@ -60,14 +60,15 @@ export default function DailyFoods({ Username, token }) {
   }, [Username, token]);
 
   return (
-    <div className="bg-[#19212C] mt-8 py-6 rounded-[16px]">
+    <div className="bg-[#19212C] mt-7 py-6 rounded-[16px]">
       <div className="flex justify-between px-6 text-white">
         <h1 className="inline font-semibold">Today's Food</h1>
       </div>
-      <div className="px-6 mt-8 text-[14px]">
-        <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_36px] text-white font-semibold border-b-2 border-b-[#363B3D] pb-3 pt-4 w-full sm:max-md:grid-cols-[1fr_1fr_1fr_36px]">
+      <div className="px-6 mt-3 text-[14px]">
+        <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_36px] text-white font-semibold border-b-2 border-b-[#363B3D] pb-3 pt-4 w-full sm:max-md:grid-cols-[1fr_1fr_1fr_36px]">
           <p>Food</p>
-          <p className="justify-self-center">Time</p>
+          <p className="justify-self-center sm:max-md:hidden">Time</p>
+          <p className="justify-self-center">Servings</p>
           <p className="justify-self-center">Calories</p>
           <p className="justify-self-center sm:max-md:hidden">Protein</p>
           <p className="justify-self-center sm:max-md:hidden">Carbs</p>
@@ -78,9 +79,11 @@ export default function DailyFoods({ Username, token }) {
             <Food key={index} foodData={food} />
           ))}
         </div>
-        <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_36px] sm:max-md:grid-cols-[1fr_1fr_1fr_36px] text-white font-semibold border-b-2 border-b-[#363B3D] pb-3 pt-4 w-full">
+        <div className="bg-[#ffffffab] mb-4 mt-7 h-1"></div>
+        <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_36px] sm:max-md:grid-cols-[1fr_1fr_1fr_36px] text-white font-semibold border-b-2 border-b-[#363B3D] pb-3 pt-4 w-full">
           <p>Recipe</p>
-          <p className="justify-self-center">Time</p>
+          <p className="justify-self-center sm:max-md:hidden">Time</p>
+          <p className="justify-self-center">Servings</p>
           <p className="justify-self-center">Calories</p>
           <p className="justify-self-center sm:max-md:hidden">Protein</p>
           <p className="justify-self-center sm:max-md:hidden">Carbs</p>

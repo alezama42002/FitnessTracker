@@ -19,7 +19,7 @@ export default function DailyOverview({ amountsData }) {
 
   const currentDate = getCurrentFormattedDate();
   return (
-    <div className="bg-[#19212C] mt-8 py-6 rounded-[16px]">
+    <div className="bg-[#19212C] mt-10 py-6 rounded-[16px]">
       <div className="flex justify-between pr-4 items-center">
         <div className="flex flex-col gap-2 px-6 text-white">
           <h1 className="inline font-semibold">Daily Overview</h1>
@@ -51,7 +51,7 @@ export default function DailyOverview({ amountsData }) {
             unit="kcal"
           />
         </div>
-        <div className="flex w-full gap-2 mt-4 sm:max-lg:flex-col">
+        <div className="flex w-full gap-6 mt-4 sm:max-lg:flex-col">
           <div className="w-1/3 pr-1 sm:max-lg:w-full sm:max-lg:p-0">
             <ProgressBar
               color="#0844A6"

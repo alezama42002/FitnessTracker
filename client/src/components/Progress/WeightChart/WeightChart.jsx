@@ -73,18 +73,16 @@ export default function WeightGraph({ weightData, weekDays }) {
   };
   return (
     <div className="relative flex flex-col rounded-xl bg-[#19212C] bg-clip-border text-gray-700 shadow-md h-full">
-      <div className="relative mx-4 mt-4 flex flex-col gap-4 overflow-hidden rounded-none bg-transparent bg-clip-border text-gray-700 shadow-none md:flex-row md:items-center">
-        <div className="relative flex justify-between items-center">
+      <div className="relative mx-4 mt-4 flex justify-between gap-4 overflow-hidden rounded-none bg-transparent bg-clip-border text-gray-700 shadow-none md:flex-row md:items-center">
           <h1 className=" block font-sans text-base font-extrabold leading-relaxed tracking-normal text-white antialiased">
             Weight
           </h1>
           <button
-            className="bg-[#1B9E4B] text-[12px] font-normal text-white px-4 py-2 rounded-[8px] cursor-pointer md:hidden"
+            className="PopupWeight-btn bg-[#1B9E4B] text-[12px] font-normal text-white px-4 py-2 rounded-[8px] cursor-pointer lg:hidden"
             onClick={() => setOpen(true)}
           >
             Log Weight
           </button>
-        </div>
       </div>
       {open && (
         <div className="absolute inset-0 z-50 flex items-center justify-center text-white">

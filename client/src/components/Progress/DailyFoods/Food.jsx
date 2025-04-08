@@ -54,9 +54,10 @@ export default function Food({ foodData }) {
   };
 
   return (
-    <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_36px] sm:max-md:grid-cols-[1fr_1fr_1fr_36px] text-white border-b-2 border-b-[#363B3D] py-3 items-center">
+    <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_36px] sm:max-md:grid-cols-[1fr_1fr_1fr_36px] text-white border-b-2 border-b-[#363B3D] py-3 items-center">
       <p>{foodData.Name}</p>
-      <p className="justify-self-center">{foodData.logTime}</p>
+      <p className="justify-self-center sm:max-md:hidden">{foodData.logTime}</p>
+      <p className="justify-self-center">{foodData.Quantity}</p>
       <p className="justify-self-center">{foodData.Calories} kcal</p>
       <p className="justify-self-center sm:max-md:hidden">
         {foodData.Protein}g

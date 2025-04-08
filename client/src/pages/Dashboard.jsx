@@ -151,16 +151,16 @@ export default function Dashboard() {
       <div className="bg-[#0E131F] pb-10">
         <Navbar />
         <div className="dashboardContainer grid grid-cols-3 gap-y-8 h-full">
-          <div className="mx-10 col-span-2">
+          <div className="mx-10 col-span-2 lg:mr-4">
             <DailyOverview amountsData={dailyOverviewData} />
             <DailyFoods Username={username} token={token} />
           </div>
 
-          <div className="row-span-2 mr-10 mt-8 sm:max-lg:mx-10 sm:max-lg:mt-0 lg:mx-10">
+          <div className="db-second-col row-span-2 mr-10 mt-10 sm:max-lg:mx-10 sm:max-lg:mt-0 lg:mx-10">
             <LogWeight Username={username} token={token} />
             <MicroNutrients nutritionData={micronutrientsData} />
           </div>
-          <div className="bg-[#19212C] h-150 mx-10 rounded-[16px] col-span-2 w-auto">
+          <div className="bg-[#19212C] h-150 mx-10 rounded-[16px] col-span-2 w-auto lg:mr-4">
             <WeightGraph weightData={weightGraphData} weekDays={weekDays} />
           </div>
         </div>
