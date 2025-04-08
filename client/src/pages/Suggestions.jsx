@@ -72,70 +72,72 @@ export default function Suggestions() {
   return (
     <div className="h-screen bg-[#0E131F]">
       <Navbar />
-      <div className="mx-16 my-8 sm:max-lg:mx-8">
-        <h1 className="text-white text-[22px] pb-4">Suggestions</h1>
-        <p className="text-[#AFA99E]">
-          Find recipes and meals that match your needs
-        </p>
-      </div>
-      <div className="bg-[#19212C] rounded-[8px] px-6 py-4 mx-16 sm:max-lg:mx-8 sm:max-lg:px-4">
-        <div className="suggestionBtn-Container flex gap-6">
-          <button
-            onClick={handleClickAll}
-            className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
-              clickedAll ? "bg-[#16a34a]" : "bg-blue-500"
-            }`}
-          >
-            All
-          </button>
-
-          <button
-            onClick={handleClickLowFat}
-            className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
-              clickedLowFat ? "bg-[#16a34a]" : "bg-blue-500"
-            }`}
-          >
-            Low Fat
-          </button>
-
-          <button
-            onClick={handleClickHighProtein}
-            className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
-              clickedHighProtein ? "bg-[#16a34a]" : "bg-blue-500"
-            }`}
-          >
-            High Protein
-          </button>
-
-          <button
-            onClick={handleClickLowCarbs}
-            className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
-              clickedLowCarbs ? "bg-[#16a34a]" : "bg-blue-500"
-            }`}
-          >
-            Low Carbs
-          </button>
-
-          <button
-            onClick={handleClickHighCarbs}
-            className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
-              clickedHighCarbs ? "bg-[#16a34a]" : "bg-blue-500"
-            }`}
-          >
-            High Carbs
-          </button>
-        </div>
-      </div>
-      <div className="bg-[#19212C] rounded-[8px] mt-6 mx-16 sm:max-lg:mx-8 px-4 py-4">
-        {recipes.length > 0 ? (
-          recipes.map((recipe, index) => (
-            <Recipe key={index} recipeData={recipe} />
-          ))
-        ) : (
-          <p className="text-white">
-            No recipes to show. Try a search or pick a category.
+      <div className="pb-15">
+        <div className="mx-16 my-8 sm:max-lg:mx-8">
+          <h1 className="text-white text-[22px] pb-4">Suggestions</h1>
+          <p className="text-[#AFA99E]">
+            Find recipes and meals that match your needs
           </p>
-        )}
+        </div>
+        <div className="bg-[#19212C] rounded-[8px] px-6 py-4 mx-16 sm:max-lg:mx-8 sm:max-lg:px-4">
+          <div className="suggestionBtn-Container flex gap-6 justify-between">
+            <button
+              onClick={handleClickAll}
+              className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
+                clickedAll ? "bg-[#16a34a]" : "bg-blue-500"
+              }`}
+            >
+              All
+            </button>
+
+            <button
+              onClick={handleClickLowFat}
+              className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
+                clickedLowFat ? "bg-[#16a34a]" : "bg-blue-500"
+              }`}
+            >
+              Low Fat
+            </button>
+
+            <button
+              onClick={handleClickHighProtein}
+              className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
+                clickedHighProtein ? "bg-[#16a34a]" : "bg-blue-500"
+              }`}
+            >
+              High Protein
+            </button>
+
+            <button
+              onClick={handleClickLowCarbs}
+              className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
+                clickedLowCarbs ? "bg-[#16a34a]" : "bg-blue-500"
+              }`}
+            >
+              Low Carbs
+            </button>
+
+            <button
+              onClick={handleClickHighCarbs}
+              className={`bg-[#2c3441] text-[14px] rounded-[8px] py-2 px-6 text-white hover:bg-[#16a34a] active:bg-[#16a34a] ${
+                clickedHighCarbs ? "bg-[#16a34a]" : "bg-blue-500"
+              }`}
+            >
+              High Carbs
+            </button>
+          </div>
+        </div>
+        <div className="bg-[#19212C] rounded-[8px] mt-6 mx-16 sm:max-lg:mx-8 p-6 flex flex-col gap-6">
+          {recipes.length > 0 ? (
+            recipes.map((recipe, index) => (
+              <Recipe key={index} recipeData={recipe} />
+            ))
+          ) : (
+            <p className="text-white">
+              No recipes to show. Try a search or pick a category.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

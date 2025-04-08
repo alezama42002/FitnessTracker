@@ -28,15 +28,16 @@ import {
   validateGetUserRecipes,
 } from "../middleware/userEndpointsValidator.js";
 import { authenticateUser } from "../middleware/authentication.js";
+import rateLimiter from "../middleware/rateLimiter.js";
 
-// Logs in user and provides refreshToken and accessToken on succesfull login
-router.post("/Login", validateLogin, userController.Login);
+// Logs in user and provides refreshToken and accessToken on successful login
+router.post("/Login", rateLimiter, validateLogin, userController.Login);
 
 // Logs out user and deletes refreshToken from database
 router.delete("/Logout", validateLogout, userController.Logout);
 
 // Generate a new accessToken through the use of valid refreshToken
-router.post("/Token", validateToken, userController.newToken);
+router.post("/Token", rateLimiter, validateToken, userController.newToken);
 
 // Checks if a accessToken is still valid or has passed its lifespan
 router.post("/Valid", validateValid, userController.checkToken);
@@ -45,7 +46,7 @@ router.post("/Valid", validateValid, userController.checkToken);
 router.post("/Macros", validateMacroRequest, userController.getMacros);
 
 // Adds user to the database
-router.post("/AddUser", validateAddUser, userController.addUser);
+router.post("/AddUser", rateLimiter, validateAddUser, userController.addUser);
 
 // Removes user from the database
 router.delete(
@@ -56,7 +57,12 @@ router.delete(
 );
 
 // Check if username is taken already
-router.post("/Username", validateCheckUsername, userController.checkUsername);
+router.post(
+  "/Username",
+  rateLimiter,
+  validateCheckUsername,
+  userController.checkUsername
+);
 
 // Gets all of the users logged foods for the day
 router.post(
@@ -74,7 +80,7 @@ router.post(
   userController.logFood
 );
 
-// Edits logged food incase of an error
+// Edits logged food in case of an error
 router.patch(
   "/EditLog",
   authenticateUser,
@@ -82,7 +88,7 @@ router.patch(
   userController.editLog
 );
 
-// Delete log of food incase of an error
+// Delete log of food in case of an error
 router.delete(
   "/DeleteLog",
   authenticateUser,

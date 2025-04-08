@@ -3,9 +3,13 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { GoPencil } from "react-icons/go";
 import axios from "axios";
 import PopupQuantity from "../../PopupQuantity";
+import { useState } from "react";
+import PopupWarning from "../../PopupWarning";
 
 export default function Food({ foodData }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [openWarning, setOpenWarning] = useState(false);
+
   const deleteLog = async () => {
     const Username = localStorage.getItem("Username");
     const token = localStorage.getItem("accessToken");
@@ -64,8 +68,11 @@ export default function Food({ foodData }) {
       </p>
       <p className="justify-self-center sm:max-md:hidden">{foodData.Carbs}g</p>
       <p className="justify-self-center sm:max-md:hidden">{foodData.Fat}g</p>
-      <div className="flex gap-2">
-        <FaRegTrashCan onClick={deleteLog} className="cursor-pointer" />
+      <div className=" relative flex gap-2">
+        <FaRegTrashCan
+          onClick={() => setOpenWarning(true)}
+          className="cursor-pointer"
+        />
         <GoPencil onClick={editLog} className="cursor-pointer" />
         {open && (
           <PopupQuantity
@@ -74,6 +81,15 @@ export default function Food({ foodData }) {
             onSave={(quantity) => {
               editLog(quantity);
               setOpen(false);
+            }}
+          />
+        )}
+        {openWarning && (
+          <PopupWarning
+            onClose={() => setOpenWarning(false)}
+            onSave={() => {
+              deleteLog();
+              setOpenWarning(false);
             }}
           />
         )}

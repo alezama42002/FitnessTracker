@@ -161,7 +161,7 @@ export default function Dashboard() {
             <MicroNutrients nutritionData={micronutrientsData} />
           </div>
           <div className="bg-[#19212C] h-150 mx-10 rounded-[16px] col-span-2 w-auto lg:mr-4">
-            <WeightGraph weightData={weightGraphData} weekDays={weekDays} />
+            <WeightGraph weekWeightData={weightGraphData} />
           </div>
         </div>
       </div>

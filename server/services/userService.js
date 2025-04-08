@@ -202,11 +202,32 @@ const addWeight = async (username, weight) => {
   const year = String(today.getFullYear()).slice(-2);
   const formattedDate = `${month}/${day}/${year}`;
 
-  return await Weight.create({
-    Weight: weight,
-    userID: userID,
-    logDate: formattedDate,
-  });
+  if (
+    await Weight.findOne({
+      where: {
+        userID: userID,
+        logDate: formattedDate,
+      },
+    })
+  ) {
+    return await Weight.update(
+      {
+        Weight: weight,
+      },
+      {
+        where: {
+          userID: userID,
+          logDate: formattedDate,
+        },
+      }
+    );
+  } else {
+    return await Weight.create({
+      Weight: weight,
+      userID: userID,
+      logDate: formattedDate,
+    });
+  }
 };
 
 // Gets all of the user weights associated with the week of the inputted date
@@ -240,7 +261,15 @@ const getUserWeights = async (Username, inputDate) => {
     },
   });
 
-  const weeksWeights = weeksWeightLogs.map((weight) => weight.Weight);
+  const weightMap = {};
+  weeksWeightLogs.forEach((entry) => {
+    weightMap[entry.logDate] = entry.Weight;
+  });
+
+  const weeksWeights = weekArray.map((date) => ({
+    logDate: date,
+    Weight: weightMap[date] ?? null,
+  }));
 
   return weeksWeights;
 };

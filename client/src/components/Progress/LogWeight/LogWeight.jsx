@@ -25,6 +25,7 @@ export default function LogWeight({ Username, token }) {
           },
         }
       );
+      setFormData({ Weight: "" });
     } catch (error) {
       console.log(error);
     }
@@ -46,6 +47,7 @@ export default function LogWeight({ Username, token }) {
         <Input
           inputName="Today's Weight (kg)"
           field="Weight"
+          value={formData.Weight}
           sendData={handleInputChange}
         />
       </div>

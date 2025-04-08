@@ -10,10 +10,12 @@ import {
   validateReccomend,
 } from "../middleware/recipeEndpointsValidator.js";
 import { authenticateUser } from "../middleware/authentication.js";
+import rateLimiter from "../middleware/rateLimiter.js";
 
 // Create recipe according to the information given by the user
 router.post(
   "/AddRecipe",
+  rateLimiter,
   validateAddRecipe,
   authenticateUser,
   recipeController.createRecipe
@@ -22,6 +24,7 @@ router.post(
 // Deletes a recipe from the database based on information given by the user
 router.delete(
   "/DeleteRecipe",
+  rateLimiter,
   validateDeleteRecipe,
   authenticateUser,
   recipeController.deleteRecipe
@@ -31,17 +34,24 @@ router.delete(
 // sought after changes
 router.patch(
   "/EditRecipe",
+  rateLimiter,
   validateEditRecipe,
   authenticateUser,
   recipeController.editRecipe
 );
 
 // Gets all recipes that have the given name from the user
-router.post("/GetRecipe", validateGetRecipe, recipeController.getRecipeByName);
+router.post(
+  "/GetRecipe",
+  rateLimiter,
+  validateGetRecipe,
+  recipeController.getRecipeByName
+);
 
-// Reccomends a list of recipes that meet the users macro request
+// Recommends a list of recipes that meet the users macro request
 router.post(
   "/Reccomend",
+  rateLimiter,
   validateReccomend,
   recipeController.getReccomendedRecipes
 );
