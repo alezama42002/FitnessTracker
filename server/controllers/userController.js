@@ -226,7 +226,6 @@ const getFoods = async (req, res) => {
 const logFood = async (req, res) => {
   const {
     foodID,
-    servingSize,
     foodName,
     foodBrand,
     Calories,
@@ -235,6 +234,7 @@ const logFood = async (req, res) => {
     Fats,
     Username,
     Quantity,
+    servingDescription,
   } = req.body;
   try {
     // Utitlity function to check if food from fatsecret api is already in our database and if
@@ -242,13 +242,13 @@ const logFood = async (req, res) => {
     // we can make the connection to the user and that specific food in the database
     const finalFoodID = await utilityFunctions.checkFood({
       foodID,
-      servingSize,
       foodName,
       foodBrand,
       Calories,
       Protein,
       Carbohydrates,
       Fats,
+      servingDescription,
     });
 
     // Gets userID based on username and gets foodID

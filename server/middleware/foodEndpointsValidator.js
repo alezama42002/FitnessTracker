@@ -36,6 +36,14 @@ const validateAddFood = [
     .isInt({ min: 1, max: 2000 })
     .withMessage("Serving size must be between 1 and 2000 grams"),
 
+  body("servingDescription")
+    .exists()
+    .withMessage("Serving description is required")
+    .isString()
+    .withMessage("Serving description must be a string")
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Serving description must be between 1 and 100 characters"),
+
   body("Calories")
     .exists()
     .withMessage("Calories are required")

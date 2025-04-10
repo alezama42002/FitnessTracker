@@ -9,29 +9,26 @@ export default function WeightGraph({ weekWeightData }) {
   const { weights, labels } = useMemo(() => {
     const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-    // Prepare an array to store the weights for each day of the week (Mon-Sun)
-    const weights = dayLabels.map((day, index) => {
-      // Calculate the correct date for the given day of the week (Mon-Sun)
-      const currentDate = new Date();
-      const firstDayOfWeek = currentDate.getDate() - currentDate.getDay() + 1; // Ensure the start of the week is Monday
-      const dayOfWeekDate = new Date(
-        currentDate.setDate(firstDayOfWeek + index)
-      );
+    const today = new Date();
+    const currentDay = today.getDay(); // 0 (Sun) to 6 (Sat)
+    const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay;
+    const monday = new Date(today);
+    monday.setDate(today.getDate() + mondayOffset);
 
-      // Format the date to "MM/DD/YY" (or the format your `logDate` is in)
-      const formattedDate = `${
-        dayOfWeekDate.getMonth() + 1
-      }/${dayOfWeekDate.getDate()}/${String(dayOfWeekDate.getFullYear()).slice(
-        -2
-      )}`;
+    const weights = dayLabels.map((_, index) => {
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + index);
 
-      // Find the entry for the current date in the weekWeightData
-      const entry = weekWeightData.find(
-        (data) => data.logDate === formattedDate
-      );
+      // ✅ Zero-padded MM/DD/YY format
+      const formatted = `${String(date.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}/${String(date.getDate()).padStart(2, "0")}/${String(
+        date.getFullYear()
+      ).slice(-2)}`;
 
-      // Return the weight if available, otherwise null
-      return entry ? entry.Weight : null;
+      const match = weekWeightData.find((entry) => entry.logDate === formatted);
+      return match ? match.Weight : null;
     });
 
     return { weights, labels: dayLabels };
@@ -41,7 +38,7 @@ export default function WeightGraph({ weekWeightData }) {
     series: [
       {
         name: "Weight",
-        data: weights.filter((weight) => weight !== null),
+        data: weights,
       },
     ],
     chart: {
@@ -64,8 +61,21 @@ export default function WeightGraph({ weekWeightData }) {
     markers: {
       size: 6,
       hover: {
-        size: 6, // Ensures the marker size remains the same when hovered
+        size: 6,
       },
+      discrete: weights
+        .map((weight, index) =>
+          weight === null
+            ? {
+                seriesIndex: 0,
+                dataPointIndex: index,
+                fillColor: "transparent",
+                strokeColor: "transparent",
+                size: 0,
+              }
+            : null
+        )
+        .filter(Boolean),
     },
 
     xaxis: {
@@ -116,7 +126,7 @@ export default function WeightGraph({ weekWeightData }) {
       theme: "dark",
       y: {
         formatter: function (value) {
-          return `${value} kg`;
+          return value !== null ? `${value} kg` : ""; // Don't show tooltip for null
         },
       },
     },

@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import Food from "../models/foodModel.js";
 import userFood from "../models/userFoodModel.js";
+import { Op } from "sequelize";
 
 // Adds food to Database (Foods Table)
 const addFoodtoDB = async (foodData) => {
@@ -99,8 +100,12 @@ const getFoodID = async (foodData) => {
 
 // Gets all foods that match the name provided
 const getFoods = async (foodName) => {
-  const [foods, created] = await Food.findAll({
-    where: { foodName },
+  const foods = await Food.findAll({
+    where: {
+      foodName: {
+        [Op.like]: `%${foodName}%`,
+      },
+    },
   });
 
   return foods;

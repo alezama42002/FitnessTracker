@@ -28,6 +28,7 @@ export default function AddFood() {
     Magnesium: "0",
     Sodium: "0",
     Zinc: "0",
+    servingDescription: "N/A",
   });
 
   const [dropToggle, setDropToggle] = useState(true);

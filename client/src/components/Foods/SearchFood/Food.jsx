@@ -29,6 +29,9 @@ export default function Food({ food }) {
         return;
       }
 
+      const match = foodData.macros.match(/Per (.+?)\s*-/);
+      const measurement = match ? match[1] : null;
+
       const macros = foodData.macros
         .match(/\d+(\.\d+)?/g)
         .map((num) => Math.round(parseFloat(num)));
@@ -45,6 +48,7 @@ export default function Food({ food }) {
           Fats: macros[2],
           Username: username,
           Quantity: quantity,
+          servingDescription: measurement,
         },
         {
           headers: {

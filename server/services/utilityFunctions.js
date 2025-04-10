@@ -36,10 +36,7 @@ const checkFood = async (foodData) => {
 
     const servingOptions = response.data.food.servings.serving;
     const index = servingOptions.findIndex(
-      (serving) =>
-        serving.metric_serving_amount ===
-          foodData.servingSize.toString() + ".000" ||
-        serving.serving_description === foodData.servingSize
+      (serving) => serving.serving_description === foodData.servingDescription
     );
 
     // Gets second serving option or first in the case that second is not present
@@ -51,6 +48,7 @@ const checkFood = async (foodData) => {
       Description: response.data.food.food_description || "",
       foodName: response.data.food.food_name || "",
       servingSize: food.metric_serving_amount || 1,
+      servingDescription: food.serving_description || "",
       Calories: food.calories ?? 0,
       Protein: food.protein ?? 0,
       Carbohydrates: food.carbohydrate ?? 0,
