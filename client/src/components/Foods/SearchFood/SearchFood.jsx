@@ -14,10 +14,11 @@ export default function SearchFood() {
           "http://localhost:3000/api/food/Search",
           {
             Name: searchItem,
+            page: 1,
           }
         );
 
-        setSearchedFoods(response.data);
+        setSearchedFoods(response.data.foods);
       } catch (error) {
         console.log(error);
       }
@@ -36,7 +37,7 @@ export default function SearchFood() {
         />
       </div>
       <div className="searchFoodText flex flex-col items-center justify-center text-[#AFA99E] pt-8 gap-3 pb-6">
-        <Foods searchedFoodData={searchedFoods} />
+        <Foods searchedFoodData={searchedFoods} searchItem={searchItem} />
         <p>Search for foods to add to your profile</p>
         <p>Try searching for items like 'chicken', 'apple', or 'rice'</p>
       </div>

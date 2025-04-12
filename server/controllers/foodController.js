@@ -7,43 +7,77 @@ dotenv.config();
 // Searches for foods based on the food name that is given by the user,
 // foods are then returned along with some respective nutritional information
 const searchFoodByName = async (req, res) => {
-  const { Name } = req.body;
+  const { Name, page } = req.body;
+  const limit = 20;
+  const offset = (page - 1) * limit;
+
   try {
-    const response = await axios.get(
-      "https://platform.fatsecret.com/rest/server.api",
-      {
-        params: {
-          method: "foods.search",
-          search_expression: `${Name}`,
-          format: "json",
-        },
-        headers: {
-          Authorization: `Bearer ${process.env.FATSECRET_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const dbFoods = await foodService.getFoods(Name);
 
-    if (
-      (response.data.foods?.food?.total_results ??
-        response.data.foods?.total_results) === "0"
-    ) {
-      res.status(404).json("No Food Exists!");
-    } else {
-      const foodData = response.data.foods.food;
+    const formattedDBFoods = dbFoods.map((food) => ({
+      name: food.foodName || "Unknown Food",
+      macros: food.Description || "",
+      brand: food.foodBrand || "",
+      ID: food.foodID,
+    }));
 
-      // Ensure foodData is always an array
+    if (formattedDBFoods.length >= offset + limit) {
+      return res.status(200).json({
+        page: Number(page),
+        results: limit,
+        foods: formattedDBFoods.slice(offset, offset + limit),
+      });
+    }
+
+    const remaining = offset + limit - formattedDBFoods.length;
+    const fatsecretResults = [];
+
+    let fatsecretPage = 0;
+    while (fatsecretResults.length < remaining) {
+      const response = await axios.get(
+        "https://platform.fatsecret.com/rest/server.api",
+        {
+          params: {
+            method: "foods.search",
+            search_expression: `${Name}`,
+            format: "json",
+            max_results: 20,
+            page_number: fatsecretPage,
+          },
+          headers: {
+            Authorization: `Bearer ${process.env.FATSECRET_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const foodData = response.data.foods?.food;
+      if (!foodData || foodData.length === 0) break;
+
       const foodsArray = Array.isArray(foodData) ? foodData : [foodData];
-
-      const filteredData = foodsArray.map((food) => ({
+      const mapped = foodsArray.map((food) => ({
         name: food.food_name || "Unknown Food",
         macros: food.food_description || "",
         brand: food.brand_name || "",
         ID: food.food_id || "Unknown ID",
       }));
 
-      res.status(200).json(filteredData);
+      fatsecretResults.push(...mapped);
+      fatsecretPage += 1;
     }
+
+    const combinedFoods = [...formattedDBFoods, ...fatsecretResults];
+    const paginatedFoods = combinedFoods.slice(offset, offset + limit);
+
+    if (combinedFoods.length === 0) {
+      return res.status(404).json("No Food Exists!");
+    }
+
+    res.status(200).json({
+      page: Number(page),
+      results: paginatedFoods.length,
+      foods: paginatedFoods,
+    });
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });
   }
