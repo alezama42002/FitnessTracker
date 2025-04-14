@@ -4,9 +4,12 @@ import { GoPencil } from "react-icons/go";
 import axios from "axios";
 import PopupQuantity from "../../PopupQuantity";
 import { useState } from "react";
+import PopupWarning from "../../PopupWarning";
 
 export default function Recipe({ recipeData }) {
   const [open, setOpen] = useState(false);
+  const [openWarning, setOpenWarning] = useState(false);
+
   const deleteLog = async () => {
     const Username = localStorage.getItem("Username");
     const token = localStorage.getItem("accessToken");
@@ -15,7 +18,7 @@ export default function Recipe({ recipeData }) {
     try {
       await axios.delete("http://localhost:3000/api/user/DeleteRecipeLog", {
         data: {
-          recipeName: recipeData.Name,
+          recipeID: recipeData.recipeID,
           Calories: recipeData.Calories,
           Username: Username,
           Servings: recipeData.Servings,
@@ -38,7 +41,7 @@ export default function Recipe({ recipeData }) {
       await axios.patch(
         "http://localhost:3000/api/user/EditRecipeLog",
         {
-          recipeName: recipeData.Name,
+          recipeID: recipeData.recipeID,
           Calories: recipeData.Calories,
           Username: Username,
           Servings: recipeData.Servings,
@@ -58,7 +61,9 @@ export default function Recipe({ recipeData }) {
   return (
     <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_1fr_1fr_36px] sm:max-md:grid-cols-[1fr_1fr_1fr_36px] text-white border-b-2 border-b-[#363B3D] py-3 items-center">
       <p>{recipeData.Name}</p>
-      <p className="justify-self-center sm:max-md:hidden">{recipeData.logTime}</p>
+      <p className="justify-self-center sm:max-md:hidden">
+        {recipeData.logTime}
+      </p>
       <p className="justify-self-center">{recipeData.Servings}</p>
       <p className="justify-self-center">{recipeData.Calories} kcal</p>
       <p className="justify-self-center sm:max-md:hidden">
@@ -68,8 +73,11 @@ export default function Recipe({ recipeData }) {
         {recipeData.Carbs}g
       </p>
       <p className="justify-self-center sm:max-md:hidden">{recipeData.Fat}g</p>
-      <div className="flex gap-2">
-        <FaRegTrashCan onClick={deleteLog} className="cursor-pointer" />
+      <div className=" relative flex gap-2">
+        <FaRegTrashCan
+          onClick={() => setOpenWarning(true)}
+          className="cursor-pointer"
+        />
         <GoPencil onClick={editLog} className="cursor-pointer" />
         {open && (
           <PopupQuantity
@@ -78,6 +86,15 @@ export default function Recipe({ recipeData }) {
             onSave={(quantity) => {
               editLog(quantity);
               setOpen(false);
+            }}
+          />
+        )}
+        {openWarning && (
+          <PopupWarning
+            onClose={() => setOpenWarning(false)}
+            onSave={() => {
+              deleteLog();
+              setOpenWarning(false);
             }}
           />
         )}

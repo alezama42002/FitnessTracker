@@ -18,7 +18,7 @@ const createRecipe = async (req, res) => {
     for (const food of foodsData) {
       const foodID = await utilityFunctions.checkFood({
         foodID: food.foodID,
-        servingSize: food.servingSize,
+        servingDescription: food.servingSize,
         foodName: food.foodName,
         foodBrand: food.foodBrand,
         Calories: food.Calories,

@@ -28,7 +28,7 @@ export default function AddFood() {
     Magnesium: "0",
     Sodium: "0",
     Zinc: "0",
-    servingDescription: "N/A",
+    servingDescription: "",
   });
 
   const [dropToggle, setDropToggle] = useState(true);
@@ -93,6 +93,13 @@ export default function AddFood() {
         <Input
           inputName="Food Description"
           field="Description"
+          sendData={handleInputChange}
+        />
+      </div>
+      <div className="flex-1 mt-6">
+        <Input
+          inputName="Serving Description"
+          field="servingDescription"
           sendData={handleInputChange}
         />
       </div>

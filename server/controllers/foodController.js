@@ -16,7 +16,11 @@ const searchFoodByName = async (req, res) => {
 
     const formattedDBFoods = dbFoods.map((food) => ({
       name: food.foodName || "Unknown Food",
-      macros: food.Description || "",
+      macros: `${food.servingDescription} - Calories: ${
+        food.Calories
+      }kcal | Fat: ${food.Fats}g | Carbs: ${food.Carbohydrates}g${
+        food.Protein !== undefined ? ` | Protein: ${food.Protein}g` : ""
+      }`,
       brand: food.foodBrand || "",
       ID: food.foodID,
     }));

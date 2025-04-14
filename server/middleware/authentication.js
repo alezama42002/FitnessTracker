@@ -29,7 +29,7 @@ const verifyToken = (token) => {
 
 // Generates a new accessToken
 const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1hr" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "2hr" });
 };
 
 export { authenticateUser, verifyToken, generateAccessToken };

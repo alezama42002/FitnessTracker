@@ -65,8 +65,8 @@ const validateAddRecipe = [
     .withMessage("Each Fats value must be a positive number."),
 
   body("foodsData.*.Quantity")
-    .isInt({ min: 1 })
-    .withMessage("Each Quantity must be a positive integer."),
+    .isFloat({ min: 0 })
+    .withMessage("Each Quantity must be a positive number."),
 
   handleValidationErrors,
 ];

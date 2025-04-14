@@ -30,6 +30,14 @@ const ProtectedRoutes = () => {
           if (error.response.status === 401) {
             console.warn("Unauthorized: Token expired or invalid.");
             localStorage.removeItem("accessToken");
+            const refreshToken = localStorage.getItem("refreshToken");
+            try {
+              await axios.delete("http://localhost:3000/api/user/Logout", {
+                data: { Token: refreshToken },
+              });
+            } catch (logoutError) {
+              console.error("Logout failed:", logoutError);
+            }
           } else {
             console.warn(`Server error: ${error.response.status}`);
           }

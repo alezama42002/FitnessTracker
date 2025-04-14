@@ -78,16 +78,23 @@ const getFood = async (foodID) => {
 // Gets the foodID for a food based on some of the nutritional information and
 // returns false if not in Database
 const getFoodID = async (foodData) => {
-  const { foodName, foodBrand, Calories, Protein, Carbohydrates, Fats } =
-    foodData;
+  const {
+    foodName,
+    foodBrand,
+    CaloriesRange,
+    ProteinRange,
+    CarbohydratesRange,
+    FatsRange,
+  } = foodData;
 
   const food = await Food.findOne({
     where: {
-      foodBrand: foodBrand,
-      foodName: foodName,
-      Protein: Protein,
-      Carbohydrates: Carbohydrates,
-      Fats: Fats,
+      foodName,
+      foodBrand,
+      Calories: { [Op.between]: CaloriesRange },
+      Protein: { [Op.between]: ProteinRange },
+      Carbohydrates: { [Op.between]: CarbohydratesRange },
+      Fats: { [Op.between]: FatsRange },
     },
   });
 

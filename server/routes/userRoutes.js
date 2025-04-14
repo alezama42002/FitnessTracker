@@ -159,4 +159,7 @@ router.delete(
 // Also adjusts their nutritional totals
 router.patch("/EditRecipeLog", authenticateUser, userController.editRecipeLog);
 
+// Generates new API key for the application, only admin is able to use this
+router.get("/NewAPIKey", userController.newAPIKey);
+
 export default router;

@@ -7,13 +7,27 @@ import axios from "axios";
 const checkFood = async (foodData) => {
   // Gets the necessary foodID for the given food based on the food wishing to be logged.
   // Foods key nutrtional information is used to find ID.
+  const TOLERANCE = 5;
+
   const foodResponse = await foodService.getFoodID({
     foodName: foodData.foodName,
     foodBrand: foodData.foodBrand,
-    Calories: Math.round(foodData.Calories),
-    Protein: Math.round(foodData.Protein),
-    Carbohydrates: Math.round(foodData.Carbohydrates),
-    Fats: Math.round(foodData.Fats),
+    CaloriesRange: [
+      Math.round(foodData.Calories) - TOLERANCE,
+      Math.round(foodData.Calories) + TOLERANCE,
+    ],
+    ProteinRange: [
+      Math.round(foodData.Protein) - TOLERANCE,
+      Math.round(foodData.Protein) + TOLERANCE,
+    ],
+    CarbohydratesRange: [
+      Math.round(foodData.Carbohydrates) - TOLERANCE,
+      Math.round(foodData.Carbohydrates) + TOLERANCE,
+    ],
+    FatsRange: [
+      Math.round(foodData.Fats) - TOLERANCE,
+      Math.round(foodData.Fats) + TOLERANCE,
+    ],
   });
 
   // If food is not already in our Database, we store food in Database
@@ -33,11 +47,19 @@ const checkFood = async (foodData) => {
         },
       }
     );
+    const normalizeServing = (desc) =>
+      desc
+        ?.toLowerCase()
+        .trim()
+        .replace(/^per\s+/i, "");
+
+    const targetServing = normalizeServing(foodData.servingDescription);
 
     const servingOptions = response.data.food.servings.serving;
-    const index = servingOptions.findIndex(
-      (serving) => serving.serving_description === foodData.servingDescription
-    );
+    const index = servingOptions.findIndex((serving) => {
+      const servingNormalized = normalizeServing(serving.serving_description);
+      return servingNormalized === targetServing;
+    });
 
     // Gets second serving option or first in the case that second is not present
     const food = response.data.food.servings.serving[index];
@@ -74,12 +96,24 @@ const checkFood = async (foodData) => {
 
     // Gets foodID of newly created Food in Food Table
     const finalFoodID = await foodService.getFoodID({
-      foodName: foodData_.foodName,
-      foodBrand: foodData_.foodBrand,
-      Calories: Math.round(foodData_.Calories),
-      Protein: Math.round(foodData_.Protein),
-      Carbohydrates: Math.round(foodData_.Carbohydrates),
-      Fats: Math.round(foodData_.Fats),
+      foodName: foodData.foodName,
+      foodBrand: foodData.foodBrand,
+      CaloriesRange: [
+        Math.round(foodData.Calories) - TOLERANCE,
+        Math.round(foodData.Calories) + TOLERANCE,
+      ],
+      ProteinRange: [
+        Math.round(foodData.Protein) - TOLERANCE,
+        Math.round(foodData.Protein) + TOLERANCE,
+      ],
+      CarbohydratesRange: [
+        Math.round(foodData.Carbohydrates) - TOLERANCE,
+        Math.round(foodData.Carbohydrates) + TOLERANCE,
+      ],
+      FatsRange: [
+        Math.round(foodData.Fats) - TOLERANCE,
+        Math.round(foodData.Fats) + TOLERANCE,
+      ],
     });
 
     return finalFoodID;

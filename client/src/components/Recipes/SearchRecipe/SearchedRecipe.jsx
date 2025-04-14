@@ -33,7 +33,7 @@ export default function SearchedRecipe({ searchedRecipeData }) {
         recipeName: recipeData.recipeName,
         Username: username,
         servings: quantity,
-        Calories: recipeData.Calories,
+        Calories: recipeData.totalCalories,
       });
 
       setQuantities((prev) => ({ ...prev, [recipeData.ID]: "" }));
@@ -58,41 +58,35 @@ export default function SearchedRecipe({ searchedRecipeData }) {
                 <div className="sm:w-65 md:w-80 lg:w-100">
                   <p>{recipe.recipeName}</p>{" "}
                 </div>
-                <div className="flex gap-2 items-center justify-center">
-                  <FaPlus 
+                <div className="flex gap-2 items-center justify-center pr-2 relative">
+                  <FaPlus
                     size={20}
-                  onClick={() => handleQuantity(recipe)} className="bg-[#1b9e4b] w-fit py-0.75 px-4 rounded" />
+                    onClick={() => handleQuantity(recipe)}
+                    className="bg-[#1b9e4b] w-fit py-0.75 px-4 rounded"
+                  />
+                  {open && (
+                    <PopupQuantity
+                      food={selectedRecipe}
+                      text={"Enter Quantity"}
+                      onClose={() => setOpen(false)}
+                      onSave={(quantity) => {
+                        logFood(selectedRecipe, quantity);
+                        setOpen(false);
+                      }}
+                    />
+                  )}
                 </div>
               </div>
               <div className="border-b-2 border-b-[#363B3D]">
                 <p>Servings: {recipe.totalServings}</p>
-                <p>
-                  Calories: {recipe.Calories} kcal
-                </p>
-                <p>
-                  Protein: {recipe.Protein}g
-                </p>
-                <p>
-                  Carbs: {recipe.Carbs}g
-                </p>
-                <p>
-                  Fat: {recipe.Fats}g
-                </p>
+                <p>Calories: {recipe.totalCalories} kcal</p>
+                <p>Protein: {recipe.totalProtein}g</p>
+                <p>Carbs: {recipe.totalCarbs}g</p>
+                <p>Fat: {recipe.totalFats}g</p>
               </div>
             </>
           ))
         : null}
-      {open && (
-        <PopupQuantity
-          food={selectedRecipe}
-          text={"Enter Quantity"}
-          onClose={() => setOpen(false)}
-          onSave={(quantity) => {
-            logFood(selectedRecipe, quantity);
-            setOpen(false);
-          }}
-        />
-      )}
     </div>
   );
 }

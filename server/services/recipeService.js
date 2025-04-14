@@ -1,6 +1,7 @@
 import foodService from "./foodService.js";
 import Recipe from "../models/recipeModel.js";
 import recipeFood from "../models/recipeFoodModel.js";
+import userRecipe from "../models/userRecipeModel.js";
 import { Sequelize } from "sequelize";
 
 // Calculates the macros for a recipe by finding nutrition data
@@ -190,6 +191,80 @@ const getSingleRecipe = async (recipeName, Calories) => {
   });
 };
 
+const getUserRecipe = async (recipeID, userID, Servings) => {
+  return await userRecipe.findOne({
+    where: {
+      recipeID: recipeID,
+      userID: userID,
+      Servings: Servings,
+    },
+  });
+};
+
+const getRecipeWithID = async (recipeID) => {
+  const recipe = await Recipe.findOne({
+    where: {
+      recipeID: recipeID,
+    },
+  });
+
+  if (recipe === null) {
+    return null;
+  }
+
+  return recipe;
+};
+
+const getUserRecipeData = async (userRecipe_ID) => {
+  const UserRecipe = await userRecipe.findOne({
+    where: { userRecipe_ID: userRecipe_ID },
+  });
+
+  if (UserRecipe === null) {
+    return null;
+  }
+
+  const recipeID = UserRecipe.recipeID;
+  const userID = UserRecipe.userID;
+  const recipeData = await getRecipeWithID(recipeID);
+
+  const loggedRecipeNutritionData = {
+    userID: userID,
+    Quantity: UserRecipe.Servings,
+    currentCalories: recipeData.totalCalories ?? 0,
+    currentProtein: recipeData.totalProtein ?? 0,
+    currentCarbohydrates: recipeData.totalCarbs ?? 0,
+    currentFats: recipeData.totalFats ?? 0,
+    currentFiber: recipeData.totalFiber ?? 0,
+    currentVitaminA: recipeData.totalVitaminA ?? 0,
+    currentVitaminB1: recipeData.totalVitaminB1 ?? 0,
+    currentVitaminB2: recipeData.totalVitaminB2 ?? 0,
+    currentVitaminB3: recipeData.totalVitaminB3 ?? 0,
+    currentVitaminB5: recipeData.totalVitaminB5 ?? 0,
+    currentVitaminB6: recipeData.totalVitaminB6 ?? 0,
+    currentVitaminB9: recipeData.totalVitaminB9 ?? 0,
+    currentVitaminB12: recipeData.totalVitaminB12 ?? 0,
+    currentVitaminC: recipeData.totalVitaminC ?? 0,
+    currentVitaminD: recipeData.totalVitaminD ?? 0,
+    currentVitaminE: recipeData.totalVitaminE ?? 0,
+    currentVitaminK: recipeData.totalVitaminK ?? 0,
+    currentCalcium: recipeData.totalCalcium ?? 0,
+    currentChlorine: recipeData.totalChlorine ?? 0,
+    currentCopper: recipeData.totalCopper ?? 0,
+    currentIron: recipeData.totalIron ?? 0,
+    currentIodine: recipeData.totalIodine ?? 0,
+    currentPotassium: recipeData.totalPotassium ?? 0,
+    currentMagnesium: recipeData.totalMagnesium ?? 0,
+    currentManganese: recipeData.totalManganese ?? 0,
+    currentSodium: recipeData.totalSodium ?? 0,
+    currentPhosphorus: recipeData.totalPhosphorus ?? 0,
+    currentSelenium: recipeData.totalSelenium ?? 0,
+    currentZinc: recipeData.totalZinc ?? 0,
+  };
+
+  return loggedRecipeNutritionData;
+};
+
 export default {
   calculateRecipeMacros,
   createRecipe,
@@ -199,4 +274,6 @@ export default {
   getRecipe,
   getRecipes,
   getSingleRecipe,
+  getUserRecipe,
+  getUserRecipeData,
 };

@@ -299,12 +299,12 @@ const validateEditLog = [
     .withMessage("Username is required"),
 
   body("Quantity")
-    .isInt({ gt: 0 })
-    .withMessage("Quantity must be a positive integer"),
+    .isFloat({ gt: 0 })
+    .withMessage("Quantity must be a positive number"),
 
   body("newQuantity")
-    .isInt({ gt: 0 })
-    .withMessage("newQuantity must be a positive integer"),
+    .isFloat({ gt: 0 })
+    .withMessage("newQuantity must be a positive number"),
 
   handleValidationErrors,
 ];

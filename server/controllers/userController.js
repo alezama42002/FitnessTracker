@@ -10,6 +10,8 @@ import {
   generateAccessToken,
   verifyToken,
 } from "../middleware/authentication.js";
+import request from "request";
+import qs from "querystring";
 
 dotenv.config();
 
@@ -441,7 +443,7 @@ const logRecipe = async (req, res) => {
       Quantity: quantity,
       currentCalories: recipe.dataValues.totalCalories ?? 0,
       currentProtein: recipe.dataValues.totalProtein ?? 0,
-      currentCarbohydrates: recipe.dataValues.totalCarbohydrates ?? 0,
+      currentCarbohydrates: recipe.dataValues.totalCarbs ?? 0,
       currentFats: recipe.dataValues.totalFats ?? 0,
       currentFiber: recipe.dataValues.totalFiber ?? 0,
       currentVitaminA: recipe.dataValues.totalVitaminA ?? 0,
@@ -513,15 +515,31 @@ const getUserRecipes = async (req, res) => {
 };
 
 const deleteRecipeLog = async (req, res) => {
-  const { recipeName, Calories, Username, Servings } = req.body;
-  const user = await userService.getUser(Username);
-  const userID = user.userID;
-
-  const recipe = await recipeService.getSingleRecipe(recipeName, Calories);
-  const recipeID = recipe.recipeID;
+  const { recipeID, Username, Servings } = req.body;
 
   try {
+    const user = await userService.getUser(Username);
+    const userID = user.userID;
+    const userRecipe = await recipeService.getUserRecipe(
+      recipeID,
+      userID,
+      Servings
+    );
+
+    if (userRecipe == null) {
+      res.status(404).json("Recipe Log Does not Exist");
+      return;
+    }
+
+    let loggedRecipeData = await recipeService.getUserRecipeData(
+      userRecipe.userRecipe_ID
+    );
+
+    loggedRecipeData.Quantity = -loggedRecipeData.Quantity;
+
     await userService.deleteRecipeLog(userID, recipeID, Servings);
+    await userService.updateUserNutrition(loggedRecipeData);
+
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });
@@ -529,18 +547,67 @@ const deleteRecipeLog = async (req, res) => {
 };
 
 const editRecipeLog = async (req, res) => {
-  const { recipeName, Calories, Username, Servings, newServings } = req.body;
-  const user = await userService.getUser(Username);
-  const userID = user.userID;
+  const { recipeID, Username, Servings, newServings } = req.body;
 
-  const recipe = await recipeService.getSingleRecipe(recipeName, Calories);
-  const recipeID = recipe.recipeID;
   try {
+    const user = await userService.getUser(Username);
+    const userID = user.userID;
+    const userRecipe = await recipeService.getUserRecipe(
+      recipeID,
+      userID,
+      Servings
+    );
+
+    if (userRecipe == null) {
+      res.status(404).json("Recipe Log Does not Exist");
+      return;
+    }
+
+    const originalQuantity = userRecipe.Servings;
+
+    let loggedRecipeData = await recipeService.getUserRecipeData(
+      userRecipe.userRecipe_ID
+    );
+
+    loggedRecipeData.Quantity = newServings - originalQuantity;
+
     await userService.editRecipeLog(userID, recipeID, Servings, newServings);
+    await userService.updateUserNutrition(loggedRecipeData);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: "Unexpected Internal Error!" });
   }
+};
+
+const newAPIKey = (req, res) => {
+  const clientId = process.env.FATSECRET_ClIENT_ID;
+  const clientSecret = process.env.FATSECRET_CLIENT_SECRET;
+  const credentials = Buffer.from(`${clientId}:${clientSecret}`).toString(
+    "base64"
+  );
+
+  const options = {
+    method: "POST",
+    url: "https://oauth.fatsecret.com/connect/token",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${credentials}`,
+    },
+    body: qs.stringify({
+      grant_type: "client_credentials",
+      scope: "basic",
+    }),
+  };
+
+  request(options, (error, response, body) => {
+    if (error) {
+      console.error("FatSecret token error:", error);
+      return res.status(500).json({ error: "Failed to retrieve token" });
+    }
+
+    const parsed = JSON.parse(body);
+    res.status(200).json(parsed);
+  });
 };
 
 export default {
@@ -565,4 +632,5 @@ export default {
   getUserRecipes,
   deleteRecipeLog,
   editRecipeLog,
+  newAPIKey,
 };

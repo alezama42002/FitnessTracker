@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import SearchedIngredient from "./SearchedIngredient";
+import Ingredients from "./Ingredients";
 
 export default function SearchIngredient({ addIngredient }) {
   const [searchItem, setSearchItem] = useState("");
@@ -14,10 +14,11 @@ export default function SearchIngredient({ addIngredient }) {
           "http://localhost:3000/api/food/Search",
           {
             Name: searchItem,
+            page: 1,
           }
         );
 
-        setSearchedFoods(response.data);
+        setSearchedFoods(response.data.foods);
       } catch (error) {
         console.log(error);
       }
@@ -36,8 +37,9 @@ export default function SearchIngredient({ addIngredient }) {
         />
       </div>
       <div className="searchFoodText flex flex-col items-center justify-center text-[#AFA99E] pt-8 gap-3 pb-6">
-        <SearchedIngredient
+        <Ingredients
           searchedFoodData={searchedFoods}
+          searchItem={searchItem}
           addIngredient={addIngredient}
         />
       </div>

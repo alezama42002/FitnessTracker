@@ -345,6 +345,7 @@ const getUserRecipes = async (username) => {
         if (recipe) {
           const servings = recipeData.Servings;
           return {
+            recipeID: recipe.recipeID,
             Name: recipe.recipeName,
             Protein: Math.round(recipe.totalProtein),
             Carbs: Math.round(recipe.totalCarbs),

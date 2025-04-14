@@ -7,7 +7,7 @@ export default function SearchRecipe() {
   const [searchItem, setSearchItem] = useState("");
   const [searchedRecipes, setSearchedRecipes] = useState([]);
 
-  const searchFood = async (event) => {
+  const SearchRecipe = async (event) => {
     if (event.key === "Enter") {
       try {
         const response = await axios.post(
@@ -32,7 +32,7 @@ export default function SearchRecipe() {
           placeholder="Search for recipe..."
           className="w-full focus:outline-none"
           onChange={(event) => setSearchItem(event.target.value)}
-          onKeyDown={searchFood}
+          onKeyDown={SearchRecipe}
         />
       </div>
       <div className="searchFoodText flex flex-col items-center justify-center text-[#AFA99E] pt-8 gap-3 pb-6">

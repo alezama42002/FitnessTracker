@@ -1,7 +1,7 @@
 import React from "react";
 import Input from "../../Input";
 import { useState } from "react";
-import SearchIngredient from "./Ingredients/SearchIngredient";
+import Ingredients from "./Ingredients/SearchIngredient";
 import axios from "axios";
 
 export default function AddRecipe() {
@@ -21,19 +21,24 @@ export default function AddRecipe() {
   };
 
   const addIngredient = (food, quantity) => {
-    const macros = food.macros
-      .match(/\d+(\.\d+)?/g)
-      .map((num) => Math.round(parseFloat(num)));
+    const [servingSizePart, macroPart] = food.macros.split("-");
+
+    const servingSize = servingSizePart.trim();
+
+    const macros =
+      macroPart
+        ?.match(/\d+(\.\d+)?/g)
+        ?.map((num) => Math.round(parseFloat(num))) || [];
 
     const foodData = {
       foodID: food.ID,
-      servingSize: macros[0],
+      servingSize: servingSize,
       foodName: food.name,
       foodBrand: food.brand,
-      Calories: macros[1],
-      Protein: macros[4],
-      Carbohydrates: macros[3],
-      Fats: macros[2],
+      Calories: macros[0],
+      Protein: macros[3],
+      Carbohydrates: macros[2],
+      Fats: macros[1],
       Quantity: quantity,
     };
     setIngredientData((prevIngredients) => [...prevIngredients, foodData]);
@@ -41,22 +46,25 @@ export default function AddRecipe() {
   };
 
   const addRecipe = async () => {
-    const storedToken = localStorage.getItem("accessToken");
-
-    if (storedToken) {
-      const base64Url = storedToken.split(".")[1];
-      const decodedData = JSON.parse(atob(base64Url));
-      setUsername(decodedData.name);
-    }
+    const Username = localStorage.getItem("Username");
+    const token = localStorage.getItem("accessToken");
 
     try {
-      await axios.post("http://localhost:3000/api/recipe/AddRecipe", {
-        Username: username,
-        foodsData: ingredientData,
-        recipeName: formData.recipeName,
-        recipeDescription: formData.recipeDescription,
-        totalServings: formData.totalServings,
-      });
+      await axios.post(
+        "http://localhost:3000/api/recipe/AddRecipe",
+        {
+          Username: Username,
+          foodsData: ingredientData,
+          recipeName: formData.recipeName,
+          recipeDescription: formData.recipeDescription,
+          totalServings: formData.totalServings,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +74,7 @@ export default function AddRecipe() {
     <div className="mx-2">
       <h1 className="text-[22px] text-white pt-4">Create Recipe </h1>
       <div className="bg-[#19212C] text-white mt-6 p-6 rounded-[8px]">
-        <div className="flex flex-col gap-4">
+        <div>
           <Input
             inputName="Recipe Name"
             field="recipeName"
@@ -82,9 +90,9 @@ export default function AddRecipe() {
             field="totalServings"
             sendData={handleInputChange}
           />
-          <div>
-            <h1 className="pb-2">Search Ingredient</h1>
-            <SearchIngredient addIngredient={addIngredient} />
+          <div className="pb-6">
+            <h1>Search Ingredient</h1>
+            <Ingredients addIngredient={addIngredient} />
           </div>
         </div>
         <button
