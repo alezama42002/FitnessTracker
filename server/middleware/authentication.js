@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
+// Authenticates user to make sure they should have access to the api calls
+// that need authorization
 const authenticateUser = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -15,6 +17,7 @@ const authenticateUser = (req, res, next) => {
   });
 };
 
+// Verifys that the token is still valid
 const verifyToken = (token) => {
   try {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
@@ -24,7 +27,9 @@ const verifyToken = (token) => {
   }
 };
 
+// Generates a new accessToken
 const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1hr" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "2hr" });
 };
+
 export { authenticateUser, verifyToken, generateAccessToken };

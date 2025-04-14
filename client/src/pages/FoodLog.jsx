@@ -2,8 +2,8 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import { FiSearch } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa6";
-import SearchFood from "../components/SearchFood";
-import AddFood from "../components/AddFood";
+import SearchFood from "../components/Foods/SearchFood/SearchFood";
+import AddFood from "../components/Foods/AddFood/AddFood";
 import { useState } from "react";
 
 export default function FoodLog() {
@@ -16,7 +16,7 @@ export default function FoodLog() {
   return (
     <div className="bg-[#0E131F] h-full">
       <Navbar />
-      <div className="foodLogContainer text-white mx-16 mt-8  pb-16">
+      <div className="foodLogContainer text-white mx-16 mt-8 mb-16">
         <h1 className="text-[22px]">Foods</h1>
         <div className="foodLogFlexContainer flex mt-8 items-center text-[#AFA99E] text-[16px] border-b-2 border-b-[#363B3D] mb-6">
           <div

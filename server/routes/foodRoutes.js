@@ -9,15 +9,23 @@ import {
   validateDeleteFood,
   validateEditFood,
   validateRecommend,
+  validateGetFood,
 } from "../middleware/foodEndpointsValidator.js";
 import { authenticateUser } from "../middleware/authentication.js";
+import rateLimiter from "../middleware/rateLimiter.js";
 
 // Searches for specific food in database and if not present give ability to enter
-router.post("/Search", validateSearch, foodController.searchFoodByName);
+router.post(
+  "/Search",
+  rateLimiter,
+  validateSearch,
+  foodController.searchFoodByName
+);
 
 // Adds food to database
 router.post(
   "/AddFood",
+  rateLimiter,
   authenticateUser,
   validateAddFood,
   foodController.addFood
@@ -26,6 +34,7 @@ router.post(
 // Deletes food from database
 router.delete(
   "/DeleteFood",
+  rateLimiter,
   authenticateUser,
   validateDeleteFood,
   foodController.deleteFood
@@ -34,14 +43,26 @@ router.delete(
 // Edit food's nutritional values in the database
 router.patch(
   "/EditFood",
+  rateLimiter,
   authenticateUser,
   validateEditFood,
   foodController.editFood
 );
 
-router.post("/GetFood", foodController.getFoodByName);
-
 // Recommend Foods based on requirements from user such as "High Protein"
-router.post("/Recommend", validateRecommend, foodController.recommendFood);
+router.post(
+  "/Recommend",
+  rateLimiter,
+  validateRecommend,
+  foodController.recommendFood
+);
+
+// Gets specific food from database
+router.post(
+  "/GetFood",
+  rateLimiter,
+  validateGetFood,
+  foodController.getFoodByName
+);
 
 export default router;

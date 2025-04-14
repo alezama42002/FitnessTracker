@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import { handleValidationErrors } from "./userEndpointsValidator.js";
 
 const validateSearch = [
@@ -22,7 +22,7 @@ const validateAddFood = [
     .isLength({ min: 1, max: 100 })
     .withMessage("Food name must be between 1 and 100 characters"),
 
-  body("foodName")
+  body("foodBrand")
     .exists()
     .withMessage("Food brand is required")
     .isString()
@@ -35,6 +35,14 @@ const validateAddFood = [
     .withMessage("Serving size is required")
     .isInt({ min: 1, max: 2000 })
     .withMessage("Serving size must be between 1 and 2000 grams"),
+
+  body("servingDescription")
+    .exists()
+    .withMessage("Serving description is required")
+    .isString()
+    .withMessage("Serving description must be a string")
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Serving description must be between 1 and 100 characters"),
 
   body("Calories")
     .exists()
@@ -122,9 +130,74 @@ const validateEditFood = [
     .isObject()
     .withMessage("Updated fields must be an object"),
 
-  body("updatedFields.*")
-    .isFloat({ min: 0, max: 10000 })
-    .withMessage("Each updated field must be a number between 0 and 10,000"),
+  // String fields
+  body("updatedFields.foodBrand")
+    .optional()
+    .isString()
+    .withMessage("foodBrand must be a string"),
+
+  body("updatedFields.foodName")
+    .optional()
+    .isString()
+    .withMessage("foodName must be a string"),
+
+  body("updatedFields.Description")
+    .optional()
+    .isString()
+    .withMessage("Description must be a string"),
+
+  // Integer fields
+  body("updatedFields.servingSize")
+    .optional()
+    .isInt({ min: 1, max: 10000 })
+    .withMessage("servingSize must be an integer between 1 and 10,000"),
+
+  body("updatedFields.Calories")
+    .optional()
+    .isInt({ min: 0, max: 10000 })
+    .withMessage("Calories must be an integer between 0 and 10,000"),
+
+  body("updatedFields.Protein")
+    .optional()
+    .isInt({ min: 0, max: 1000 })
+    .withMessage("Protein must be an integer between 0 and 1,000"),
+
+  body("updatedFields.Carbohydrates")
+    .optional()
+    .isInt({ min: 0, max: 1000 })
+    .withMessage("Carbohydrates must be an integer between 0 and 1,000"),
+
+  body("updatedFields.Fats")
+    .optional()
+    .isInt({ min: 0, max: 1000 })
+    .withMessage("Fats must be an integer between 0 and 1,000"),
+
+  body("updatedFields.Fiber")
+    .optional()
+    .isInt({ min: 0, max: 500 })
+    .withMessage("Fiber must be an integer between 0 and 500"),
+
+  // Vitamins & Minerals (general range 0–1000)
+  ...[
+    "VitaminA",
+    "VitaminB6",
+    "VitaminB12",
+    "VitaminC",
+    "VitaminD",
+    "VitaminE",
+    "VitaminK",
+    "Calcium",
+    "Iron",
+    "Magnesium",
+    "Potassium",
+    "Sodium",
+    "Zinc",
+  ].map((field) =>
+    body(`updatedFields.${field}`)
+      .optional()
+      .isInt({ min: 0, max: 1000 })
+      .withMessage(`${field} must be an integer between 0 and 1,000`)
+  ),
 
   handleValidationErrors,
 ];
@@ -143,10 +216,31 @@ const validateRecommend = [
   handleValidationErrors,
 ];
 
+const validateGetFood = [
+  body("foodName")
+    .exists()
+    .withMessage("Food name is required")
+    .isString()
+    .withMessage("Food name must be a string")
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Food name must be between 1 and 100 characters"),
+
+  body("foodBrand")
+    .exists()
+    .withMessage("Food brand is required")
+    .isString()
+    .withMessage("Food brand must be a string")
+    .isLength({ min: 1, max: 100 })
+    .withMessage("Food brand must be between 1 and 100 characters"),
+
+  handleValidationErrors,
+];
+
 export {
   validateSearch,
   validateAddFood,
   validateDeleteFood,
   validateEditFood,
   validateRecommend,
+  validateGetFood,
 };

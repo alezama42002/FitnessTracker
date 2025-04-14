@@ -14,10 +14,11 @@ const createRecipe = async (req, res) => {
     const userID = (await userService.getUser(Username)).userID;
     let finalFoodIDs = [];
 
+    // Checks to see if the food exists if not it's created
     for (const food of foodsData) {
       const foodID = await utilityFunctions.checkFood({
         foodID: food.foodID,
-        servingSize: food.servingSize,
+        servingDescription: food.servingSize,
         foodName: food.foodName,
         foodBrand: food.foodBrand,
         Calories: food.Calories,
@@ -32,6 +33,7 @@ const createRecipe = async (req, res) => {
       });
     }
 
+    // Calculates all of the macro/micro totals for the recipe
     const recipeMacros = await recipeService.calculateRecipeMacros(
       finalFoodIDs
     );
@@ -44,6 +46,8 @@ const createRecipe = async (req, res) => {
       totalServings
     );
 
+    // Creates the connections so that it can be determined which foods
+    // belong to the recipe incase it's needed in the future
     const recipe = await recipeService.getRecipe(recipeName);
     const recipeID = await recipe.recipeID;
     await recipeService.createRecipeFood(finalFoodIDs, recipeID);
@@ -54,34 +58,57 @@ const createRecipe = async (req, res) => {
   }
 };
 
+// Deletes recipe from the database based on the name given by the user
 const deleteRecipe = async (req, res) => {
-  await recipeService.deleteRecipe(req.body.recipeName);
-
-  res.status(204).send();
+  try {
+    await recipeService.deleteRecipe(req.body.recipeName);
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
+// Edits recipe in the database according to the changes given by the user
 const editRecipe = async (req, res) => {
   const { updatedFields, recipeName } = req.body;
 
-  await recipeService.editRecipe(updatedFields, recipeName);
-  res.status(200).send();
+  try {
+    await recipeService.editRecipe(updatedFields, recipeName);
+    res.status(200).send();
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
+// Gets all recipes that have the name given by the user
 const getRecipeByName = async (req, res) => {
-  const recipe = await recipeService.getRecipe(req.body.recipeName);
-  res.status(200).json({
-    recipeName: recipe.recipeName,
-    Calories: recipe.totalCalories,
-    Protein: recipe.totalProtein,
-    Carbs: recipe.totalCarbohydrates,
-    Fat: recipe.totalFats,
-  });
+  try {
+    const recipes = await recipeService.getRecipe(req.body.recipeName);
+
+    const formattedRecipes = recipes.map((recipe) => ({
+      recipeName: recipe.recipeName,
+      totalServings: recipe.totalServings,
+      totalCalories: recipe.totalCalories,
+      totalProtein: recipe.totalProtein,
+      totalCarbs: recipe.totalCarbs || 0,
+      totalFats: recipe.totalFats,
+    }));
+
+    res.status(200).json(formattedRecipes);
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
+// Gets all recipes from database thats macros and micronutrients meet the
+// requirements of the user
 const getReccomendedRecipes = async (req, res) => {
-  const recipes = await recipeService.getRecipes(req.body.macroRequest);
-
-  res.status(200).json(recipes);
+  try {
+    const recipes = await recipeService.getRecipes(req.body.MacroRequest);
+    res.status(200).json(recipes);
+  } catch (error) {
+    res.status(500).json({ error: "Unexpected Internal Error!" });
+  }
 };
 
 export default {

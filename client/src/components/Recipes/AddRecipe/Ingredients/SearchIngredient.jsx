@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import SearchedFood from "./SearchedFood";
+import Ingredients from "./Ingredients";
 
-export default function SearchFood() {
+export default function SearchIngredient({ addIngredient }) {
   const [searchItem, setSearchItem] = useState("");
   const [searchedFoods, setSearchedFoods] = useState([]);
 
@@ -14,10 +14,11 @@ export default function SearchFood() {
           "http://localhost:3000/api/food/Search",
           {
             Name: searchItem,
+            page: 1,
           }
         );
 
-        setSearchedFoods(response.data);
+        setSearchedFoods(response.data.foods);
       } catch (error) {
         console.log(error);
       }
@@ -25,20 +26,22 @@ export default function SearchFood() {
   };
 
   return (
-    <div className="bg-[#19212C] px-8 mt-6 rounded-[8px] pt-6">
-      <div className="bg-[#2C3441] rounded-md py-2 pl-4">
+    <div className="bg-[#19212C]  rounded-[8px]">
+      <div className="bg-[#2C3441] rounded-md py-2 pl-3">
         <input
           type="text"
-          placeholder="Search for food items..."
+          placeholder="Search for ingredients..."
           className="w-full focus:outline-none"
           onChange={(event) => setSearchItem(event.target.value)}
           onKeyDown={searchFood}
         />
       </div>
       <div className="searchFoodText flex flex-col items-center justify-center text-[#AFA99E] pt-8 gap-3 pb-6">
-      <SearchedFood searchedFoodData={searchedFoods} />
-        <p>Search for foods to add to your profile</p>
-        <p>Try searching for items like 'chicken', 'apple', or 'rice'</p>
+        <Ingredients
+          searchedFoodData={searchedFoods}
+          searchItem={searchItem}
+          addIngredient={addIngredient}
+        />
       </div>
     </div>
   );

@@ -1,13 +1,13 @@
 import React from "react";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "../ProgressBar";
 
 export default function MicroNutrients({ nutritionData }) {
   return (
-    <div className="bg-[#19212C] rounded-[16px] mr-[40px] pb-6 ">
+    <div className="bg-[#19212C] rounded-[16px] pb-6 ">
       <div className="px-6 text-white pb-6 pt-4">
         <h1 className=" font-semibold">Micronutrients</h1>
       </div>
-      <div className="px-6 flex flex-col gap-4 ">
+      <div className="px-6 flex flex-col gap-5 ">
         <ProgressBar
           color="#1B9E4B"
           currentValue={nutritionData[0]}

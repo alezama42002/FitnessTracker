@@ -2,18 +2,18 @@
 
 @theme {
   --breakpoint-sm: 22rem;
-  --breakpoint-lg: 63rem;
+  --breakpoint--slg: 64.063rem;
 }
 
 body {
   background-color: #0e131f;
 }
 
-
-.nav-links.visible{
+.nav-links.visible {
   background-color: #19212c;
   display: flex;
   flex-direction: column;
+  z-index: 1;
   align-items: center;
   position: absolute;
   top: 90px;
@@ -22,7 +22,6 @@ body {
   padding: 10px;
   border-radius: 8px;
   transition: 1s linear;
-
 }
 
 .micronutientsContainer.hide {
@@ -32,8 +31,18 @@ body {
 .micronutrientsArrow.rotate {
   transform: rotate(180deg);
 }
+@media screen and (max-width: 548px) {
+  .suggestionBtn-Container button {
+    justify-content: space-evenly;
+    font-size: 12px;
+    padding: 4px 6px;
+    gap: 2px;
+  }
+}
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
+  /* navbar  */
+
   .menu-icon {
     display: block;
     cursor: pointer;
@@ -43,7 +52,8 @@ body {
     display: block;
   }
 
-  .nav-links, .profile-icon {
+  .nav-links,
+  .profile-icon {
     display: none;
   }
 
@@ -55,8 +65,11 @@ body {
     position: absolute;
   }
 
+  /* navbar */
+
   .dashboardContainer {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
 
   .foodLogContainer {
@@ -70,10 +83,26 @@ body {
   .searchFoodText {
     font-size: 0.9em;
     align-items: flex-start;
+    padding-top: 5px;
   }
 
-  .addFoodContainer > button{
+  .addFoodContainer > button {
     font-size: 14px;
   }
 
+
+  .suggestion.plus {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .db-second-col {
+    margin-top: 0;
+  }
+
+  .PopupWeight-btn {
+    display: block;
+  }
+  
 }

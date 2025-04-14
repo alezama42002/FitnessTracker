@@ -49,3 +49,6 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+
+# Ignore tests folder in server directory
+server/tests/

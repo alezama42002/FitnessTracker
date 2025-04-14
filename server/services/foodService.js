@@ -1,14 +1,11 @@
 import { Sequelize } from "sequelize";
 import Food from "../models/foodModel.js";
 import userFood from "../models/userFoodModel.js";
+import { Op } from "sequelize";
 
 // Adds food to Database (Foods Table)
 const addFoodtoDB = async (foodData) => {
-  try {
-    return await Food.create(foodData);
-  } catch (error) {
-    console.error("Issue adding food to DB:", error);
-  }
+  return await Food.create(foodData);
 };
 
 // Deletes food from Database (Foods Table) using the foodID and foodName
@@ -81,16 +78,23 @@ const getFood = async (foodID) => {
 // Gets the foodID for a food based on some of the nutritional information and
 // returns false if not in Database
 const getFoodID = async (foodData) => {
-  const { foodName, foodBrand, Calories, Protein, Carbohydrates, Fats } =
-    foodData;
+  const {
+    foodName,
+    foodBrand,
+    CaloriesRange,
+    ProteinRange,
+    CarbohydratesRange,
+    FatsRange,
+  } = foodData;
 
   const food = await Food.findOne({
     where: {
-      foodBrand: foodBrand,
-      foodName: foodName,
-      Protein: Protein,
-      Carbohydrates: Carbohydrates,
-      Fats: Fats,
+      foodName,
+      foodBrand,
+      Calories: { [Op.between]: CaloriesRange },
+      Protein: { [Op.between]: ProteinRange },
+      Carbohydrates: { [Op.between]: CarbohydratesRange },
+      Fats: { [Op.between]: FatsRange },
     },
   });
 
@@ -101,20 +105,27 @@ const getFoodID = async (foodData) => {
   }
 };
 
+// Gets all foods that match the name provided
 const getFoods = async (foodName) => {
-  const [foods, created] = await Food.findAll({
-    where: { foodName },
+  const foods = await Food.findAll({
+    where: {
+      foodName: {
+        [Op.like]: `%${foodName}%`,
+      },
+    },
   });
 
   return foods;
 };
 
+// Deletes a userFood connection in the userFoods table
 const deleteUserFood = async (userFood_ID) => {
   await userFood.destroy({
     where: { userFood_ID: userFood_ID },
   });
 };
 
+// Gets all the data assosciated with a specific userFood_ID
 const getUserFoodData = async (userFood_ID) => {
   const food = await userFood.findOne({
     where: { userFood_ID: userFood_ID },
@@ -182,10 +193,23 @@ const editFood = async (foodID, updatedFields) => {
   return await Food.findByPk(foodID);
 };
 
+// Gets a single food based on the foodName and foodBrand
 const getFoodByName = async (foodName, foodBrand) => {
   return await Food.findOne({
     where: { foodName: foodName, foodBrand: foodBrand },
   });
+};
+
+const getUserFoodID = async (userID, foodID, Quantity) => {
+  const food = await userFood.findOne({
+    where: { userID: userID, foodID: foodID, Quantity: Quantity },
+  });
+
+  if (food === null) {
+    return false;
+  } else {
+    return food.userFood_ID;
+  }
 };
 
 export default {
@@ -199,4 +223,5 @@ export default {
   getUserFoodData,
   editFood,
   getFoodByName,
+  getUserFoodID,
 };

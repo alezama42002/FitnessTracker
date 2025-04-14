@@ -1,5 +1,7 @@
 import User from "../models/userModel.js";
 import Food from "../models/foodModel.js";
+import userRecipe from "../models/userRecipeModel.js";
+import Recipe from "../models/recipeModel.js";
 import userFood from "../models/userFoodModel.js";
 import userNutritionProgress from "../models/userDailyNutritionModel.js";
 import Weight from "../models/weightModel.js";
@@ -38,7 +40,7 @@ const addFoodforUser = async (logData) => {
 
 // Adds logged foods nutritional information to users daily totals
 const updateUserNutrition = async (userDailyNutritionData) => {
-  const { Quantity, adjustmentType } = userDailyNutritionData;
+  const { Quantity } = userDailyNutritionData;
 
   const date = new Date();
   const month = date.getMonth() + 1; // Months are 0-based
@@ -153,26 +155,31 @@ const getUserFoods = async (userID) => {
   // Adds a foodID "x" times to the foodIDs array according to the quantity of
   // the logged good
   userFoodsData.forEach((food) => {
-    for (let x = 0; x < food.dataValues.Quantity; x++) {
-      foodIDs.push(food.foodID);
-    }
+    foodIDs.push({
+      foodID: food.foodID,
+      Quantity: food.Quantity,
+      creationTime: moment(food.createdAt).format("h:mm A"),
+    });
   });
 
   // For each of the foodIDs we get the food assosciated to that foodID and then
   // retrieve the necessary data
-  const foodDataPromises = foodIDs.map(async (foodID) => {
+  const foodDataPromises = foodIDs.map(async (food) => {
     const foodData = await Food.findOne({
       where: {
-        foodID: foodID,
+        foodID: food.foodID,
       },
     });
 
     const foodItem = {
-      foodName: foodData.foodName,
+      Name: foodData.foodName,
       Calories: foodData.Calories,
       Protein: foodData.Protein,
       Carbs: foodData.Carbohydrates,
       Fat: foodData.Fats,
+      Quantity: food.Quantity,
+      logTime: food.creationTime,
+      foodID: foodData.foodID,
     };
 
     return foodItem;
@@ -183,23 +190,47 @@ const getUserFoods = async (userID) => {
   return foodItems;
 };
 
+// Logs a weight for the user
 const addWeight = async (username, weight) => {
   const user = await getUser(username);
   const userID = user.userID;
 
+  // Formats the date for storage in the database
   const today = new Date();
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
   const year = String(today.getFullYear()).slice(-2);
   const formattedDate = `${month}/${day}/${year}`;
 
-  return await Weight.create({
-    Weight: weight,
-    userID: userID,
-    logDate: formattedDate,
-  });
+  if (
+    await Weight.findOne({
+      where: {
+        userID: userID,
+        logDate: formattedDate,
+      },
+    })
+  ) {
+    return await Weight.update(
+      {
+        Weight: weight,
+      },
+      {
+        where: {
+          userID: userID,
+          logDate: formattedDate,
+        },
+      }
+    );
+  } else {
+    return await Weight.create({
+      Weight: weight,
+      userID: userID,
+      logDate: formattedDate,
+    });
+  }
 };
 
+// Gets all of the user weights associated with the week of the inputted date
 const getUserWeights = async (Username, inputDate) => {
   const user = await getUser(Username);
   const userID = user.userID;
@@ -230,9 +261,134 @@ const getUserWeights = async (Username, inputDate) => {
     },
   });
 
-  const weeksWeights = weeksWeightLogs.map((weight) => weight.Weight);
+  const weightMap = {};
+  weeksWeightLogs.forEach((entry) => {
+    weightMap[entry.logDate] = entry.Weight;
+  });
+
+  const weeksWeights = weekArray.map((date) => ({
+    logDate: date,
+    Weight: weightMap[date] ?? null,
+  }));
 
   return weeksWeights;
+};
+
+// Makes the connection to the recipe for a user
+const addRecipeForUser = async (recipeID, userID, servings) => {
+  await userRecipe.create({
+    userID: userID,
+    Servings: servings,
+    recipeID: recipeID,
+  });
+};
+
+// Alters the macros of the user in the Users table
+const changeUserMacros = async (username, macros) => {
+  const user = await getUser(username);
+  const userID = user.userID;
+
+  await user.update(
+    {
+      calorieGoal: macros.Calories,
+      proteinGoal: macros.Protein,
+      carbGoal: macros.Carbohydrates,
+      fatGoal: macros.Fat,
+    },
+    {
+      where: {
+        userID: userID,
+      },
+    }
+  );
+};
+
+const getUserRecipes = async (username) => {
+  const user = await getUser(username);
+  const userID = user.userID;
+
+  // Variables for selecting only foods logged in the current day
+  const startOfDay = moment().startOf("day").toDate();
+  const endOfDay = moment().endOf("day").toDate();
+
+  const userRecipes = await userRecipe.findAll({
+    where: {
+      createdAt: {
+        [Op.gte]: startOfDay,
+        [Op.lte]: endOfDay,
+      },
+      userID: userID,
+    },
+  });
+
+  if (userRecipes.length != 0) {
+    const recipesData = userRecipes.map((recipe) => ({
+      recipeID: recipe.recipeID,
+      Servings: recipe.Servings,
+      creationTime: moment(recipe.createdAt).format("h:mm A"),
+    }));
+
+    const recipeIDs = recipesData.map((recipe) => recipe.recipeID);
+
+    const recipes = await Recipe.findAll({
+      where: {
+        recipeID: {
+          [Op.in]: recipeIDs,
+        },
+      },
+    });
+
+    const recipeData = recipesData
+      .map((recipeData) => {
+        const recipe = recipes.find((r) => r.recipeID === recipeData.recipeID);
+
+        if (recipe) {
+          const servings = recipeData.Servings;
+          return {
+            recipeID: recipe.recipeID,
+            Name: recipe.recipeName,
+            Protein: Math.round(recipe.totalProtein),
+            Carbs: Math.round(recipe.totalCarbs),
+            Calories: Math.round(recipe.totalCalories),
+            Fat: Math.round(recipe.totalFats),
+            Servings: servings,
+            logTime: recipeData.creationTime,
+          };
+        }
+        return null;
+      })
+      .filter((item) => item !== null);
+
+    return recipeData;
+  } else return null;
+};
+
+const deleteRecipeLog = async (userID, recipeID, Servings) => {
+  const recipe = await userRecipe.findOne({
+    where: {
+      userID: userID,
+      recipeID: recipeID,
+      Servings: Servings,
+    },
+  });
+
+  if (recipe) {
+    await recipe.destroy();
+  }
+};
+
+const editRecipeLog = async (userID, recipeID, Servings, newServings) => {
+  const recipe = await userRecipe.findOne({
+    where: {
+      userID: userID,
+      recipeID: recipeID,
+      Servings: Servings,
+    },
+  });
+
+  if (recipe) {
+    await recipe.update({ Servings: newServings });
+  }
 };
 
 export default {
@@ -247,4 +403,9 @@ export default {
   getUserCurrentNutrition,
   addWeight,
   getUserWeights,
+  addRecipeForUser,
+  changeUserMacros,
+  getUserRecipes,
+  deleteRecipeLog,
+  editRecipeLog,
 };

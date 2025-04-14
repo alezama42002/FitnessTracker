@@ -26,6 +26,7 @@ export default function AccountInformation() {
     "Professional Athlete",
   ];
 
+  // Handles the changes to any of the inputs
   const handleInputChange = (field, value) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -33,6 +34,7 @@ export default function AccountInformation() {
     }));
   };
 
+  // Takes care of the select input changes
   const handleSelectChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -41,9 +43,12 @@ export default function AccountInformation() {
     }));
   };
 
+  // Handles the collection and structuring of the needed data for
+  // creating a user
   const submitInformation = async (event) => {
     event.preventDefault();
 
+    // Gets needed user data from SignUp page
     const signUpFormData = JSON.parse(localStorage.getItem("SignUp-FormData"));
 
     const newUserData = {
@@ -56,21 +61,46 @@ export default function AccountInformation() {
       lastName: formData.LastName,
       activityLevel: formData.ActivityLevel,
       Gender: formData.Gender,
+      calorieGoal: 0,
+      proteinGoal: 0,
+      carbGoal: 0,
+      fatGoal: 0,
     };
 
-    try {
-      await axios.post("http://localhost:3000/api/user/AddUser", newUserData);
+    if (
+      formData.FirstName === "" ||
+      formData.LastName === "" ||
+      formData.Gender === "" ||
+      formData.Age === "" ||
+      formData.Weight === "" ||
+      formData.Height === "" ||
+      formData.ActivityLevel === ""
+    )
+      alert("All Inputs are Required");
+    else {
+      try {
+        await axios.post("http://localhost:3000/api/user/AddUser", newUserData);
 
-      localStorage.removeItem("SignUp-FormData");
-      navigate("/Auth/Login");
-    } catch (error) {
-      return `Error: ${error}`;
+        localStorage.removeItem("SignUp-FormData");
+        navigate("/Auth/Login");
+      } catch (error) {
+        // Error handling for all possible errors
+        if (error.response) {
+          if (error.response.status === 422) {
+            const errorMessage = error.response.data.errors.msg;
+            alert(errorMessage);
+          } else if (error.response.status === 500) {
+            console.log(error);
+            alert("An unexpected error occurred. Please try again.");
+          }
+        }
+      }
     }
   };
 
   return (
-    <div className="bg-[#0E131F] flex justify-center items-center h-screen">
-      <div className=" w-full mx-115 lg:mx-90">
+    <div className="bg-[#0E131F] flex justify-center items-center my-14">
+      <div className=" w-full mx-90 sm:max-lg:mx-10 lg:mx-30">
         <form
           action="#"
           method="POST"
@@ -98,12 +128,12 @@ export default function AccountInformation() {
           />
           <Input inputName="Age" field="Age" sendData={handleInputChange} />
           <Input
-            inputName="Weight"
+            inputName="Weight (kg)"
             field="Weight"
             sendData={handleInputChange}
           />
           <Input
-            inputName="Height"
+            inputName="Height (cm)"
             field="Height"
             sendData={handleInputChange}
           />
@@ -116,7 +146,7 @@ export default function AccountInformation() {
             <button
               type="button"
               onClick={submitInformation}
-              className="bg-[#1B9E4B] rounded-[8px] px-14 mt-2 text-white font-normal text-[20px]"
+              className="bg-[#1B9E4B] rounded-[8px] px-14 py-2 mt-2 text-white font-normal text-[16px]"
             >
               Submit
             </button>

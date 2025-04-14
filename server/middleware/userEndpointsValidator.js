@@ -86,7 +86,8 @@ const validateMacroRequest = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Username must be at least 4 characters long"),
 
   body("Goal")
     .exists()
@@ -111,39 +112,61 @@ const validateAddUser = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Username must be at least 4 characters long")
+    .matches(/[a-zA-Z]/)
+    .withMessage("Username must contain at least one letter"),
+
+  body("Password")
+    .exists()
+    .withMessage("Password is required")
+    .isString()
+    .withMessage("Password must be a string")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long")
+    .matches(/^(?=.*[a-zA-Z])(?=.*\d).{6,}$/)
+    .withMessage("Password must contain at least one letter and one number"),
 
   body("Height")
     .exists()
     .withMessage("Height is required")
     .isInt({ min: 0, max: 300 })
-    .withMessage("Height must be between 0 and 300 cm"),
+    .withMessage("Height must be an integer between 0 and 300 cm")
+    .toInt(),
 
   body("Weight")
     .exists()
     .withMessage("Weight is required")
     .isInt({ min: 0, max: 400 })
-    .withMessage("Weight must be between 0 and 400 kg"),
+    .withMessage("Weight must be an integer between 0 and 400 kg")
+    .toInt(),
 
   body("Age")
     .exists()
     .withMessage("Age is required")
     .isInt({ min: 0, max: 150 })
-    .withMessage("Age must be between 0 and 150 years"),
+    .withMessage("Age must be an integer between 0 and 150 years")
+    .toInt(),
 
   body("firstName")
     .exists()
     .withMessage("First Name is required")
     .isString()
     .withMessage("First Name must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 3, max: 30 })
+    .withMessage("First Name must be at least 3 characters long")
+    .matches(/^[A-Za-z]+$/)
+    .withMessage("First Name must contain only letters"),
 
   body("lastName")
     .exists()
     .withMessage("Last Name is required")
     .isString()
     .withMessage("Last Name must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 3, max: 30 })
+    .withMessage("Last Name must be at least 3 characters long")
+    .matches(/^[A-Za-z]+$/)
+    .withMessage("Last Name must contain only letters"),
 
   body("activityLevel")
     .exists()
@@ -165,7 +188,6 @@ const validateAddUser = [
     .withMessage("Gender is required")
     .isIn(["Male", "Female"])
     .withMessage("Gender must be 'Male' or 'Female'"),
-
   handleValidationErrors,
 ];
 
@@ -176,18 +198,34 @@ const validateDeleteUser = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Username must be at least 4 characters long"),
 
   handleValidationErrors,
 ];
 
-const validateGetUserFoods = [
+const validateCheckUsername = [
+  // Validation rules
   body("Username")
     .exists()
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3, max: 30 }),
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Username must be at least 4 characters long"),
+
+  handleValidationErrors,
+];
+
+const validateGetUserFoods = [
+  // Validation rules
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 4, max: 30 })
+    .withMessage("Username must be at least 4 characters long"),
 
   handleValidationErrors,
 ];
@@ -250,27 +288,41 @@ const validateLogFood = [
 ];
 
 const validateEditLog = [
-  body("userFood_ID")
-    .exists()
-    .withMessage("userFood_ID is required")
-    .isInt({ min: 1 })
-    .withMessage("userFood_ID must be a positive integer"),
+  body("foodID")
+    .isInt({ gt: 0 })
+    .withMessage("foodID must be a positive integer"),
+
+  body("Username")
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage("Username is required"),
+
+  body("Quantity")
+    .isFloat({ gt: 0 })
+    .withMessage("Quantity must be a positive number"),
 
   body("newQuantity")
-    .exists()
-    .withMessage("newQuantity is required")
-    .isInt({ min: 1 })
-    .withMessage("newQuantity must be a positive integer"),
+    .isFloat({ gt: 0 })
+    .withMessage("newQuantity must be a positive number"),
 
   handleValidationErrors,
 ];
 
 const validateDeleteLog = [
-  body("userFood_ID")
-    .exists()
-    .withMessage("userFood_ID is required")
+  body("foodID")
     .isInt({ min: 1 })
-    .withMessage("userFood_ID must be a positive integer"),
+    .withMessage("foodID must be a positive integer"),
+
+  body("Username")
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage("Username is required"),
+
+  body("Quantity")
+    .isInt({ min: 1 })
+    .withMessage("Quantity must be a positive integer"),
 
   handleValidationErrors,
 ];
@@ -281,8 +333,8 @@ const validateGetCurrentNutrition = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3 })
-    .withMessage("Username must be at least 3 characters long"),
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
 
   handleValidationErrors,
 ];
@@ -294,6 +346,14 @@ const validateLogWeight = [
     .isInt({ min: 0, max: 400 })
     .withMessage("Weight must be between 0 and 400 kg"),
 
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
+
   handleValidationErrors,
 ];
 
@@ -303,8 +363,104 @@ const validateGetWeights = [
     .withMessage("Username is required")
     .isString()
     .withMessage("Username must be a string")
-    .isLength({ min: 3 })
-    .withMessage("Username must be at least 3 characters long"),
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
+
+  handleValidationErrors,
+];
+
+const validateLogRecipe = [
+  body("recipeName")
+    .exists()
+    .withMessage("Recipe name is required")
+    .isString()
+    .withMessage("Recipe name must be a string")
+    .isLength({ min: 2, max: 100 })
+    .withMessage("Recipe name must be between 2 and 100 characters"),
+
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
+
+  body("Servings")
+    .exists()
+    .withMessage("Servings is required")
+    .isFloat({ min: 1 })
+    .withMessage("Servings must be a positive value"),
+
+  body("Calories")
+    .exists()
+    .withMessage("Calories is required")
+    .isInt({ min: 0 })
+    .withMessage("Calories must be a positive integer"),
+];
+
+const validateSetMacros = [
+  body("Macros")
+    .exists({ checkFalsy: true })
+    .withMessage("Macros object is required")
+    .isObject()
+    .withMessage("Macros must be a valid object"),
+
+  body("Macros.Calories")
+    .exists({ checkFalsy: true })
+    .withMessage("Calories is required in Macros")
+    .isFloat({ min: 0, max: 10000 })
+    .withMessage("Calories must be a number between 0 and 10,000"),
+
+  body("Macros.Protein")
+    .exists({ checkFalsy: true })
+    .withMessage("Protein is required in Macros")
+    .isFloat({ min: 0, max: 10000 })
+    .withMessage("Protein must be a number between 0 and 10,000"),
+
+  body("Macros.Carbohydrates")
+    .exists({ checkFalsy: true })
+    .withMessage("Carbohydrates is required in Macros")
+    .isFloat({ min: 0, max: 10000 })
+    .withMessage("Carbohydrates must be a number between 0 and 10,000"),
+
+  body("Macros.Fat")
+    .exists({ checkFalsy: true })
+    .withMessage("Fat is required in Macros")
+    .isFloat({ min: 0, max: 10000 })
+    .withMessage("Fat must be a number between 0 and 10,000"),
+
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
+
+  handleValidationErrors,
+];
+
+const validateUserMacros = [
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
+
+  handleValidationErrors,
+];
+
+const validateGetUserRecipes = [
+  body("Username")
+    .exists()
+    .withMessage("Username is required")
+    .isString()
+    .withMessage("Username must be a string")
+    .isLength({ min: 4 })
+    .withMessage("Username must be at least 4 characters long"),
 
   handleValidationErrors,
 ];
@@ -317,6 +473,7 @@ export {
   validateMacroRequest,
   validateAddUser,
   validateDeleteUser,
+  validateCheckUsername,
   validateGetUserFoods,
   validateLogFood,
   validateEditLog,
@@ -324,5 +481,9 @@ export {
   validateGetCurrentNutrition,
   validateLogWeight,
   validateGetWeights,
+  validateLogRecipe,
   handleValidationErrors,
+  validateSetMacros,
+  validateUserMacros,
+  validateGetUserRecipes,
 };

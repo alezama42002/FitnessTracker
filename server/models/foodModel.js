@@ -16,12 +16,16 @@ const Food = sequelize.define("Food", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  foodName: {
+  servingDescription: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   servingSize: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  foodName: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
   Calories: {

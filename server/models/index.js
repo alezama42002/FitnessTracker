@@ -4,6 +4,7 @@ import Recipe from "./recipeModel.js";
 import userFood from "./userFoodModel.js";
 import recipeFood from "./recipeFoodModel.js";
 import userDailyNutrition from "./userDailyNutritionModel.js";
+import userRecipe from "./userRecipeModel.js";
 import sequelize from "../config/database.js";
 
 // Each user can have multiple foods through userFoods
@@ -31,3 +32,11 @@ Weight.belongsTo(User, { foreignKey: "userID" });
 // Each user can have multiple recipes
 User.hasMany(Recipe, { foreignKey: "userID" });
 Recipe.belongsTo(User, { foreignKey: "userID" });
+
+// Each user can have multiple recipes through userRecipes
+User.hasMany(userRecipe, { foreignKey: "userID" });
+userRecipe.belongsTo(User, { foreignKey: "userID" });
+
+// Each recipe belongs to multiple users through userRecipes
+Recipe.hasMany(userRecipe, { foreignKey: "recipeID" });
+userRecipe.belongsTo(Recipe, { foreignKey: "recipeID" });
