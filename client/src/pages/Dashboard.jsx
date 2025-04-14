@@ -14,24 +14,6 @@ export default function Dashboard() {
   const [token, setToken] = useState(null);
   const [username, setUsername] = useState(null);
 
-  // Gets the current weeks dates for displayment in the weight graph
-  const getCurrentWeekDates = () => {
-    const today = new Date();
-    const dayOfWeek = today.getDay();
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - dayOfWeek + 1);
-
-    return Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(startOfWeek);
-      date.setDate(startOfWeek.getDate() + i);
-      const month = String(date.getMonth() + 1).padStart(2, "");
-      const day = String(date.getDate()).padStart(2, "0");
-      return `${month}/${day}`;
-    });
-  };
-
-  const weekDays = getCurrentWeekDates();
-
   useEffect(() => {
     const storedToken = localStorage.getItem("accessToken");
 

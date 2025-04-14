@@ -30,7 +30,19 @@ export default function Foods({ searchedFoodData, searchItem }) {
         setPage(page + 1);
       }
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        if (error.response.status === 404) {
+          alert("No matching food found. Try a different keyword.");
+        } else if (error.response.status === 500) {
+          alert("Something went wrong on the server. Please try again later.");
+        } else {
+          console.log(error);
+          alert("An unexpected error occurred. Please try again.");
+        }
+      } else {
+        console.error("Network or other error:", error);
+        alert("Network error. Please check your connection.");
+      }
     }
   };
 

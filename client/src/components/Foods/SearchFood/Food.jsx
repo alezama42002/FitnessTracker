@@ -58,7 +58,17 @@ export default function Food({ food }) {
       );
       setQuantities((prev) => ({ ...prev, [foodData.ID]: "" }));
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        if (error.response.status === 500) {
+          alert("Something went wrong on the server. Please try again later.");
+        } else {
+          console.log(error);
+          alert(`Error: ${error.response.data?.error || "Unexpected error."}`);
+        }
+      } else {
+        console.error("Network or other error:", error);
+        alert("Network error. Please check your connection.");
+      }
     }
   };
 

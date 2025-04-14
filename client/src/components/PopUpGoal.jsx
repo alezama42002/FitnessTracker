@@ -40,7 +40,19 @@ export default function PopupGoal({ onClose, onSave }) {
       );
       onSave(goal);
     } catch (error) {
-      console.error("Error fetching macros:", error);
+      if (error.response) {
+        // Server-side errors
+        if (error.response.status === 500) {
+          console.error("Error on the server. Please try again later.");
+        } else {
+          console.error(
+            `Error: ${error.response.data?.error || "Unexpected error."}`
+          );
+        }
+      } else {
+        // Network or other errors
+        console.error("Network error or unexpected issue:", error);
+      }
     }
   };
 

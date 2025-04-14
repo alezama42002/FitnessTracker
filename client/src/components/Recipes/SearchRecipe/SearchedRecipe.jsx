@@ -22,7 +22,7 @@ export default function SearchedRecipe({ searchedRecipeData }) {
     }
   }, []);
 
-  const logFood = async (recipeData, quantity) => {
+  const logRecipe = async (recipeData, quantity) => {
     try {
       if (!quantity || quantity <= 0) {
         alert("Please enter a valid quantity.");
@@ -38,7 +38,17 @@ export default function SearchedRecipe({ searchedRecipeData }) {
 
       setQuantities((prev) => ({ ...prev, [recipeData.ID]: "" }));
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        if (error.response.status === 500) {
+          alert("Something went wrong on the server. Please try again later.");
+        } else {
+          console.log(error);
+          alert(`Error: ${error.response.data?.error || "Unexpected error."}`);
+        }
+      } else {
+        console.error("Network or other error:", error);
+        alert("Network error. Please check your connection.");
+      }
     }
   };
 
@@ -70,7 +80,7 @@ export default function SearchedRecipe({ searchedRecipeData }) {
                       text={"Enter Quantity"}
                       onClose={() => setOpen(false)}
                       onSave={(quantity) => {
-                        logFood(selectedRecipe, quantity);
+                        logRecipe(selectedRecipe, quantity);
                         setOpen(false);
                       }}
                     />

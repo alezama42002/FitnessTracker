@@ -54,7 +54,25 @@ export default function AddFood() {
         },
       });
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        if (error.response.status === 422) {
+          const errorMessage =
+            error.response.data.errors?.msg || "Invalid input.";
+          alert(errorMessage);
+        } else if (error.response.status === 409) {
+          alert("This food already exists in the database.");
+        } else if (error.response.status === 401) {
+          alert("Invalid Username or Password");
+        } else if (error.response.status === 500) {
+          alert("Server error. Please try again later.");
+        } else {
+          console.log(error);
+          alert("An unexpected error occurred. Please try again.");
+        }
+      } else {
+        console.error("Network or other error:", error);
+        alert("Network error. Please check your connection.");
+      }
     }
   };
 

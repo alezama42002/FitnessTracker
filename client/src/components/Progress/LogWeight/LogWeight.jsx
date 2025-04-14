@@ -27,7 +27,25 @@ export default function LogWeight({ Username, token }) {
       );
       setFormData({ Weight: "" });
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        if (error.response.status === 422) {
+          const errorMessage =
+            error.response.data.errors?.msg || "Invalid input.";
+          alert(errorMessage);
+        } else if (error.response.status === 500) {
+          alert("Something went wrong on the server. Please try again later.");
+        } else {
+          console.log(error);
+          alert(
+            `Unexpected error: ${
+              error.response.data?.error || "Please try again."
+            }`
+          );
+        }
+      } else {
+        console.error("Network or other error:", error);
+        alert("Network error. Please check your connection.");
+      }
     }
   };
 

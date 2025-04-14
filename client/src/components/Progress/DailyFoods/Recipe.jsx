@@ -28,7 +28,17 @@ export default function Recipe({ recipeData }) {
         },
       });
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        if (error.response.status === 404) {
+          alert("This recipe log does not exist.");
+        } else if (error.response.status === 500) {
+          alert("Internal server error. Please try again later.");
+        } else {
+          alert(`Error: ${error.response.data}`);
+        }
+      } else {
+        console.error("Network or other error:", error);
+      }
     }
   };
   const editLog = async (newQuantity) => {
@@ -54,7 +64,17 @@ export default function Recipe({ recipeData }) {
         }
       );
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        if (error.response.status === 404) {
+          alert("This recipe log does not exist.");
+        } else if (error.response.status === 500) {
+          alert("Internal server error. Please try again later.");
+        } else {
+          alert(`Error: ${error.response.data}`);
+        }
+      } else {
+        console.error("Network or other error:", error);
+      }
     }
   };
 
