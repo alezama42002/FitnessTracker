@@ -59,10 +59,10 @@ export default function Suggestions() {
 
   const findRecipes = async (macroRequest) => {
     try {
-      const res = await axios.post(
-        "http://localhost:3000/api/recipe/Reccomend",
-        { MacroRequest: macroRequest }
-      );
+      const apiURL = import.meta.env.VITE_API_URL;
+      const res = await axios.post(`${apiURL}/recipe/Reccomend`, {
+        MacroRequest: macroRequest,
+      });
       setRecipes(res.data);
     } catch (error) {
       console.log(error);
@@ -142,3 +142,4 @@ export default function Suggestions() {
     </div>
   );
 }
+
