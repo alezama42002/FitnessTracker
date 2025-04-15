@@ -9,16 +9,14 @@ const ProtectedRoutes = () => {
   useEffect(() => {
     const checkToken = async () => {
       const Token = localStorage.getItem("accessToken");
+      const apiUrl = import.meta.env.VITE_API_URL;
       if (!Token) {
         setIsValid(false);
         return;
       }
 
       try {
-        const response = await axios.post(
-          "http://localhost:3000/api/user/Valid",
-          { Token }
-        );
+        const response = await axios.post(`${apiUrl}/user/Valid`, { Token });
 
         setIsValid(true);
       } catch (error) {
@@ -32,7 +30,7 @@ const ProtectedRoutes = () => {
             localStorage.removeItem("accessToken");
             const refreshToken = localStorage.getItem("refreshToken");
             try {
-              await axios.delete("http://localhost:3000/api/user/Logout", {
+              await axios.delete(`${apiUrl}/user/Logout`, {
                 data: { Token: refreshToken },
               });
             } catch (logoutError) {
