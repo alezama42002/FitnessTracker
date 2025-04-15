@@ -4,8 +4,9 @@ import axios from "axios";
 export default function Logout() {
   const handleLogout = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
-      await axios.delete("http://localhost:3000/api/user/Logout", {
+      await axios.delete(`${apiUrl}/user/Logout`, {
         data: { Token: refreshToken },
       });
       localStorage.removeItem("accessToken");

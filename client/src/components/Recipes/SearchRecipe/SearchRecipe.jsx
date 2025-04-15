@@ -10,12 +10,11 @@ export default function SearchRecipe() {
   const SearchRecipe = async (event) => {
     if (event.key === "Enter") {
       try {
-        const response = await axios.post(
-          "http://localhost:3000/api/recipe/GetRecipe",
-          {
-            recipeName: searchItem,
-          }
-        );
+        const apiUrl = import.meta.env.VITE_API_URL;
+
+        const response = await axios.post(`${apiUrl}/recipe/GetRecipe`, {
+          recipeName: searchItem,
+        });
 
         setSearchedRecipes(response.data);
       } catch (error) {

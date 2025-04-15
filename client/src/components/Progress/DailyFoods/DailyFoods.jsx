@@ -12,10 +12,11 @@ export default function DailyFoods({ Username, token }) {
     const fetchUserFoods = async () => {
       if (!Username || !token) return;
       try {
+        const apiUrl = import.meta.env.VITE_API_URL;
         const [foodresponse, reciperesponse] = await Promise.all([
           axios
             .post(
-              "http://localhost:3000/api/user/GetUserFoods",
+              `${apiUrl}/user/GetUserFoods`,
               { Username: Username },
               {
                 headers: {
@@ -26,14 +27,14 @@ export default function DailyFoods({ Username, token }) {
             .catch((error) => {
               if (error.response && error.response.status === 404) {
                 console.log("No food data found");
-                return { data: [] }; // Or an empty fallback format
+                return { data: [] };
               }
               throw error;
             }),
 
           axios
             .post(
-              "http://localhost:3000/api/user/GetUserRecipes",
+              `${apiUrl}/user/GetUserRecipes`,
               { Username: Username },
               {
                 headers: {

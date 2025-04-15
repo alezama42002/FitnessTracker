@@ -7,6 +7,8 @@ import userRouter from "./routes/userRoutes.js";
 import foodRouter from "./routes/foodRoutes.js";
 import recipeRouter from "./routes/recipeRoutes.js";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 app.use(express.json());
@@ -19,3 +21,15 @@ app.listen(3000, () => console.log("Server running on port 3000"));
 app.use("/api/user", userRouter);
 app.use("/api/food", foodRouter);
 app.use("/api/recipe", recipeRouter);
+
+// Setup __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files from client/dist
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+// Fallback for SPA routing (React Router)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+});

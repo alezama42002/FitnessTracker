@@ -16,8 +16,9 @@ export default function Recipe({ recipeData }) {
       }
 
       const username = localStorage.getItem("Username");
+      const apiUrl = import.meta.env.VITE_API_URL;
 
-      await axios.post("http://localhost:3000/api/user/LogRecipe", {
+      await axios.post(`${apiUrl}/user/LogRecipe`, {
         recipeName: recipeData.recipeName,
         Username: username,
         servings: quantity,

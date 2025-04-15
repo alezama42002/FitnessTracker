@@ -21,13 +21,14 @@ export default function PopupGoal({ onClose, onSave }) {
     const Username = localStorage.getItem("Username");
     const token = localStorage.getItem("accessToken");
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
       const macros = await axios.post("http://localhost:3000/api/user/Macros", {
         Username: Username,
         Goal: goal,
       });
 
       await axios.patch(
-        "http://localhost:3000/api/user/SetMacros",
+        `${apiUrl}/user/SetMacros`,
         {
           Macros: macros.data,
           Username: Username,

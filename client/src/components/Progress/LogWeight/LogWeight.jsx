@@ -13,8 +13,10 @@ export default function LogWeight({ Username, token }) {
       if (!Username || !token) return;
 
       const weightInt = parseInt(formData.Weight, 10);
+      const apiUrl = import.meta.env.VITE_API_URL;
+
       await axios.post(
-        "http://localhost:3000/api/user/LogWeight",
+        `${apiUrl}/user/LogWeight`,
         {
           Username: Username,
           Weight: weightInt,

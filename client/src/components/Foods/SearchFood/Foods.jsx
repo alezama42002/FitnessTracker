@@ -18,13 +18,12 @@ export default function Foods({ searchedFoodData, searchItem }) {
   const handleMoreFoods = async () => {
     // Handle the more foods action
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/food/Search",
-        {
-          Name: searchItem,
-          page: page + 1,
-        }
-      );
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      const response = await axios.post(`${apiUrl}/food/Search`, {
+        Name: searchItem,
+        page: page + 1,
+      });
       if (response.data.foods?.length) {
         setNewSearchedFoodData(response.data.foods);
         setPage(page + 1);

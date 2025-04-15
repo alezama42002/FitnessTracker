@@ -50,8 +50,10 @@ export default function AddRecipe() {
     const token = localStorage.getItem("accessToken");
 
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+
       await axios.post(
-        "http://localhost:3000/api/recipe/AddRecipe",
+        `${apiUrl}/recipe/AddRecipe`,
         {
           Username: Username,
           foodsData: ingredientData,

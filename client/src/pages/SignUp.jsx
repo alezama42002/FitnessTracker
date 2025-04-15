@@ -45,12 +45,10 @@ export default function SignUp() {
       alert("Password and Re-entered Password must match");
     } else {
       try {
-        const response = await axios.post(
-          "http://localhost:3000/api/user/Username",
-          {
-            Username: formData.Username,
-          }
-        );
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await axios.post(`${apiUrl}/user/Username`, {
+          Username: formData.Username,
+        });
 
         localStorage.setItem("SignUp-FormData", JSON.stringify(formData));
         navigate("/Auth/AccountInformation");

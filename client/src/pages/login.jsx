@@ -29,10 +29,8 @@ export default function Login() {
       alert("Username and Password are Required");
     else {
       try {
-        const response = await axios.post(
-          "http://localhost:3000/api/user/Login",
-          formData
-        );
+        const apiURL = import.meta.env.VITE_API_URL;
+        const response = await axios.post(`${apiURL}/user/Login`, formData);
 
         // Generates accessToken and reroutes user if user is validated by
         // login endpoint

@@ -16,7 +16,9 @@ export default function Food({ foodData }) {
     if (!Username || !token) return;
 
     try {
-      await axios.delete("http://localhost:3000/api/user/DeleteLog", {
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      await axios.delete(`${apiUrl}/user/DeleteLog`, {
         data: {
           foodID: foodData.foodID,
           Username: Username,
@@ -38,8 +40,9 @@ export default function Food({ foodData }) {
     if (!Username || !token) return;
 
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
       await axios.patch(
-        "http://localhost:3000/api/user/EditLog",
+        `${apiUrl}/user/EditLog`,
         {
           foodID: foodData.foodID,
           Username: Username,

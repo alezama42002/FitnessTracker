@@ -29,12 +29,22 @@ export default function SearchedRecipe({ searchedRecipeData }) {
         return;
       }
 
-      await axios.post("http://localhost:3000/api/user/LogRecipe", {
-        recipeName: recipeData.recipeName,
-        Username: username,
-        servings: quantity,
-        Calories: recipeData.totalCalories,
-      });
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      await axios.post(
+        `${apiUrl}/user/LogRecipe`,
+        {
+          recipeName: recipeData.recipeName,
+          Username: username,
+          servings: quantity,
+          Calories: recipeData.totalCalories,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setQuantities((prev) => ({ ...prev, [recipeData.ID]: "" }));
     } catch (error) {

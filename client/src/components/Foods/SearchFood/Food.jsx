@@ -36,8 +36,10 @@ export default function Food({ food }) {
         .match(/\d+(\.\d+)?/g)
         .map((num) => Math.round(parseFloat(num)));
 
+      const apiUrl = import.meta.env.VITE_API_URL;
+
       await axios.post(
-        "http://localhost:3000/api/user/LogFood",
+        `${apiUrl}/user/LogFood`,
         {
           foodID: foodData.ID,
           foodName: foodData.name,

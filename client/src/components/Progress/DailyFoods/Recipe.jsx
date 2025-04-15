@@ -16,7 +16,9 @@ export default function Recipe({ recipeData }) {
     if (!Username || !token) return;
 
     try {
-      await axios.delete("http://localhost:3000/api/user/DeleteRecipeLog", {
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      await axios.delete(`${apiUrl}/user/DeleteRecipeLog`, {
         data: {
           recipeID: recipeData.recipeID,
           Calories: recipeData.Calories,
@@ -48,8 +50,10 @@ export default function Recipe({ recipeData }) {
     if (!Username || !token) return;
 
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+
       await axios.patch(
-        "http://localhost:3000/api/user/EditRecipeLog",
+        `${apiUrl}/user/EditRecipeLog`,
         {
           recipeID: recipeData.recipeID,
           Calories: recipeData.Calories,

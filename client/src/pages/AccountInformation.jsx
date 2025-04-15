@@ -79,7 +79,8 @@ export default function AccountInformation() {
       alert("All Inputs are Required");
     else {
       try {
-        await axios.post("http://localhost:3000/api/user/AddUser", newUserData);
+        const apiURL = import.meta.env.VITE_API_URL;
+        await axios.post(`${apiURL}/user/AddUser`, newUserData);
 
         localStorage.removeItem("SignUp-FormData");
         navigate("/Auth/Login");

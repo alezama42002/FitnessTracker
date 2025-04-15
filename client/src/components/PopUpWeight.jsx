@@ -7,12 +7,14 @@ export default function PopUpWeight({ onClose, onSave }) {
   const logWeight = async () => {
     const Username = localStorage.getItem("Username");
     const token = localStorage.getItem("accessToken");
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     try {
       if (!Username || !token) return;
 
       const weightInt = parseInt(weight, 10);
       await axios.post(
-        "http://localhost:3000/api/user/LogWeight",
+        `${apiUrl}/user/LogWeight`,
         {
           Username: Username,
           Weight: weightInt,

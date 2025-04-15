@@ -32,13 +32,13 @@ export default function Dashboard() {
     // for displayment on the dashboard
     const fetchAllData = async () => {
       try {
+        const apiURL = import.meta.env.VITE_API_URL;
+
         const [macroResponse, nutritionResponse, weightResponse] =
           await Promise.all([
             axios.post(
-              "http://localhost:3000/api/user/UserMacros",
-              {
-                Username: username,
-              },
+              `${apiURL}/user/UserMacros`,
+              { Username: username },
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ export default function Dashboard() {
             ),
             axios
               .post(
-                "http://localhost:3000/api/user/GetCurrentNutrition",
+                `${apiURL}/user/GetCurrentNutrition`,
                 { Username: username },
                 {
                   headers: {
@@ -56,16 +56,15 @@ export default function Dashboard() {
                 }
               )
               .catch((error) => {
-                // If the nutrition API returns a 404 or other error, we handle it here
                 if (error.response && error.response.status === 404) {
                   console.log("No nutrition data found");
-                  return { data: {} }; // Return an empty object or handle as needed
+                  return { data: {} };
                 }
-                throw error; // Rethrow if it's another error
+                throw error;
               }),
             axios
               .post(
-                "http://localhost:3000/api/user/GetWeights",
+                `${apiURL}/user/GetWeights`,
                 { Username: username },
                 {
                   headers: {
@@ -74,12 +73,11 @@ export default function Dashboard() {
                 }
               )
               .catch((error) => {
-                // If the weights API returns a 404 or other error, we handle it here
                 if (error.response && error.response.status === 404) {
                   console.log("No weight data found");
-                  return { data: [] }; // Return an empty array or handle as needed
+                  return { data: [] };
                 }
-                throw error; // Rethrow if it's another error
+                throw error;
               }),
           ]);
 

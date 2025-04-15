@@ -48,7 +48,9 @@ export default function AddFood() {
     const token = localStorage.getItem("accessToken");
 
     try {
-      await axios.post("http://localhost:3000/api/food/AddFood", formData, {
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      await axios.post(`${apiUrl}/food/AddFood`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
