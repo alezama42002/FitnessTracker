@@ -50,8 +50,19 @@ export default function Navbar() {
 
   return (
     <div className="bg-[#19212C]  flex justify-between items-center px-4 w-full h-[100px]">
-      <div>
+      <div className="flex items-center gap-4">
         <img src={Logo} alt="" className="h-15" />
+        <div>
+          <a href="https://www.fatsecret.com" className="text-white">
+            <img
+              src="https://platform.fatsecret.com/api/static/images/powered_by_fatsecret.png"
+              srcset="https://platform.fatsecret.com/api/static/images/powered_by_fatsecret_2x.png 2x, https://platform.fatsecret.com/api/static/images/powered_by_fatsecret_3x.png 3x"
+              border="0"
+            />
+
+            <a href="https://www.fatsecret.com">Powered by fatsecret</a>
+          </a>
+        </div>
       </div>
       <div
         className={`nav-links ${
@@ -98,10 +109,7 @@ export default function Navbar() {
           onClick={toggleProfile}
           className="profile-icon cursor-pointer"
         >
-          <CiUser
-            size={28}
-            color="#AFA99E"
-          />
+          <CiUser size={28} color="#AFA99E" />
         </button>
         <div ref={profileMenuRef}>
           {profileOpen && (
