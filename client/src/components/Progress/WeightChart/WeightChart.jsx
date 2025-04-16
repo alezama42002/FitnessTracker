@@ -46,6 +46,7 @@ export default function WeightGraph({ weekWeightData }) {
       height: "100%",
       width: "100%", // Ensure the chart container is full width
       toolbar: { show: false },
+      zoom: { enabled: false },
       spacing: {
         left: 20,
         right: 20,
